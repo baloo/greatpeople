@@ -5,12 +5,15 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.mail.*;
+import javax.mail.Flags.Flag;
 import javax.mail.internet.*;
 import javax.mail.search.*;
 
-import models.Attachement;
+import models.Attachment;
+import models.JobApplication;
 
 import play.*;
+import play.db.jpa.Blob;
 import play.jobs.*;
 import play.libs.IO;
 
@@ -34,12 +37,13 @@ public class FetchEmails extends Job {
 		// Search unstarred messages
 		SearchTerm unstarred = new FlagTerm(new Flags(Flags.Flag.FLAGGED), false);
 		Message[] messages = folder.search(unstarred);
-
+		
 		for (Message message : messages) {
-			System.out.println("---> " + message.getSubject());
-			// message.setFlag(Flag.FLAGGED, true);
+			
+			
 			String contentString = "";
-			List<Attachement> attachements = new ArrayList<Attachement>();
+			
+			List<Attachment> attachements = new ArrayList<Attachment>();
 			if (message.getContent() instanceof String) {
 				contentString = (String) message.getContent();
 			} else if (message.getContent() instanceof Multipart) {
@@ -49,40 +53,41 @@ public class FetchEmails extends Job {
 
 					String disposition = part.getDisposition();
 
-					if (disposition == null) {
+					if (disposition == null || 
+							((disposition != null) && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition.equalsIgnoreCase(Part.INLINE)))
+						) {
 						// Check if plain
 						MimeBodyPart mbp = (MimeBodyPart) part;
 						if (mbp.isMimeType("text/plain")) {
 							contentString += (String) mbp.getContent();
-						} else {attachements.add(saveAttachment(part));}
-					} else if ((disposition != null)
-							&& (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition.equalsIgnoreCase(Part.INLINE))) {
-						// Check if plain
-						MimeBodyPart mbp = (MimeBodyPart) part;
-						if (mbp.isMimeType("text/plain")) {
-							contentString += (String) mbp.getContent();
-						} else {attachements.add(saveAttachment(part));}
+						} else {
+							attachements.add(saveAttachment(part));
+						}
+						}
 					}
-				}
 			}
 			Logger.info("content : %s -- attachements (%d)", contentString, attachements.size());
-
+			String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
+			String email =  ((InternetAddress) message.getFrom()[0]).getAddress();
+			JobApplication application = new JobApplication(name, email, contentString, attachements);
+			application.save();
+			if (Play.mode == Play.Mode.PROD) {
+				message.setFlag(Flag.FLAGGED, true);
+			}
 		}
 
 		// Close connection
 		folder.close(false);
 		store.close();
 	}
-	private Attachement saveAttachment(Part part) throws Exception, MessagingException, IOException {
+	private Attachment saveAttachment(Part part) throws Exception, MessagingException, IOException {
 		// Special non-attachment cases here of
 		// image/gif, text/html, ...
-		Attachement attachement = new Attachement();
-		attachement.name = decodeName(part.getFileName());
-		
-		File savefile = File.createTempFile("emailattach", ".atch", Play.getFile("/attachements"));
-		attachement.path = savefile.getAbsolutePath();
-		IO.write(part.getInputStream(), savefile);
-		return attachement;
+		Attachment attachment = new Attachment();
+		attachment.name = decodeName(part.getFileName());
+		attachment.content.set(part.getInputStream(), part.getContentType());
+		attachment.save();
+		return attachment;
 	}
 	protected String decodeName(String name) throws Exception {
 		if (name == null || name.length() == 0) {
