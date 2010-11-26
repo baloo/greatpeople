@@ -43,8 +43,10 @@ public class JobApplication extends Model {
         new Note(this, from, email, content, false).create();
     }
     
-    public void addInternalNote(String from, String email, String content) {
-        new Note(this, from, email, content, true).create();
+    public void addInternalNote(String from, String email, String content, Integer rating) {
+        Note note = new Note(this, from, email, content, true);
+        note.rating = rating;
+        note.create();
     }
     
     public List<Note> getNotes() {

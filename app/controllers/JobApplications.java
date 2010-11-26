@@ -16,15 +16,7 @@ public class JobApplications extends Controller {
     
     public static void postNote(Long resumeId, String comment, Integer rating) {
         JobApplication resume = JobApplication.findById(resumeId);
-        
-        Note note = new Note();
-        note.jobApplication = resume;
-        note.comment = comment;
-        note.rating = rating;
-        note.name = session.get("name");
-        note.email = session.get("email");
-        note.save();
-        
+        resume.addInternalNote(session.get("name"), session.get("email"), comment, rating);
         index(resumeId);
     }
 

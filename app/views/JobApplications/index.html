@@ -26,7 +26,7 @@
     </dl>
 
     <div class="original-message">
-        <p>${resume.message}</p>
+        <pre>${resume.message}</pre>
     </div>
     <div class="tags" style="display:none">
         <ul>
@@ -38,8 +38,9 @@
     </div>
     <div class="tags">
         Comments:<br/>
-        #{list resume.notes()}
-            ${_.comment} - ${_.name}<br/>
+        #{list resume.notes}
+            <h3>${_.name}</h3>
+            <pre>${_.comment}</pre>
         #{/}
     </div>
     <div>
