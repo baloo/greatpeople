@@ -52,8 +52,9 @@ public class JobApplication extends Model {
         //this.attachments = attachments;
     }
 
-    @OneToMany
-    public List<Note> notes;
+    public List<Note> notes() {
+        return Note.find("jobApplication", this).fetch();
+    }
 
     public List<String> tagsList() {
         if (tags == null) {

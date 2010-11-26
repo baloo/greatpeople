@@ -10,10 +10,51 @@
                 </ul>
             </nav>
 #{/}
-<h1>${resume.name}</h1>
-Submitted: ${resume.submitted}<br/>
-Status: ${resume.status}<br/>
-Comments:<br/>
-#{list resume.notes}
-    ${_.comment} - ${_.name}
-#{/}
+<div id="candidate">
+    <h1>${resume.name}</h1>
+    <dl class="contact">
+        <dt>Contact</dt>
+        <dd><span class="type">Phone:</span>${resume.phone}</dd>
+        <dd><span class="type">Mail:</span>${resume.email}</dd>
+    </dl>
+    <dl class="contact">
+        <dt>Meta</dt>
+        <dd><span class="type">Submitted:</span>${resume.submitted}</dd>
+        <dd><span class="type">Status:</span>${resume.status}</dd>
+    </dl>
+
+    <div class="original-message">
+        <p>${resume.message}</p>
+    </div>
+    <div class="tags" style="display:none">
+        <ul>
+            <li>Developer</li>
+            <li>Python</li>
+            <li>Javascript</li>
+        </ul>
+        <input type="text" id="addTag" placeholder="Add a tag" />
+    </div>
+    <div class="tags">
+        Comments:<br/>
+        #{list resume.notes()}
+            ${_.comment} - ${_.name}<br/>
+        #{/}
+    </div>
+    <div>
+        #{form @JobApplications.postNote(resume.id)}
+            <p>
+                <label for="content">Comment: </label>
+                <textarea name="comment" id="comment"></textarea>
+            </p>
+            <p>
+                <label for="rating">Rating: </label>
+                <input type="text" name="rating" id="rating" />
+            </p>
+            <p>
+                <input type="submit" value="Submit your comment" />
+            </p>
+        #{/form}
+    </div>
+</div>
+
+
