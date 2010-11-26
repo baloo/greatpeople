@@ -11,7 +11,7 @@ import play.db.jpa.Model;
 import play.utils.Utils;
 
 @Entity
-public class Resume extends Model {
+public class JobApplication extends Model {
 
     public static final int STATUS_NEW = 0;
     public static final int STATUS_INPROGRESS = 2;
