@@ -50,7 +50,7 @@ $(function(){
 #{list applications}
     <dl class="candidate-list">
         <dt><a class="name" href="/resume/${_.id}">${_.name}</a></dt>
-        <dd class="submition"><date>${_.submitted}</date></dd>
+        <dd class="submition"><date>${_.submitted.format('dd MMMM yyyy hh:mm:ss')}</date></dd>
         <dd class="tags">
             <ul>
             #{list _.tagsList()}

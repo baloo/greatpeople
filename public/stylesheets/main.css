@@ -172,7 +172,7 @@ nav li a.active {
 }
 
 .candidate-list .submition:before {
-    content: "Applided on ";
+    content: "Applied on ";
 }
 .candidate-list .tags {
     position: absolute;
