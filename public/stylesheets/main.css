@@ -232,7 +232,9 @@ h1, h2 {
 }
 
 .contact dd {
-    display: table-cell;
+    display: block;
+    width: 250px;
+    float: left;
 }
 .original-message{
     margin: 10px;
