@@ -4,8 +4,31 @@
 #{set 'moreScripts'}
 <script>
 
+function filter(q) {
+    if (q.length < 3) {
+        $(".candidate-list").show();
+        return;
+    }
+    $(".candidate-list").each(function(){
+        console.log("one candidate");
+        var name = $(this).find(".name").text();
+        console.log(name.toLowerCase());
+        if (name.toLowerCase().indexOf(q) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
 $(function(){
     $(".${boxid} a").addClass("active");
+
+    $("#search").keypress(function(){
+        var q = $(this).val();
+        filter(q.toLowerCase());
+    });
+
 });
 
 </script>
@@ -26,7 +49,7 @@ $(function(){
     *{ Candidates go here }*
 #{list applications}
     <dl class="candidate-list">
-        <dt><a href="/resume/${_.id}">${_.name}</a></dt>
+        <dt><a class="name" href="/resume/${_.id}">${_.name}</a></dt>
         <dd class="submition"><date>${_.submitted}</date></dd>
         <dd class="tags">
             <ul>
