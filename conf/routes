@@ -9,8 +9,8 @@ GET     /box/{boxid}                            Application.box
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
-*       /admin                          module:crud
-*       /admin/secure                   module:secure
+*       /admin                                  module:crud
+*       /admin/secure                           module:secure
 
 GET     /resume/{id}                            JobApplications.index
 

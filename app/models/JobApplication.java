@@ -47,6 +47,9 @@ public class JobApplication extends Model {
         //this.attachments = attachments;
     }
 
+    @OneToMany
+    public List<Note> notes;
+
     public List<String> tagsList() {
         if (tags == null) {
             return new ArrayList<String>();

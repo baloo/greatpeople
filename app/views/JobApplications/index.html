@@ -1,4 +1,9 @@
 #{extends 'main.html' /}
 #{set title:'Resume' /}
-<h1>Le resume</h1>
-
+<h1>${resume.name}</h1>
+Submitted: ${resume.submitted}<br/>
+Status: ${resume.status}<br/>
+Comments:<br/>
+#{list resume.notes}
+    ${_.comment} - ${_.name}
+#{/}
