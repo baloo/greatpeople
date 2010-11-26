@@ -76,31 +76,17 @@
                 #{/form}
             </div>
             <div class="email">
-                <form>
-                    <label for="email">Message</label>
-                    <textarea id="email"></textarea>
+                #{form @JobApplications.sendMessage(resume.id)}
+                    <span style="color:#c00">Your message will be sent!</span>
+                    <label for="content">Message</label>
+                    <textarea id="content"></textarea>
                     <p>
-                        <input type="submit" value="Send" />
-                        <input type="submit" value="Send and close" />
+                        <input type="submit" value="Send this message" />
                     </p>
-                </form>
+                #{/form}                
             </div>
         </div>
     </div>
-
-    <div>
-        #{form @JobApplications.sendMessage(resume.id)}
-            <span style="color:#c00">Your message will be send!</span>
-            <p>
-                <label for="content">Comment: </label>
-                <textarea name="comment" id="comment"></textarea>
-            </p>
-            <p>
-                <input type="submit" value="Send this message" />
-            </p>
-        #{/form}
-    </div>
-
 </div>
 
 <script type="text/javascript" charset="utf-8">
@@ -117,5 +103,10 @@
         });
 
         $(".answer .email").hide();
+        $(".tabs a").click(function(e){
+            e.preventDefault();
+            $(".tabs a").toggleClass("active");
+            $(".answer > div").toggle();
+        })
     });
 </script>
