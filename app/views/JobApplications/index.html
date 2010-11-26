@@ -1,5 +1,15 @@
 #{extends 'main.html' /}
 #{set title:'Resume' /}
+#{set 'nav'}
+            <nav>
+                <input type="search" results="10" placeholder="Search" id="search" />
+                <ul>
+                    <li class="new"><a href="@{Application.box('new')}">Submited</a></li>
+                    <li class="inprogress"><a href="@{Application.box('inprogress')}">In process</a></li>
+                    <li class="archived"><a href="@{Application.box('archived')}">Archived</a></li>
+                </ul>
+            </nav>
+#{/}
 <h1>${resume.name}</h1>
 Submitted: ${resume.submitted}<br/>
 Status: ${resume.status}<br/>
