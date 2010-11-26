@@ -18,12 +18,16 @@ public class JobApplications extends Controller {
 
     public static void postNote(Long resumeId, String comment, Integer rating) {
         JobApplication resume = JobApplication.findById(resumeId);
+        resume.status = JobApplication.JobStatus.INPROGRESS;
+        resume.save();
         resume.addInternalNote(session.get("name"), session.get("email"), comment, rating);
         index(resumeId);
     }
     
     public static void sendMessage(Long resumeId, String comment) {
         JobApplication resume = JobApplication.findById(resumeId);
+        resume.status = JobApplication.JobStatus.INPROGRESS;
+        resume.save();
         resume.addMessage(session.get("name"), session.get("email"), comment);
         Mails.sendMessage(resume, comment);
         index(resumeId);

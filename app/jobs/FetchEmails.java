@@ -48,68 +48,72 @@ public class FetchEmails extends Job {
 
         // Loop over messages
         for (Message message : messages) {
+            try {
             
-            String contentString = "";
-            List<Attachment> attachments = new ArrayList<Attachment>();
+                String contentString = "";
+                List<Attachment> attachments = new ArrayList<Attachment>();
             
-            // Decode content
-            if (message.getContent() instanceof String) {
-                contentString = (String) message.getContent();
-            } else if (message.getContent() instanceof Multipart) {
-                Multipart mp = (Multipart) message.getContent();
-                for (int j = 0; j < mp.getCount(); j++) {
-                    Part part = mp.getBodyPart(j);
-                    String disposition = part.getDisposition();
-                    if (disposition == null
-                            || ((disposition != null) && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition
-                                    .equalsIgnoreCase(Part.INLINE)))) {
-                        // Check if plain
-                        MimeBodyPart mbp = (MimeBodyPart) part;
-                        if (mbp.isMimeType("text/plain")) {
-                            contentString += (String) mbp.getContent();
-                        } else {
-                            attachments.add(saveAttachment(part));
+                // Decode content
+                if (message.getContent() instanceof String) {
+                    contentString = (String) message.getContent();
+                } else if (message.getContent() instanceof Multipart) {
+                    Multipart mp = (Multipart) message.getContent();
+                    for (int j = 0; j < mp.getCount(); j++) {
+                        Part part = mp.getBodyPart(j);
+                        String disposition = part.getDisposition();
+                        if (disposition == null
+                                || ((disposition != null) && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition
+                                        .equalsIgnoreCase(Part.INLINE)))) {
+                            // Check if plain
+                            MimeBodyPart mbp = (MimeBodyPart) part;
+                            if (mbp.isMimeType("text/plain")) {
+                                contentString += (String) mbp.getContent();
+                            } else {
+                                attachments.add(saveAttachment(part));
+                            }
                         }
                     }
                 }
-            }
             
-            String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
-            String email = ((InternetAddress) message.getFrom()[0]).getAddress();
-            String to = ((InternetAddress) message.getAllRecipients()[0]).getAddress();
+                String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
+                String email = ((InternetAddress) message.getFrom()[0]).getAddress();
+                String to = ((InternetAddress) message.getAllRecipients()[0]).getAddress();
             
-            if("jobs@zenexity.com".equals(to)) {
+                if("jobs@zenexity.com".equals(to)) {
                 
-                // Create Application
-                JobApplication application = new JobApplication(name, email, contentString, attachments);
-                application.create();
-                for(Attachment attachment : attachments) {
-                    attachment.jobApplication = application;
-                    attachment.create();
-                }
-                Mails.applied(application);
-                
-            } else {
-                Pattern regexp = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
-                Matcher matcher = regexp.matcher(to);
-                if(matcher.matches()) {
-                    Long id = Long.parseLong(matcher.group(1));
-                    JobApplication application = JobApplication.findById(id);
-                    if(application == null) {
-                        Logger.warn("Job application not found %s, for %s", id, to);
-                    } else {
-                        application.addMessage(name, email, contentString);
-                        application.save();
+                    // Create Application
+                    JobApplication application = new JobApplication(name, email, contentString, attachments);
+                    application.create();
+                    for(Attachment attachment : attachments) {
+                        attachment.jobApplication = application;
+                        attachment.create();
                     }
+                    Mails.applied(application);
+                
                 } else {
-                    Logger.warn("Unknow address --> %s", to);
+                    Pattern regexp = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
+                    Matcher matcher = regexp.matcher(to);
+                    if(matcher.matches()) {
+                        Long id = Long.parseLong(matcher.group(1));
+                        JobApplication application = JobApplication.findById(id);
+                        if(application == null) {
+                            Logger.warn("Job application not found %s, for %s", id, to);
+                        } else {
+                            application.addMessage(name, email, contentString);
+                            application.save();
+                        }
+                    } else {
+                        Logger.warn("Unknow address --> %s", to);
+                    }
                 }
-            }
             
-            if (Play.mode == Play.Mode.PROD || true) {
-                message.setFlag(Flag.FLAGGED, true);
-            }
+                if (Play.mode == Play.Mode.PROD || true) {
+                    message.setFlag(Flag.FLAGGED, true);
+                }
             
+            } catch(Exception e) {
+                Logger.error(e, "Cannot read this message");
+            }
         }
 
         // Close connection
