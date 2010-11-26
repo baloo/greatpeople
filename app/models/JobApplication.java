@@ -35,7 +35,7 @@ public class JobApplication extends Model {
     // Separated by commas
     public String tags;
 
-    public JobStatus status;
+    public JobStatus status = JobStatus.NEW;
 
     @OneToMany
     public List<Attachment> attachments;

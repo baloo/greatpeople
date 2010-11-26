@@ -32,6 +32,7 @@ public class Application extends Controller {
         if ("archived".equals(boxid)) {
             applications = JobApplication.find("status", JobStatus.ARCHIVED).fetch();
         }
+        
         render(boxid, applications);
     }
 
