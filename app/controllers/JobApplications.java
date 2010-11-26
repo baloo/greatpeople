@@ -35,6 +35,8 @@ public class JobApplications extends Controller {
             resume.name = value;
         } else if ("email".equals(id)) {
             resume.email = value;
+        } else if ("phone".equals(id)) {
+            resume.phone = value;
         } else {
             badRequest();
         }

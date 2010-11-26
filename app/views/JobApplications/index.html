@@ -65,6 +65,7 @@ $(function(){
     $(".inplace").editable("@{change()}", {
         tooltip: 'Click to edit',
         attribute: this.id,
+        style: 'display: inline',
         submitdata : {resumeId: "${resume.id}"}
     });
 });

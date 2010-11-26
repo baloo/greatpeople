@@ -255,10 +255,6 @@ h1 {
     color: #8f0b0b;
 }
 
-.inplace form {
-    diplay: inline;
-}
-
 #addTag {
     display: inline-block;
     margin: 0 2px;
