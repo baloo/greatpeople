@@ -3,6 +3,7 @@ package jobs;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.*;
 
 import javax.mail.*;
 import javax.mail.Flags.Flag;
@@ -44,20 +45,20 @@ public class FetchEmails extends Job {
         SearchTerm unstarred = new FlagTerm(new Flags(Flags.Flag.FLAGGED), false);
         Message[] messages = folder.search(unstarred);
 
+        // Loop over messages
         for (Message message : messages) {
-
+            
             String contentString = "";
-
             List<Attachment> attachments = new ArrayList<Attachment>();
+            
+            // Decode content
             if (message.getContent() instanceof String) {
                 contentString = (String) message.getContent();
             } else if (message.getContent() instanceof Multipart) {
                 Multipart mp = (Multipart) message.getContent();
                 for (int j = 0; j < mp.getCount(); j++) {
                     Part part = mp.getBodyPart(j);
-
                     String disposition = part.getDisposition();
-
                     if (disposition == null
                             || ((disposition != null) && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition
                                     .equalsIgnoreCase(Part.INLINE)))) {
@@ -71,30 +72,57 @@ public class FetchEmails extends Job {
                     }
                 }
             }
-            Logger.info("content : %s -- attachements (%d)", contentString, attachments.size());
+            
             String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
             String email = ((InternetAddress) message.getFrom()[0]).getAddress();
-            JobApplication application = new JobApplication(name, email, contentString, attachments);
-            application.save();
-            if (Play.mode == Play.Mode.PROD) {
+            String to = ((InternetAddress) message.getAllRecipients()[0]).getAddress();
+            
+            if("jobs@zenexity.com".equals(to)) {
+                
+                // Create Application
+                JobApplication application = new JobApplication(name, email, contentString, attachments);
+                application.create();
+                for(Attachment attachment : attachments) {
+                    attachment.jobApplication = application;
+                    attachment.create();
+                }
+                Mails.applied(application);
+                
+            } else {
+                Pattern regexp = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
+                Matcher matcher = regexp.matcher(to);
+                if(matcher.matches()) {
+                    Long id = Long.parseLong(matcher.group(1));
+                    JobApplication application = JobApplication.findById(id);
+                    if(application == null) {
+                        Logger.warn("Job application not found %s, for %s", id, to);
+                    } else {
+                        application.addMessage(name, email, contentString);
+                        application.save();
+                    }
+                } else {
+                    Logger.warn("Unknow address --> %s", to);
+                }
+            }
+            
+            if (Play.mode == Play.Mode.PROD || true) {
                 message.setFlag(Flag.FLAGGED, true);
             }
-            Mails.applied(application);
+            
         }
 
         // Close connection
         folder.close(false);
         store.close();
     }
+    
     private Attachment saveAttachment(Part part) throws Exception, MessagingException, IOException {
-        // Special non-attachment cases here of
-        // image/gif, text/html, ...
         Attachment attachment = new Attachment();
         attachment.name = decodeName(part.getFileName());
         attachment.content.set(part.getInputStream(), part.getContentType());
-        attachment.save();
         return attachment;
     }
+    
     protected String decodeName(String name) throws Exception {
         if (name == null || name.length() == 0) {
             return "unknown";

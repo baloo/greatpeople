@@ -8,6 +8,8 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
+import javax.persistence.Enumerated;
+import javax.persistence.EnumType;
 
 import play.data.validation.Email;
 import play.db.jpa.Model;
@@ -23,48 +25,30 @@ public class JobApplication extends Model {
     }
 
     public String name;
-
-    @Email
-    public String email;
-
-    public Date submitted;
-
-    public String phone;
-    
-    @Lob
-    public String message;
-
-    // Separated by commas
-    public String tags;
-
-    public JobStatus status = JobStatus.NEW;
-    
+    @Email public String email;
+    public Date submitted = new Date();
+    public String phone;    
+    @Lob public String message;
+    @Enumerated(EnumType.STRING) public JobStatus status = JobStatus.NEW;    
     public String uniqueID;
-
-    @OneToMany
-    public List<Attachment> attachments;
 
     public JobApplication(String name, String email, String message, List<Attachment> attachments) {
         this.name = name;
         this.email = email;
         this.message = message;
         this.uniqueID = Codec.UUID().substring(0,5);
-        //this.attachments = attachments;
     }
 
-    public List<Note> notes() {
-        return Note.find("jobApplication", this).fetch();
+    public void addMessage(String from, String email, String content) {
+        new Note(this, from, email, content, false).create();
     }
-
-    public List<String> tagsList() {
-        if (tags == null) {
-            return new ArrayList<String>();
-        }
-        return Arrays.asList(tags.split(","));
+    
+    public void addInternalNote(String from, String email, String content) {
+        new Note(this, from, email, content, true).create();
     }
-
-    public void changeTags(List<String> tagsList) {
-        tags = Utils.join(tagsList, ",");
+    
+    public List<Note> getNotes() {
+        return Note.find("jobApplication = ? order by date desc", this).fetch();
     }
 
     @Override
