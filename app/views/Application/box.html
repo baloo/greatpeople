@@ -1,0 +1,30 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+#{set 'moreScripts'}
+<script>
+
+$(function(){
+    $(".${boxid} a").addClass("active");
+});
+
+</script>
+#{/}
+
+#{set 'nav'}
+            <nav>
+                <ul>
+                    <li class="new"><a href="@{box('new')}">Submited</a></li>
+                    <li class="inprogress"><a href="@{box('inprogress')}">In process</a></li>
+                    <li class="archived"><a href="@{box('archived')}">Archived</a></li>
+                </ul>
+            </nav>
+#{/}
+
+<h1>Liste des candidats</h1>
+
+<script type="text/javascript" charset="utf-8">
+    var Resume = Backbone.Model.extend({
+    
+    });
+</script>

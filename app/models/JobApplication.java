@@ -13,9 +13,9 @@ import play.utils.Utils;
 @Entity
 public class JobApplication extends Model {
 
-    public static final int STATUS_NEW = 0;
-    public static final int STATUS_INPROGRESS = 2;
-    public static final int STATUS_ARCHIVED = 3;
+    public static enum JobStatus {
+        NEW, INPROGRESS, ARCHIVED
+    }
 
     public String name;
 
@@ -27,7 +27,7 @@ public class JobApplication extends Model {
     // Separated by commas
     public String tags;
 
-    public int status;
+    public JobStatus status;
 
     @OneToMany
     public List<Attachment> attachments;
