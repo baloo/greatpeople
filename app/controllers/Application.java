@@ -4,6 +4,7 @@ import java.util.List;
 
 import models.JobApplication;
 import models.JobApplication.JobStatus;
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -11,7 +12,7 @@ import play.mvc.With;
 public class Application extends Controller {
 
     public static void index() {
-        box("new");
+        box("new", 0);
     }
 
     public static void test() throws Exception {
@@ -21,19 +22,22 @@ public class Application extends Controller {
 
     // API
 
-    public static void box(String boxid) {
-        List<JobApplication> applications = null;
+    public static void box(String boxid, int pageId) {
+        JobStatus status = null;
         if ("new".equals(boxid)) {
-            applications = JobApplication.find("status = ? order by submitted desc", JobStatus.NEW).fetch();
+            status = JobStatus.NEW;
         } else if ("inprogress".equals(boxid)) {
-            applications = JobApplication.find("status = ? order by submitted desc", JobStatus.INPROGRESS).fetch();
+            status = JobStatus.INPROGRESS;
         } else if ("archived".equals(boxid)) {
-            applications = JobApplication.find("status = ? order by submitted desc", JobStatus.ARCHIVED).fetch();
+            status = JobStatus.ARCHIVED;
         } else {
             notFound();
         }
-
-        render(boxid, applications);
+        List<JobApplication> applications = JobApplication.find("status = ? order by submitted desc", status)
+            .from(JobApplication.PER_PAGE * pageId).fetch(JobApplication.PER_PAGE);
+        int pageCount = JobApplication.pageCount(status);
+        Logger.info("From: " + JobApplication.PER_PAGE * pageId + " fetch " + JobApplication.PER_PAGE);
+        render(boxid, pageId, applications, pageCount);
     }
 
     public static void candidate() {

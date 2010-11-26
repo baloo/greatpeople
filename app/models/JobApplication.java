@@ -20,6 +20,8 @@ import play.libs.Codec;
 @Entity
 public class JobApplication extends Model {
 
+    public final static int PER_PAGE = 15;
+
     public static enum JobStatus {
         NEW, INPROGRESS, ARCHIVED
     }
@@ -27,9 +29,9 @@ public class JobApplication extends Model {
     public String name;
     @Email public String email;
     public Date submitted = new Date();
-    public String phone;    
+    public String phone;
     @Lob public String message;
-    @Enumerated(EnumType.STRING) public JobStatus status = JobStatus.NEW;    
+    @Enumerated(EnumType.STRING) public JobStatus status = JobStatus.NEW;
     public String uniqueID;
 
     public JobApplication(String name, String email, String message, List<Attachment> attachments) {
@@ -42,19 +44,25 @@ public class JobApplication extends Model {
     public void addMessage(String from, String email, String content) {
         new Note(this, from, email, content, false).create();
     }
-    
+
     public void addInternalNote(String from, String email, String content, Integer rating) {
         Note note = new Note(this, from, email, content, true);
         note.rating = rating;
         note.create();
     }
-    
+
     public List<Note> getNotes() {
         return Note.find("jobApplication = ? order by date asc", this).fetch();
     }
     
     public List<Attachment> getAttachments() {
         return Attachment.find("byJobApplication", this).fetch();
+    }
+
+    public static int pageCount(JobStatus status) {
+        int count = find("status", status).fetch().size();
+        int result = (int) Math.floor(count / PER_PAGE);
+        return result + 1;
     }
 
     @Override

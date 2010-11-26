@@ -15,7 +15,7 @@ public class JobApplications extends Controller {
         notFoundIfNull(resume);
         render(resume);
     }
-    
+
     public static void postNote(Long resumeId, String comment, Integer rating) {
         JobApplication resume = JobApplication.findById(resumeId);
         resume.addInternalNote(session.get("name"), session.get("email"), comment, rating);

@@ -6,6 +6,7 @@ GET     /test                                   Application.test
 
 # Home page
 GET     /                                       Application.index
+GET     /box/{boxid}/{pageId}                   Application.box
 GET     /box/{boxid}                            Application.box
 
 # Map static resources from the /app/public folder to the /public path
