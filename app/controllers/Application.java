@@ -7,7 +7,7 @@ import models.JobApplication.JobStatus;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@With(Auth.class)
+@With(Auth.class) 
 public class Application extends Controller {
 
     public static void index() {

@@ -14,12 +14,11 @@
         #{get 'moreScripts' /}
     </head>
     <body>
-        <div id="menu-bar">
-            <div id="toplinks">
-                <span class="username">${session.name} (${session.email})</span>
-            </div>
-        </div>
-
+        <menu>
+            <ul>
+                <li class="user-name">${session.name} <span class="user-mail">(${session.email})</span></li>
+            </ul>
+        </menu>
         <header>
             <a href="/" id="logo">Great People</a>
             #{get 'nav' /}
@@ -27,5 +26,8 @@
         <div id="wrapper">
             #{doLayout /}
         </div>
+        <footer>
+            ©2010 zenexity.com
+        </footer>
     </body>
 </html>

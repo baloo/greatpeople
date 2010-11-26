@@ -13,6 +13,7 @@ $(function(){
 
 #{set 'nav'}
             <nav>
+                <input type="search" results="10" placeholder="Search" id="search" />
                 <ul>
                     <li class="new"><a href="@{box('new')}">Submited</a></li>
                     <li class="inprogress"><a href="@{box('inprogress')}">In process</a></li>
@@ -21,8 +22,27 @@ $(function(){
             </nav>
 #{/}
 
-<h1>Liste des candidats</h1>
+<div id="list">
+    *{ Candidates go here }*
+</div>
 
+<script type="text/template" charset="utf-8">
+    <dl class="candidate-list">
+        <dt>John Doe</dt>
+        <dd class="submition"><date>11/11/11</date></dd>
+        <dd class="tags">
+            <ul>
+                <li>Developer</li>
+                <li>Python</li>
+                <li>Javascript</li>
+            </ul>
+        </dd>
+        <dd class="rating">
+            *{ lol | bad | good | awesome }*
+            <span class="awesome"></span>
+        </dd>
+    </dl>
+</script>
 <script type="text/javascript" charset="utf-8">
     var Resume = Backbone.Model.extend({
     
