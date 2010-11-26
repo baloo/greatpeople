@@ -21,6 +21,11 @@
     </dl>
     <div class="original-message">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <h2>Attachements</h2>
+        <ul class="attachements">
+            <li><a href="#my_super_resume.pdf">my_super_resume.pdf</a></li>
+            <li><a href="#a_pr0n_picture_from_google_image.jpg">my_face.jpg</a></li>
+        </ul>
     </div>
     <div class="tags">
         <ul>
@@ -29,6 +34,50 @@
             <li>Javascript</li>
         </ul>
         <input type="text" id="addTag" placeholder="Add a tag" />
+    </div>
+    <div class="discussion">
+        <div class="list">
+            <dl>
+                <dt>Name of the guy</dt>
+                <dd class="date"><date>11/11/11</date></dd>
+                <dd class="rate">5+</dd>
+                <dd class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</dd>
+            </dl>
+        </div>
+        <div class="answer">
+            <ul class="tabs">
+                <li><a href="#" class="active">Internal note</a></li>
+                <li><a href="#">Send an email</a></li>
+            </ul>
+            <div class="internal">
+                <form>
+                    <label for="internal">Message</label>
+                    <textarea id="internal"></textarea>
+                    <label for="rate">Message</label>
+                    <input type="hidden" name="rate" id="rate" />
+                    <ul class="rate">
+                        <li>★</li>
+                        <li>★</li>
+                        <li>★</li>
+                        <li>★</li>
+                    </ul>
+                    <p>
+                        <input type="submit" value="Send" />
+                        <input type="submit" value="Send and close" />
+                    </p>
+                </form>
+            </div>
+            <div class="email">
+                <form>
+                    <label for="email">Message</label>
+                    <textarea id="email"></textarea>
+                    <p>
+                        <input type="submit" value="Send" />
+                        <input type="submit" value="Send and close" />
+                    </p>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

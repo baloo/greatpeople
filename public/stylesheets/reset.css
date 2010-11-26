@@ -108,9 +108,6 @@ html { -webkit-font-smoothing: antialiased; }
 a:active { outline: none; }
 a:focus { outline: thin dotted; }
 
-a, a:active, a:visited { color:#607890; }
-a:hover { color:#036; }
-
 
 ul { margin-left:30px; }
 ol { margin-left:30px; list-style-type: decimal; }
