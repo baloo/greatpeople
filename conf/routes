@@ -12,5 +12,7 @@ GET     /public/                                staticDir:public
 *       /admin                          module:crud
 *       /admin/secure                   module:secure
 
+GET     /resume/{id}                            JobApplications.index
+
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
