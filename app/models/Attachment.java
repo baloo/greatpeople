@@ -11,6 +11,6 @@ public class Attachment extends Model {
 
     public String name;
 
-    public Blob data;
+    public Blob content = new Blob();
 
 }
