@@ -1,11 +1,13 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 
 import play.data.validation.Email;
 import play.db.jpa.Model;
@@ -22,6 +24,8 @@ public class JobApplication extends Model {
 
     @Email
     public String email;
+
+    public Date submitted;
 
     public String phone;
     
@@ -44,6 +48,9 @@ public class JobApplication extends Model {
     }
 
     public List<String> tagsList() {
+        if (tags == null) {
+            return new ArrayList<String>();
+        }
         return Arrays.asList(tags.split(","));
     }
 

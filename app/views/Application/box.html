@@ -24,6 +24,23 @@ $(function(){
 
 <div id="list">
     *{ Candidates go here }*
+#{list applications}
+    <dl class="candidate-list">
+        <dt>${_.name}</dt>
+        <dd class="submition"><date>${_.submitted}</date></dd>
+        <dd class="tags">
+            <ul>
+            #{list _.tagsList()}
+                <li>${_}</li>
+            #{/list}
+            </ul>
+        </dd>
+        <dd class="rating">
+            *{ lol | bad | good | awesome }*
+            <span class="awesome"></span>
+        </dd>
+    </dl>
+#{/list}
 </div>
 
 <script type="text/template" charset="utf-8">
