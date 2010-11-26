@@ -8,27 +8,18 @@ import play.mvc.Controller;
 
 public class Auth extends Controller {
 
-    static String REMEMBER_ME = "gpuser";
-    static String REMEMBER_FOR = "10d";
     static String ZENEXITY_OPENID = "https://www.google.com/accounts/o8/site-xrds?hd=zenexity.com";
 
     @Before(unless="authenticate")
     static void checkUser() {
-        Logger.info("checkUser");
         // Protect
-        if (!session.contains("username")) {
+        if (!session.contains("email")) {
             authenticate();
         }
-        // Retrieve connected user
-        String username = session.get("username");
-        User user = User.findOrCreate(username);
-        // Now we have the user
-        renderArgs.put("user", user);
     }
 
     public static void logout() {
         session.clear();
-        response.removeCookie(REMEMBER_ME);
         Application.index();
     }
 
@@ -37,22 +28,20 @@ public class Auth extends Controller {
     }
 
     public static void authenticate() {
-        Logger.info("authenticate()");
         if (OpenID.isAuthenticationResponse()) {
             OpenID.UserInfo verifiedUser = OpenID.getVerifiedID();
-            Logger.info("Got response!");
-            if (verifiedUser == null) {
-                flash.error("user.failed");
-                response.removeCookie(REMEMBER_ME);
+            if (verifiedUser == null || !verifiedUser.extensions.containsKey("email") || verifiedUser.extensions.get("email").trim().equals("")) {
                 error();
             }
-            User user = User.findOrCreate(verifiedUser.id);
-            session.put("username", user.openid);
+            session.put("email", verifiedUser.extensions.get("email"));
+            session.put("name", verifiedUser.extensions.get("firstname") + " " + verifiedUser.extensions.get("lastname"));
             Application.index();
         } else {
-            Logger.info("Verify with Zenexity openid");
-            if (!OpenID.id(ZENEXITY_OPENID).verify()) {
-                response.removeCookie(REMEMBER_ME);
+            if (!OpenID.id(ZENEXITY_OPENID).
+                    required("lastname", "http://axschema.org/namePerson/last").
+                    required("firstname", "http://axschema.org/namePerson/first").
+                    required("email", "http://axschema.org/contact/email").
+                    verify()) {
                 error();
             }
         }
