@@ -38,9 +38,9 @@ $(function(){
     <nav>
         <input type="search" results="0" placeholder="Search" id="search" autocomplete="off"/>
         <ul>
-            <li class="new"><a href="@{box('new')}">Submited</a></li>
-            <li class="inprogress"><a href="@{box('inprogress')}">In process</a></li>
-            <li class="archived"><a href="@{box('archived')}">Archived</a></li>
+            <li class="new"><a href="@{box('new', 0)}">Submited</a></li>
+            <li class="inprogress"><a href="@{box('inprogress', 0)}">In process</a></li>
+            <li class="archived"><a href="@{box('archived', 0)}">Archived</a></li>
         </ul>
     </nav>
 #{/}
