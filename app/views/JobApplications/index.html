@@ -4,13 +4,13 @@
 <script src="@{'/public/javascripts/lib/jquery.jeditable.mini.js'}" type="text/javascript" charset="utf-8"></script>
 #{/set}
 #{set 'nav'}
-            <nav>
-                <ul>
-                    <li class="new"><a href="@{Application.box('new')}">Submited</a></li>
-                    <li class="inprogress"><a href="@{Application.box('inprogress')}">In process</a></li>
-                    <li class="archived"><a href="@{Application.box('archived')}">Archived</a></li>
-                </ul>
-            </nav>
+    <nav>
+        <ul>
+            <li class="new"><a href="@{Application.box('new')}">Submited</a></li>
+            <li class="inprogress"><a href="@{Application.box('inprogress')}">In process</a></li>
+            <li class="archived"><a href="@{Application.box('archived')}">Archived</a></li>
+        </ul>
+    </nav>
 #{/}
 <div id="candidate">
     <h1 class="inplace" id="name">${resume.name}</h1>
@@ -21,9 +21,15 @@
     </dl>
     <dl class="contact">
         <dt>Meta</dt>
-        <dd><span class="type">Submitted:</span>${resume.submitted}</dd>
+        <dd><span class="type">Submitted:</span>${resume.submitted.since()}</dd>
 
     </dl>
+    
+    <ul>
+    #{list resume.attachments}
+        <li><a href="@{download(_.id)}">${_.name}</a></li>
+    #{/list}
+    </ul>
 
     <div class="original-message">
         <pre>${resume.message}</pre>

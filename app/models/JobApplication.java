@@ -52,6 +52,10 @@ public class JobApplication extends Model {
     public List<Note> getNotes() {
         return Note.find("jobApplication = ? order by date asc", this).fetch();
     }
+    
+    public List<Attachment> getAttachments() {
+        return Attachment.find("byJobApplication", this).fetch();
+    }
 
     @Override
     public String toString() {

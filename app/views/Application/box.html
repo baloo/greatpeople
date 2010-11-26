@@ -35,14 +35,14 @@ $(function(){
 #{/}
 
 #{set 'nav'}
-            <nav>
-                <input type="search" results="10" placeholder="Search" id="search" />
-                <ul>
-                    <li class="new"><a href="@{box('new')}">Submited</a></li>
-                    <li class="inprogress"><a href="@{box('inprogress')}">In process</a></li>
-                    <li class="archived"><a href="@{box('archived')}">Archived</a></li>
-                </ul>
-            </nav>
+    <nav>
+        <input type="search" results="0" placeholder="Search" id="search" autocomplete="off"/>
+        <ul>
+            <li class="new"><a href="@{box('new')}">Submited</a></li>
+            <li class="inprogress"><a href="@{box('inprogress')}">In process</a></li>
+            <li class="archived"><a href="@{box('archived')}">Archived</a></li>
+        </ul>
+    </nav>
 #{/}
 
 <div id="list">
