@@ -19,22 +19,18 @@
         <dd><span class="type">Phone:</span><span id="phone" class="inplace">${resume.phone}</span></dd>
         <dd><span class="type">Mail:</span><span id="email" class="inplace">${resume.email}</span></dd>
     </dl>
-    <dl class="contact">
-        <dt>Meta</dt>
-        <dd><span class="type">Submitted:</span>${resume.submitted.since()}</dd>
-
-    </dl>
-    
-    <ul>
-    #{list resume.attachments}
-        <li><a href="@{download(_.id)}">${_.name}</a></li>
-    #{/list}
-    </ul>
 
     <div class="original-message">
         <pre>${resume.message}</pre>
+        <h2>Attachements</h2>
+        <ul class="attachements">
+            #{list resume.attachments}
+                <li><a href="@{download(_.id)}">${_.name}</a></li>
+            #{/list}
+        </ul>
     </div>
-    <div class="tags" style="display:none">
+
+    <div class="tags">
         <ul>
             <li>Developer</li>
             <li>Python</li>
@@ -42,33 +38,56 @@
         </ul>
         <input type="text" id="addTag" placeholder="Add a tag" />
     </div>
-    <div class="tags">
-        Comments:<br/>
-        #{list resume.notes}
-            <pre>${_.comment} - ${_.name} - Rating: ${_.rating}</pre>
-        #{/}
+    
+    <div class="discussion">
+        <div class="list">
+            #{list resume.notes}
+            <dl>
+                <dt>${_.name}</dt>
+                <dd class="date"><date>${_.date}</date></dd>
+                <dd class="rate">${_.rating}</dd>
+                <dd class="message">
+                    <p>${_.comment}</p>
+                </dd>
+            </dl>
+            #{/}
+        </div>
+        <div class="answer">
+            <ul class="tabs">
+                <li><a href="#" class="active">Internal note</a></li>
+                <li><a href="#">Send an email</a></li>
+            </ul>
+            <div class="internal">
+                #{form @JobApplications.postNote(resume.id)}
+                    <label for="comment">Message</label>
+                    <textarea id="comment" name="comment"></textarea>
+                    <label for="rating">Rating</label>
+                    <select name="rating" id="rating">
+                        <option value="0" selected>no rating</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                    <p>
+                        <input type="submit" value="Send" />
+                        <input type="submit" value="Send and close" />
+                    </p>
+                #{/form}
+            </div>
+            <div class="email">
+                <form>
+                    <label for="email">Message</label>
+                    <textarea id="email"></textarea>
+                    <p>
+                        <input type="submit" value="Send" />
+                        <input type="submit" value="Send and close" />
+                    </p>
+                </form>
+            </div>
+        </div>
     </div>
-    <div>
-        #{form @JobApplications.postNote(resume.id)}
-            <p>
-                <label for="content">Comment: </label>
-                <textarea name="comment" id="comment"></textarea>
-            </p>
-            <p>
-                <label for="rating">Rating: </label>
-                <select id="rating">
-                    <option value="0" selected>no rating</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                </select>
-            </p>
-            <p>
-                <input type="submit" value="Submit your comment" />
-            </p>
-        #{/form}
-    </div>
+<<<<<<< Updated upstream
     
     <div>
         #{form @JobApplications.sendMessage(resume.id)}
@@ -83,15 +102,20 @@
         #{/form}
     </div>
     
+=======
+
+>>>>>>> Stashed changes
 </div>
 
-<script>
-$(function(){
-    $(".inplace").editable("@{change()}", {
-        tooltip: 'Click to edit',
-        attribute: this.id,
-        style: 'display: inline',
-        submitdata : {resumeId: "${resume.id}"}
+<script type="text/javascript" charset="utf-8">
+    $(function(){
+        $(".inplace").editable("@{change()}", {
+            tooltip: 'Click to edit',
+            attribute: this.id,
+            style: 'display: inline',
+            submitdata : {resumeId: "${resume.id}"}
+        });
+        
+        $(".answer .email").hide();
     });
-});
 </script>

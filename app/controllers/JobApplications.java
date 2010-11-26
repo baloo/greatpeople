@@ -1,5 +1,5 @@
 package controllers;
-
+import play.Logger;
 import models.JobApplication;
 import models.Note;
 import models.Attachment;
