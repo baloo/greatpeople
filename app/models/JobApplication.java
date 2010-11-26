@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import play.data.validation.Email;
 import play.db.jpa.Model;
 import play.utils.Utils;
+import play.libs.Codec;
+
 
 @Entity
 public class JobApplication extends Model {
@@ -36,6 +38,8 @@ public class JobApplication extends Model {
     public String tags;
 
     public JobStatus status = JobStatus.NEW;
+    
+    public String uniqueID;
 
     @OneToMany
     public List<Attachment> attachments;
@@ -44,6 +48,7 @@ public class JobApplication extends Model {
         this.name = name;
         this.email = email;
         this.message = message;
+        this.uniqueID = Codec.UUID().substring(0,5);
         //this.attachments = attachments;
     }
 

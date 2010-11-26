@@ -12,6 +12,8 @@ import javax.mail.search.*;
 import models.Attachment;
 import models.JobApplication;
 
+import controllers.Mails;
+
 import play.*;
 import play.db.jpa.Blob;
 import play.jobs.*;
@@ -20,6 +22,11 @@ import play.libs.IO;
 public class FetchEmails extends Job {
 
     public void doJob() throws Exception {
+        
+        if(Play.configuration.getProperty("mailbox.username") == null || Play.configuration.getProperty("mailbox.password") == null) {
+            Logger.error("Please configure mailbox credentials in conf/credentials.conf");
+            return;
+        }
 
         // Connect to gmail mailbox
         Properties props = new Properties();
@@ -27,8 +34,7 @@ public class FetchEmails extends Job {
         props.setProperty("mail.imap.socketFactory.port", "993");
         Session session = Session.getDefaultInstance(props);
         Store store = session.getStore("imap");
-        store.connect("imap.gmail.com", Play.configuration.getProperty("mailbox.username"), Play.configuration
-                .getProperty("mailbox.password"));
+        store.connect("imap.gmail.com", Play.configuration.getProperty("mailbox.username"), Play.configuration.getProperty("mailbox.password"));
 
         // Open jobs mailbox
         Folder folder = store.getFolder("jobs");
@@ -73,6 +79,7 @@ public class FetchEmails extends Job {
             if (Play.mode == Play.Mode.PROD) {
                 message.setFlag(Flag.FLAGGED, true);
             }
+            Mails.applied(application);
         }
 
         // Close connection
