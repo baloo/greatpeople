@@ -27,6 +27,14 @@ a:hover {
 	text-shadow: #59636c 1px 1px 0;
 }
 
+#menu-bar {
+	border-bottom: solid 1px black;
+	width: 100%;
+	text-align: right;
+	padding: 2px 20px 2px 5px;
+}
+
+
 header {
 	background: #6e7b87;
 	background: -webkit-gradient(linear, left top, left bottom, from(#8795a2), to(#6e7b87));
