@@ -1,6 +1,5 @@
 package controllers;
 
-import models.User;
 import play.Logger;
 import play.libs.OpenID;
 import play.mvc.Before;
