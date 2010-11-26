@@ -21,7 +21,7 @@
     </dl>
 
     <div class="original-message">
-        <pre>${resume.message}</pre>
+        <p>${resume.message.nl2br()}</p>
         <h2>Attachements</h2>
         <ul class="attachements">
             #{list resume.attachments}
@@ -29,25 +29,18 @@
             #{/list}
         </ul>
     </div>
-
-    <div class="tags">
-        <ul>
-            <li>Developer</li>
-            <li>Python</li>
-            <li>Javascript</li>
-        </ul>
-        <input type="text" id="addTag" placeholder="Add a tag" />
-    </div>
     
     <div class="discussion">
         <div class="list">
             #{list resume.notes}
-            <dl>
+            <dl class="${_.internal ? 'internal-message' : 'email-message'} ${_.email == session.email ? 'yourself' : ''} ${resume.email == _.email ? 'himself' : ''}">
                 <dt>${_.name}</dt>
                 <dd class="date"><date>${_.date.format('dd MMMM yyyy')}</date></dd>
-                <dd class="rate"><div class="cursor" style="width:${_.rating / 4 * 100}%">${_.rating}</div></dd>
+                #{if _.rating}
+                    <dd class="rate"><div class="cursor" style="width:${_.rating / 4 * 100}%">${_.rating}</div></dd>                    
+                #{/if}
                 <dd class="message">
-                    <p>${_.comment}</p>
+                    <p>${_.comment.nl2br()}</p>
                 </dd>
             </dl>
             #{/}
@@ -64,10 +57,10 @@
                     <label for="rating">Rating</label>
                     <select name="rating" id="rating" style="width:100px;margin-left:60px;margin-top:-32px">
                         <option value="0" selected>no rating</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
+                        <option value="1">LOL</option>
+                        <option value="2">BAD</option>
+                        <option value="3">GOOD</option>
+                        <option value="4">AWESOME</option>
                     </select>
                     <p>
                         <input type="submit" value="Send" />
@@ -79,7 +72,7 @@
                 #{form @JobApplications.sendMessage(resume.id)}
                     <span style="color:#c00">Your message will be sent!</span>
                     <label for="content">Message</label>
-                    <textarea id="content"></textarea>
+                    <textarea id="content" name="comment"></textarea>
                     <p>
                         <input type="submit" value="Send this message" />
                     </p>

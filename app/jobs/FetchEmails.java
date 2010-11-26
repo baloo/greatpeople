@@ -106,7 +106,7 @@ public class FetchEmails extends Job {
                 }
             }
             
-            if (Play.mode == Play.Mode.PROD) {
+            if (Play.mode == Play.Mode.PROD || true) {
                 message.setFlag(Flag.FLAGGED, true);
             }
             
