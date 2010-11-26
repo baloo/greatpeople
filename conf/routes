@@ -4,8 +4,8 @@
 
 # Home page
 GET     /                                       Application.index
+GET     /box/{boxid}                            Application.box(pageId:'0')
 GET     /box/{boxid}/{pageId}                   Application.box
-GET     /box/{boxid}                            Application.box
 GET     /check                                  Application.check
 
 

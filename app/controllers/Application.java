@@ -12,12 +12,13 @@ import play.mvc.With;
 public class Application extends Controller {
 
     public static void index() {
+        new jobs.HouseKeeping().now();
         box("new", 0);
     }
 
     public static void check() throws Exception {
         new jobs.FetchEmails().now().get();
-        box();
+        box("new", 0);
     }
 
     // API
@@ -36,7 +37,6 @@ public class Application extends Controller {
         List<JobApplication> applications = JobApplication.find("status = ? order by submitted desc", status)
             .from(JobApplication.PER_PAGE * pageId).fetch(JobApplication.PER_PAGE);
         int pageCount = JobApplication.pageCount(status);
-        Logger.info("From: " + JobApplication.PER_PAGE * pageId + " fetch " + JobApplication.PER_PAGE);
         render(boxid, pageId, applications, pageCount);
     }
 

@@ -23,5 +23,12 @@ public class Mails extends Mailer {
         send(jobApplication, message);
     }
     
+    public static void alert(List oldApplications) {
+        setFrom("jobs@zenexity.com");
+        addRecipient("z@zenexity.com");
+        setSubject("There are some job applications to process");
+        send(oldApplications);
+    }
+    
 }
 
