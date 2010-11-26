@@ -105,13 +105,17 @@
 
 <script type="text/javascript" charset="utf-8">
     $(function(){
-        $(".inplace").editable("@{change()}", {
-            tooltip: 'Click to edit',
-            attribute: this.id,
-            style: 'display: inline',
-            submitdata : {resumeId: "${resume.id}"}
+        $(".inplace").each(function() {
+            var self = this;
+            $(this).editable("@{change()}", {
+                tooltip: 'Click to edit',
+                attribute: this.id,
+                style: 'display: inline',
+                submitdata : {resumeId: "${resume.id}"},
+                width: self.id == "name" ? "auto" : 100
+            });
         });
-        
+
         $(".answer .email").hide();
     });
 </script>
