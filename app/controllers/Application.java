@@ -24,15 +24,15 @@ public class Application extends Controller {
     public static void box(String boxid) {
         List<JobApplication> applications = null;
         if ("new".equals(boxid)) {
-            applications = JobApplication.find("status", JobStatus.NEW).fetch();
+            applications = JobApplication.find("status = ? order by submitted desc", JobStatus.NEW).fetch();
         } else if ("inprogress".equals(boxid)) {
-            applications = JobApplication.find("status", JobStatus.INPROGRESS).fetch();
+            applications = JobApplication.find("status = ? order by submitted desc", JobStatus.INPROGRESS).fetch();
         } else if ("archived".equals(boxid)) {
-            applications = JobApplication.find("status", JobStatus.ARCHIVED).fetch();
+            applications = JobApplication.find("status = ? order by submitted desc", JobStatus.ARCHIVED).fetch();
         } else {
             notFound();
         }
-        
+
         render(boxid, applications);
     }
 

@@ -1,5 +1,8 @@
 #{extends 'main.html' /}
 #{set title:'Resume' /}
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/lib/jquery.jeditable.mini.js'}" type="text/javascript" charset="utf-8"></script>
+#{/set}
 #{set 'nav'}
             <nav>
                 <input type="search" results="10" placeholder="Search" id="search" />
@@ -11,11 +14,11 @@
             </nav>
 #{/}
 <div id="candidate">
-    <h1>${resume.name}</h1>
+    <h1 class="inplace" id="name">${resume.name}</h1>
     <dl class="contact">
         <dt>Contact</dt>
-        <dd><span class="type">Phone:</span>${resume.phone}</dd>
-        <dd><span class="type">Mail:</span>${resume.email}</dd>
+        <dd><span class="type">Phone:</span><span id="phone" class="inplace">${resume.phone}</span></dd>
+        <dd><span class="type">Mail:</span><span id="email" class="inplace">${resume.email}</span></dd>
     </dl>
     <dl class="contact">
         <dt>Meta</dt>
@@ -57,4 +60,12 @@
     </div>
 </div>
 
-
+<script>
+$(function(){
+    $(".inplace").editable("@{change()}", {
+        tooltip: 'Click to edit',
+        attribute: this.id,
+        submitdata : {resumeId: "${resume.id}"}
+    });
+});
+</script>
