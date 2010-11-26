@@ -1,0 +1,39 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+#{set 'nav'}
+            <nav>
+                <input type="search" results="10" placeholder="Search" id="search" />
+                <ul>
+                    <li class="new"><a href="@{box('new')}">Submited</a></li>
+                    <li class="inprogress"><a href="@{box('inprogress')}">In process</a></li>
+                    <li class="archived"><a href="@{box('archived')}">Archived</a></li>
+                </ul>
+            </nav>
+#{/}
+
+<div id="candidate">
+    <h1>John Doe</h1>
+    <dl class="contact">
+        <dt>Contact</dt>
+        <dd><span class="type">Phone:</span>(+33) 06 12 12 12 12</dd>
+        <dd><span class="type">Mail:</span>isaywhatwhat@inthe.but</dd>
+    </dl>
+    <div class="original-message">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    </div>
+    <div class="tags">
+        <ul>
+            <li>Developer</li>
+            <li>Python</li>
+            <li>Javascript</li>
+        </ul>
+        <input type="text" id="addTag" placeholder="Add a tag" />
+    </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    var Resume = Backbone.Model.extend({
+    
+    });
+</script>

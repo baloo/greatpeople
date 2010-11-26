@@ -36,4 +36,9 @@ public class Application extends Controller {
         render(boxid, applications);
     }
 
+    public static void candidate() {
+        render();
+    }
+
+
 }

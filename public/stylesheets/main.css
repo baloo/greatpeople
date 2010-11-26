@@ -86,7 +86,7 @@ nav {
     -moz-text-shadow: #fff 1px 1px 0;
     text-shadow: #fff 1px 1px 0;
     font-weight: bold;
-    overflow: auto;
+    overflow: hidden;
     zoom: 1;
 }
 nav ul {
@@ -179,16 +179,94 @@ nav li a.active {
     right: 0;
     top: 5px;
 }
-.candidate-list .tags li {
+.tags li {
     display: inline-block;
     margin: 2px;
     padding: 2px 5px;
-    background: #b9d6f5;
-    border: 1px solid #93b8e1;
+    background: #cbdcee;
+    border: 1px solid #abbfd5;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
     opacity: .8;
+}
+
+#candidate {
+    padding: 10px;
+}
+h1 {
+    font-size: 22px;
+    font-family: 'Neuton', serif;
+    font-weight: normal;
+    -webkit-text-shadow: #fff 1px 1px 0;
+    -moz-text-shadow: #fff 1px 1px 0;
+    text-shadow: #fff 1px 1px 0; 
+}
+.contact {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 5px;
+    display: table;
+    width: 100%;
+}
+
+.contact dt {
+    position:absolute !important;    
+    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.contact .type {
+    padding: 0 10px 0 0;
+    color: #8599af;
+}
+
+.contact dd {
+    display: table-cell;
+}
+
+#candidate .tags {
+    padding: 5px;
+    margin: 15px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+
+}
+#candidate .tags ul {
+    margin: 0;
+    display: inline-block;
+}
+#candidate .tags li {
+    cursor: pointer;
+}
+#candidate .tags li:before {
+    content: "✕";
+    font-size: 10px;
+    padding-right: 4px;
+}
+#candidate .tags li:hover {
+    border-color: red;
+    background: #fccbcb;
+    color: #d60000;
+}
+#candidate .tags li:hover:before {
+    color: #8f0b0b;
+}
+
+
+#addTag {
+    display: inline-block;
+    margin: 0 2px;
+    padding: 2px 5px;
+    background: #fff;
+    border: 1px solid #ccc;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    width: 75px;
+    vertical-align: baseline;
 }
 
 
