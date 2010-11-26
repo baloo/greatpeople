@@ -55,6 +55,21 @@ public class JobApplication extends Model {
         return Note.find("jobApplication = ? order by date asc", this).fetch();
     }
     
+    
+    public Float getRating() {
+        List<Note> notes = getNotes();
+        int votes = 0;
+        int total = 0;
+        for( int i = 0; i < notes.size(); i++ ){
+            int rating = notes.get( i ).rating == null ? 0 : notes.get( i ).rating;
+            if(rating > 0){
+               votes++;
+               total+= rating;
+            }
+        }
+        return votes == 0 ? 0 : (float)total / (float)votes;
+    }
+    
     public List<Attachment> getAttachments() {
         return Attachment.find("byJobApplication", this).fetch();
     }

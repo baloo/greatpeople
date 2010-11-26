@@ -52,7 +52,7 @@ $(function(){
         <dt><a class="name" href="/resume/${_.id}">${_.name}</a></dt>
         <dd class="submition"><date>${_.submitted ? _.submitted.format('dd MMMM yyyy hh:mm:ss') : ''}</date></dd>
         <dd class="rate">
-            <div class="cursor" style="width: 35%"></div>
+            <div class="cursor" style="width: ${(int)(_.getRating() / 4 * 100)}%"></div>
         </dd>
     </dl>
 #{/list}

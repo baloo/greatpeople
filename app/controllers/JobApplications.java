@@ -50,5 +50,4 @@ public class JobApplications extends Controller {
         resume.save();
         renderText(value);
     }
-
 }
