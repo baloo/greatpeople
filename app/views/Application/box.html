@@ -51,9 +51,8 @@ $(function(){
     <dl class="candidate-list">
         <dt><a class="name" href="/resume/${_.id}">${_.name}</a></dt>
         <dd class="submition"><date>${_.submitted ? _.submitted.format('dd MMMM yyyy hh:mm:ss') : ''}</date></dd>
-        <dd class="rating">
-            *{ lol | bad | good | awesome }*
-            <span class="awesome"></span>
+        <dd class="rate">
+            <div class="cursor" style="width: 35%"></div>
         </dd>
     </dl>
 #{/list}
