@@ -24,7 +24,7 @@ function filter(q) {
 $(function(){
     $(".${boxid} a").addClass("active");
 
-    $("#search").keypress(function(){
+    $("#search").keyup(function(){
         var q = $(this).val();
         filter(q.toLowerCase());
     });

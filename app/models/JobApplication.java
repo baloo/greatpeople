@@ -39,7 +39,7 @@ public class JobApplication extends Model {
 
     @OneToMany
     public List<Attachment> attachments;
-    
+
     public JobApplication(String name, String email, String message, List<Attachment> attachments) {
         this.name = name;
         this.email = email;

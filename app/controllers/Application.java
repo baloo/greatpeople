@@ -25,12 +25,12 @@ public class Application extends Controller {
         List<JobApplication> applications = null;
         if ("new".equals(boxid)) {
             applications = JobApplication.find("status", JobStatus.NEW).fetch();
-        }
-        if ("inprogress".equals(boxid)) {
+        } else if ("inprogress".equals(boxid)) {
             applications = JobApplication.find("status", JobStatus.INPROGRESS).fetch();
-        }
-        if ("archived".equals(boxid)) {
+        } else if ("archived".equals(boxid)) {
             applications = JobApplication.find("status", JobStatus.ARCHIVED).fetch();
+        } else {
+            notFound();
         }
         
         render(boxid, applications);
