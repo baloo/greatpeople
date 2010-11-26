@@ -1,1 +1,111 @@
 @import "reset.css";
+
+body {
+	background: #d5dade;
+}
+
+a {
+	color: #546e87;
+	text-decoration: none;
+}
+a:hover {
+	color: #3e5469;
+}
+
+#logo {
+	display: block;
+	width: 200px;
+	margin: 0 auto;
+	padding: 20px 0 10px;
+	text-align: center;
+	color: #fff;
+	font-size: 32px;
+	font-family: 'Neuton', serif;
+	font-weight: normal;
+	-webkit-text-shadow: #59636c 1px 1px 0;
+	-moz-text-shadow: #59636c 1px 1px 0;
+	text-shadow: #59636c 1px 1px 0;
+}
+
+header {
+	background: #6e7b87;
+	background: -webkit-gradient(linear, left top, left bottom, from(#8795a2), to(#6e7b87));
+	background: -moz-linear-gradient(top, #f3f3f3, #dbdbdb);
+	background: gradient(linear, left top, left bottom, from(#f3f3f3), to(#dbdbdb));
+	-webkit-box-shadow: inset #59636c 0 -1px 0;
+	-moz-box-shadow: inset #59636c 0 -1px 0;
+	box-shadow: inset #59636c 0 -1px 0;
+}
+
+#wrapper, nav {
+	width: 800px;
+	margin: 0 auto;
+	background: #f2f2f2;
+}
+
+nav {
+	background: #f2f2f2;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f3f3f3), to(#dbdbdb));
+	background: -moz-linear-gradient(top, #f3f3f3, #dbdbdb);
+	background: gradient(linear, left top, left bottom, from(#f3f3f3), to(#dbdbdb));
+	-webkit-border-radius: 3px 3px 0 0;
+	-moz-border-radius: 3px 3px 0 0;
+	border-radius: 3px 3px 0 0;
+	-webkit-box-shadow: inset #b4b5b6 0 -1px 0 , #fff 0 1px 0 inset, #59636c 0 -1px 2px;
+	-moz-box-shadow: inset #b4b5b6 0 -1px 0 , #fff 0 1px 0 inset;
+	box-shadow: inset #b4b5b6 0 -1px 0 , #fff 0 1px 0 inset;
+	-webkit-text-shadow: #fff 1px 1px 0;
+	-moz-text-shadow: #fff 1px 1px 0;
+	text-shadow: #fff 1px 1px 0;
+	font-weight: bold;
+}
+nav ul {
+	margin: 0;
+	padding: 5px;
+}
+nav li {
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+}
+nav li a {
+	display: inline-block;
+	padding: 3px 10px;
+	cursor: pointer;
+	border: 1px solid #ccc;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	color: #666;
+}
+nav li a:hover {
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#dbdbdb));
+	background: -moz-linear-gradient(top, #fff, #dbdbdb);
+	background: gradient(linear, left top, left bottom, from(#fff), to(#dbdbdb));
+	color: #444;
+}
+nav li a.active {
+	background: -webkit-gradient(linear, left top, left bottom, from(#6e7b87), to(#8795a2));
+	background: -moz-linear-gradient(top, #6e7b87, #8795a2);
+	background: gradient(linear, left top, left bottom, from(#6e7b87), to(#8795a2));
+	-webkit-box-shadow: #fff 0 1px 0;
+	-moz-box-shadow: #fff 0 1px 0;
+	box-shadow: #fff 0 1px 0;
+	color: #fff;
+	border-color: #59636c;
+	-webkit-text-shadow: #59636c -1px -1px 0;
+	-moz-text-shadow: #59636c -1px -1px 0;
+	text-shadow: #59636c -1px -1px 0;
+}
+
+
+
+#wrapper {
+	min-height: 200px;
+	background: -webkit-gradient(linear, 0 0, 0 100, from(#dbdbdb), to(#f3f3f3));
+	background: -moz-linear-gradient(top, #dbdbdb, #f3f3f3);
+	background: gradient(linear, 0 0, 0 100, from(#dbdbdb), to(#f3f3f3));
+	-webkit-box-shadow: #fff 0 1px 0 inset, #999 0 1px 2px;
+	-moz-box-shadow: #fff 0 1px 0 inset, #999 0 1px 2px;
+	box-shadow: #fff 0 1px 0 inset, #999 0 1px 2px;
+}

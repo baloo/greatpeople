@@ -8,26 +8,25 @@
 		<link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
 
 		<link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
+		<link href='http://fonts.googleapis.com/css?family=Neuton&subset=latin' rel='stylesheet' type='text/css'> 
 		#{get 'moreStyles' /}
 		<script src="@{'/public/javascripts/jquery-1.4.2.min.js'}" type="text/javascript" charset="utf-8"></script>
 		#{get 'moreScripts' /}
 
 	</head>
 	<body>
-		<div id="wrapper">
+		<header>
 			<a href="/" id="logo">Great People</a>
-			<head>
-				<nav>
-					<ul>
-						<li class="submitted">Submited</li>
-						<li class="inProcess">In process</li>
-						<li class="archived">Archived</li>
-					</ul>
-				</nav>
-			</head>
-			<div id="content">
-				#{doLayout /}
-			</div>
+			<nav>
+				<ul>
+					<li class="submitted"><a class="active" href="#s">Submited</a></li>
+					<li class="inProcess"><a href="#s">In process</a></li>
+					<li class="archived"><a href="#s">Archived</a></li>
+				</ul>
+			</nav>
+		</header>
+		<div id="wrapper">
+			#{doLayout /}
 		</div>
 	</body>
 </html>
