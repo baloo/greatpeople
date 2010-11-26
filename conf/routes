@@ -2,12 +2,12 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET     /test                                   Application.test
-
 # Home page
 GET     /                                       Application.index
 GET     /box/{boxid}/{pageId}                   Application.box
 GET     /box/{boxid}                            Application.box
+GET     /check                                  Application.check
+
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public

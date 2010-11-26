@@ -20,6 +20,7 @@ import play.db.jpa.Blob;
 import play.jobs.*;
 import play.libs.IO;
 
+@Every("10mins")
 public class FetchEmails extends Job {
 
     public void doJob() throws Exception {
@@ -105,7 +106,7 @@ public class FetchEmails extends Job {
                 }
             }
             
-            if (Play.mode == Play.Mode.PROD || true) {
+            if (Play.mode == Play.Mode.PROD) {
                 message.setFlag(Flag.FLAGGED, true);
             }
             

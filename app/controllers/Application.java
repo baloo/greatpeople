@@ -15,9 +15,9 @@ public class Application extends Controller {
         box("new", 0);
     }
 
-    public static void test() throws Exception {
+    public static void check() throws Exception {
         new jobs.FetchEmails().now().get();
-        renderText("DONE");
+        box();
     }
 
     // API
