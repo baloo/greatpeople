@@ -200,23 +200,14 @@ nav li a.active {
 #candidate {
     padding: 10px;
 }
-h1 {
+h1, h2 {
     font-size: 22px;
     font-family: 'Neuton', serif;
     font-weight: normal;
     -webkit-text-shadow: #fff 1px 1px 0;
     -moz-text-shadow: #fff 1px 1px 0;
     text-shadow: #fff 1px 1px 0; 
-}
-
-h2 {
-    margin-top: 10px;
-    font-size: 16px;
-    font-family: 'Neuton', serif;
-    font-weight: normal;
-    -webkit-text-shadow: #fff 1px 1px 0;
-    -moz-text-shadow: #fff 1px 1px 0;
-    text-shadow: #fff 1px 1px 0; 
+    margin: 10px;
 }
 
 .contact {
@@ -242,6 +233,13 @@ h2 {
 
 .contact dd {
     display: table-cell;
+}
+.original-message{
+    margin: 10px;
+}
+.original-message h2 {
+    font-size: 16px;
+    margin: 10px 0 0;
 }
 
 #candidate .tags {
@@ -270,6 +268,69 @@ h2 {
 }
 #candidate .tags li:hover:before {
     color: #8f0b0b;
+}
+
+.discussion .list {
+}
+
+.discussion .list dl {
+    position: relative;
+    overflow: auto;
+    padding: 10px;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #ddd;
+}
+.discussion .list dl:first-child {
+    border-top: none;
+}
+.discussion .list dl:last-child {
+    border-bottom: none;
+}
+
+.discussion .list dt {
+    font-weight: bold;
+    display: inline-block;
+}
+.discussion .list .date {
+    display: inline-block;
+    color: #999;
+}
+.discussion .list .date:before {
+    content: "Posted on ";
+}
+
+.discussion .list .message {
+    padding: 10px 0 0;
+}
+.discussion .list .rate {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.rate {
+    background: url(/public/images/clear-star.png) left center repeat-x;
+    height: 12px;
+    width: 52px;
+    text-indent:-999em;
+}
+.rate .cursor {
+    display: block;
+    background: url(/public/images/plain-star.png) left center repeat-x;
+    height: 12px;
+    width: 50%;
+}
+
+.email-message {
+    
+} 
+
+.internal-message {
+    
+} 
+
+.himself {
+    
 }
 
 #addTag {
