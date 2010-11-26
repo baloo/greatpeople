@@ -320,7 +320,6 @@ h1, h2 {
     display: block;
     background: url(/public/images/plain-star.png) left center repeat-x;
     height: 12px;
-    width: 50%;
 }
 
 .email-message {

@@ -44,8 +44,8 @@
             #{list resume.notes}
             <dl>
                 <dt>${_.name}</dt>
-                <dd class="date"><date>${_.date}</date></dd>
-                <dd class="rate">${_.rating}</dd>
+                <dd class="date"><date>${_.date.format('dd MMMM yyyy')}</date></dd>
+                <dd class="rate"><div class="cursor" style="width:${_.rating / 4 * 100}%">${_.rating}</div></dd>
                 <dd class="message">
                     <p>${_.comment}</p>
                 </dd>
