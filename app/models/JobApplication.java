@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Lob;
 
 import play.data.validation.Email;
 import play.db.jpa.Model;
@@ -23,6 +24,9 @@ public class JobApplication extends Model {
     public String email;
 
     public String phone;
+    
+    @Lob
+    public String message;
 
     // Separated by commas
     public String tags;
@@ -31,6 +35,13 @@ public class JobApplication extends Model {
 
     @OneToMany
     public List<Attachment> attachments;
+    
+    public JobApplication(String name, String email, String message, List<Attachment> attachments) {
+        this.name = name;
+        this.email = email;
+        this.message = message;
+        //this.attachments = attachments;
+    }
 
     public List<String> tagsList() {
         return Arrays.asList(tags.split(","));
