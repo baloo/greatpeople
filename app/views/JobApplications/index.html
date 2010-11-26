@@ -63,6 +63,20 @@
             </p>
         #{/form}
     </div>
+    
+    <div>
+        #{form @JobApplications.sendMessage(resume.id)}
+            <span style="color:#c00">Your message will be send!</span>
+            <p>
+                <label for="content">Comment: </label>
+                <textarea name="comment" id="comment"></textarea>
+            </p>
+            <p>
+                <input type="submit" value="Send this message" />
+            </p>
+        #{/form}
+    </div>
+    
 </div>
 
 <script>

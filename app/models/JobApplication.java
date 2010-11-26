@@ -50,7 +50,7 @@ public class JobApplication extends Model {
     }
     
     public List<Note> getNotes() {
-        return Note.find("jobApplication = ? order by date desc", this).fetch();
+        return Note.find("jobApplication = ? order by date asc", this).fetch();
     }
 
     @Override

@@ -4,4 +4,5 @@ tmp
 eclipse
 .settings
 conf/credentials.conf
+data
 

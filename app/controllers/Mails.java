@@ -16,5 +16,12 @@ public class Mails extends Mailer {
         send(jobApplication);
     }
     
+    public static void sendMessage(JobApplication jobApplication, String message) {
+        setFrom("jobs+" + jobApplication.uniqueID + "-" + jobApplication.id + "@zenexity.com");
+        addRecipient(jobApplication.email);
+        setSubject("Your job application at zenexity");
+        send(jobApplication, message);
+    }
+    
 }
 
