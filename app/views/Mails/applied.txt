@@ -1,1 +1,5 @@
-Merci de votre retour. ééé
+We have received your application, we will take a look at it and contact you as soon as possible.
+
+If you feel to add more details please contact us at this dedicated address: ${"jobs+" + jobApplication.uniqueID + "-" + jobApplication.id + "@zenexity.com"}
+
+Zenexity recruitment team.

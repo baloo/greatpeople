@@ -50,7 +50,7 @@ public class FetchEmails extends Job {
         for (Message message : messages) {
             try {
             
-                String contentString = "";
+                String contentString = "(no content found)";
                 List<Attachment> attachments = new ArrayList<Attachment>();
             
                 // Decode content
@@ -66,6 +66,7 @@ public class FetchEmails extends Job {
                                         .equalsIgnoreCase(Part.INLINE)))) {
                             // Check if plain
                             MimeBodyPart mbp = (MimeBodyPart) part;
+                            System.out.println(mbp.getContentType());
                             if (mbp.isMimeType("text/plain")) {
                                 contentString += (String) mbp.getContent();
                             } else {
@@ -74,7 +75,7 @@ public class FetchEmails extends Job {
                         }
                     }
                 }
-            
+                
                 String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
                 String email = ((InternetAddress) message.getFrom()[0]).getAddress();
                 String to = ((InternetAddress) message.getAllRecipients()[0]).getAddress();
@@ -107,7 +108,7 @@ public class FetchEmails extends Job {
                     }
                 }
             
-                if (Play.mode == Play.Mode.PROD || true) {
+                if (Play.mode == Play.Mode.PROD) {
                     message.setFlag(Flag.FLAGGED, true);
                 }
             

@@ -19,7 +19,7 @@ public class JobApplication extends Model {
     public final static int PER_PAGE = 15;
 
     public static enum JobStatus {
-        NEW, INPROGRESS, ARCHIVED
+        NEW, INPROGRESS, ARCHIVED, DELETED
     }
 
     public String name;

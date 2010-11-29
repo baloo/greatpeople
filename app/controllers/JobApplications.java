@@ -38,6 +38,13 @@ public class JobApplications extends Controller {
         response.contentType = attachment.content.type();
         renderBinary(attachment.content.getFile());
     }
+    
+    public static void delete(Long id) {
+        JobApplication resume = JobApplication.findById(id);
+        resume.status = JobApplication.JobStatus.DELETED;
+        resume.save();
+        Application.index();
+    }
 
     public static void change(Long resumeId, String id, String value) {
         JobApplication resume = JobApplication.findById(resumeId);

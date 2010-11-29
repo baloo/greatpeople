@@ -12,14 +12,14 @@ public class Mails extends Mailer {
     public static void applied(JobApplication jobApplication) {
         setFrom("jobs+" + jobApplication.uniqueID + "-" + jobApplication.id + "@zenexity.com");
         addRecipient(jobApplication.email);
-        setSubject("Thank for your job application @ zenexity!");
+        setSubject("Thank you for being interested by zenexity!");
         send(jobApplication);
     }
     
     public static void sendMessage(JobApplication jobApplication, String message) {
         setFrom("jobs+" + jobApplication.uniqueID + "-" + jobApplication.id + "@zenexity.com");
         addRecipient(jobApplication.email);
-        setSubject("Your job application at zenexity");
+        setSubject("Your job application @ zenexity");
         send(jobApplication, message);
     }
     

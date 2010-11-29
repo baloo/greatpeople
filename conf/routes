@@ -22,3 +22,6 @@ GET     /resume/{id}                            JobApplications.index
 POST    /resume/note                            JobApplications.postNote
 POST    /resume/message                         JobApplications.sendMessage
 POST    /resume/changee                         JobApplications.change
+GET     /resume/{id}/delete                     JobApplications.delete
+
+GET     /attachment/{id}                        JobApplications.download
