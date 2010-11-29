@@ -47,6 +47,7 @@ $(function(){
 #{/list}
 </div>
 
+#{if pageCount > 1}
 <div id="pages">
 <ul
 #{list Math.max(0, pageId-4)..Math.min(pageCount-1, pageId+4)}
@@ -61,6 +62,7 @@ $(function(){
 #{/}
 </ul>
 </div>
+#{/if}
 
 <script type="text/template" charset="utf-8">
     <dl class="candidate-list">
