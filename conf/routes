@@ -8,6 +8,8 @@ GET     /box/{boxid}                            Application.box(pageId:'0')
 GET     /box/{boxid}/{pageId}                   Application.box
 GET     /check                                  Application.check
 
+GET     /login                                  Auth.authenticate
+GET     /logout                                 Auth.logout
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
@@ -15,7 +17,8 @@ GET     /public/                                staticDir:public
 *       /admin                                  module:crud
 *       /admin/secure                           module:secure
 
+# Resume
 GET     /resume/{id}                            JobApplications.index
-
-# Catch all
-*       /{controller}/{action}                  {controller}.{action}
+POST    /resume/note                            JobApplications.postNote
+POST    /resume/message                         JobApplications.sendMessage
+POST    /resume/changee                         JobApplications.change

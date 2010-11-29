@@ -23,7 +23,7 @@ public class JobApplications extends Controller {
         resume.addInternalNote(session.get("name"), session.get("email"), comment, rating);
         index(resumeId);
     }
-    
+
     public static void sendMessage(Long resumeId, String comment) {
         JobApplication resume = JobApplication.findById(resumeId);
         resume.status = JobApplication.JobStatus.INPROGRESS;
@@ -32,7 +32,7 @@ public class JobApplications extends Controller {
         Mails.sendMessage(resume, comment);
         index(resumeId);
     }
-    
+
     public static void download(Long id) {
         Attachment attachment = Attachment.findById(id);
         response.contentType = attachment.content.type();

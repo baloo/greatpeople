@@ -1,19 +1,15 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.OneToMany;
-import javax.persistence.Enumerated;
 import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 
 import play.data.validation.Email;
 import play.db.jpa.Model;
-import play.utils.Utils;
 import play.libs.Codec;
 
 

@@ -5,4 +5,5 @@ eclipse
 .settings
 conf/credentials.conf
 data
+*.pyc
 
