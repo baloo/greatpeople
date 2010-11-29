@@ -16,6 +16,7 @@ public class JobApplications extends Controller {
 
     public static void postNote(Long resumeId, String comment, Integer rating, String status) {
         JobApplication resume = JobApplication.findById(resumeId);
+        if (resume == null) badRequest();
         JobStatus jobStatus = JobStatus.find(status);
         resume.status = jobStatus != null ? jobStatus : JobStatus.INPROGRESS;
         resume.save();
@@ -25,6 +26,7 @@ public class JobApplications extends Controller {
 
     public static void sendMessage(Long resumeId, String comment) {
         JobApplication resume = JobApplication.findById(resumeId);
+        if (resume == null) badRequest();
         resume.status = JobApplication.JobStatus.INPROGRESS;
         resume.save();
         resume.addMessage(session.get("name"), session.get("email"), comment);
@@ -32,14 +34,17 @@ public class JobApplications extends Controller {
         index(resumeId);
     }
 
-    public static void download(Long id) {
+    // Filename is not used, it's just to get the correct filename at download time
+    public static void download(Long id, String filename) {
         Attachment attachment = Attachment.findById(id);
+        notFoundIfNull(attachment);
         response.contentType = attachment.content.type();
         renderBinary(attachment.content.getFile());
     }
 
     public static void delete(Long id) {
         JobApplication resume = JobApplication.findById(id);
+        if (resume == null) badRequest();
         resume.status = JobApplication.JobStatus.DELETED;
         resume.save();
         Application.index();
@@ -47,7 +52,7 @@ public class JobApplications extends Controller {
 
     public static void change(Long resumeId, String id, String value) {
         JobApplication resume = JobApplication.findById(resumeId);
-        notFoundIfNull(resume);
+        if (resume == null) badRequest();
         if ("name".equals(id)) {
             resume.name = value;
         } else if ("email".equals(id)) {

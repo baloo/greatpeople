@@ -14,7 +14,7 @@
         <h2>Attachements</h2>
         <ul class="attachements">
             #{list resume.attachments}
-                <li><a href="@{download(_.id)}">${_.name}</a></li>
+                <li><a href="@{download(_.id, _.name)}">${_.name}</a></li>
             #{/list}
         </ul>
     </div>
