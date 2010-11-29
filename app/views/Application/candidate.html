@@ -1,17 +1,6 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
-#{set 'nav'}
-            <nav>
-                <input type="search" results="10" placeholder="Search" id="search" />
-                <ul>
-                    <li class="new"><a href="@{box('new')}">Submited</a></li>
-                    <li class="inprogress"><a href="@{box('inprogress')}">In process</a></li>
-                    <li class="archived"><a href="@{box('archived')}">Archived</a></li>
-                </ul>
-            </nav>
-#{/}
-
 <div id="candidate">
     <h1>John Doe</h1>
     <dl class="contact">
@@ -71,7 +60,7 @@
                 <dd class="rate">5+</dd>
                 <dd class="message">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</dd>
             </dl>
-            
+
         </div>
         <div class="answer">
             <h2>Add a comment</h2>
@@ -110,9 +99,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript" charset="utf-8">
-    var Resume = Backbone.Model.extend({
-    
-    });
-</script>

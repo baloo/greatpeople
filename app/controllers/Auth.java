@@ -1,13 +1,18 @@
 package controllers;
 
-import play.Logger;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
+import play.Play;
 import play.libs.OpenID;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.Router;
 
 public class Auth extends Controller {
 
     static String ZENEXITY_OPENID = "https://www.google.com/accounts/o8/site-xrds?hd=zenexity.com";
+    static String ZENEXITY_LOGOUT = "http://google.com/a/zenexity.com/Logout";
 
     @Before(unless="authenticate")
     static void checkUser() {
@@ -17,9 +22,9 @@ public class Auth extends Controller {
         }
     }
 
-    public static void logout() {
+    public static void logout() throws UnsupportedEncodingException {
         session.clear();
-        Application.index();
+        redirect(ZENEXITY_LOGOUT);
     }
 
     public static void error() {

@@ -1,17 +1,6 @@
 #{extends 'main.html' /}
 #{set title:'Resume' /}
-#{set 'moreScripts'}
-<script src="@{'/public/javascripts/lib/jquery.jeditable.mini.js'}" type="text/javascript" charset="utf-8"></script>
-#{/set}
-#{set 'nav'}
-    <nav>
-        <ul>
-            <li class="new"><a href="@{Application.box('new')}">Submited</a></li>
-            <li class="inprogress"><a href="@{Application.box('inprogress')}">In process</a></li>
-            <li class="archived"><a href="@{Application.box('archived')}">Archived</a></li>
-        </ul>
-    </nav>
-#{/}
+
 <div id="candidate">
     <h1 class="inplace" id="name">${resume.name}</h1>
     <dl class="contact">
@@ -29,7 +18,7 @@
             #{/list}
         </ul>
     </div>
-    
+
     <div class="discussion">
         <div class="list">
             #{list resume.notes}
@@ -76,12 +65,14 @@
                     <p>
                         <input type="submit" value="Send this message" />
                     </p>
-                #{/form}                
+                #{/form}
             </div>
         </div>
     </div>
 </div>
 
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/lib/jquery.jeditable.mini.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
     $(function(){
         $(".inplace").each(function() {
@@ -106,3 +97,4 @@
         })
     });
 </script>
+#{/set}

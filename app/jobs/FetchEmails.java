@@ -24,7 +24,7 @@ import play.libs.IO;
 public class FetchEmails extends Job {
 
     public void doJob() throws Exception {
-        
+
         if(Play.configuration.getProperty("mailbox.username") == null || Play.configuration.getProperty("mailbox.password") == null) {
             Logger.error("Please configure mailbox credentials in conf/credentials.conf");
             return;

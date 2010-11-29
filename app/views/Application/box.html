@@ -34,17 +34,6 @@ $(function(){
 </script>
 #{/}
 
-#{set 'nav'}
-    <nav>
-        <input type="search" results="0" placeholder="Search" id="search" autocomplete="off"/>
-        <ul>
-            <li class="new"><a href="@{box('new', 0)}">Submited</a></li>
-            <li class="inprogress"><a href="@{box('inprogress', 0)}">In process</a></li>
-            <li class="archived"><a href="@{box('archived', 0)}">Archived</a></li>
-        </ul>
-    </nav>
-#{/}
-
 <div id="list">
     *{ Candidates go here }*
 #{list applications}
@@ -89,9 +78,4 @@ $(function(){
             <span class="awesome"></span>
         </dd>
     </dl>
-</script>
-<script type="text/javascript" charset="utf-8">
-    var Resume = Backbone.Model.extend({
-    
-    });
 </script>

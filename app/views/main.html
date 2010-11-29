@@ -8,20 +8,24 @@
         <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
         <link href='http://fonts.googleapis.com/css?family=Neuton&subset=latin' rel='stylesheet' type='text/css'>
         #{get 'moreStyles' /}
-        <script src="@{'/public/javascripts/lib/jquery-1.4.4.min.js'}" type="text/javascript" charset="utf-8"></script>
-        <script src="@{'/public/javascripts/lib/underscore-min.js'}" type="text/javascript" charset="utf-8"></script>
-        <script src="@{'/public/javascripts/lib/backbone.js'}" type="text/javascript" charset="utf-8"></script>
-        #{get 'moreScripts' /}
     </head>
     <body>
         <menu>
             <ul>
-                <li class="user-name">${session.name} <span class="user-mail">(${session.email})</span></li>
+                <li class="user-name">${session.name} <span class="user-mail">(${session.email})</span></li> |
+                <li><a href="@{Auth.logout()}">logout</a></li>
             </ul>
         </menu>
         <header>
             <a href="/" id="logo">Great People</a>
-            #{get 'nav' /}
+            <nav>
+                <input type="search" results="10" placeholder="Search" id="search" />
+                <ul>
+                    <li class="new"><a href="@{Application.box('new')}">Submited</a></li>
+                    <li class="inprogress"><a href="@{Application.box('inprogress')}">In process</a></li>
+                    <li class="archived"><a href="@{Application.box('archived')}">Archived</a></li>
+                </ul>
+            </nav>
         </header>
         <div id="wrapper">
             #{doLayout /}
@@ -29,5 +33,9 @@
         <footer>
             ©2010 zenexity.com
         </footer>
+        <script src="@{'/public/javascripts/lib/jquery-1.4.4.min.js'}" type="text/javascript" charset="utf-8"></script>
+        <script src="@{'/public/javascripts/lib/underscore-min.js'}" type="text/javascript" charset="utf-8"></script>
+        <script src="@{'/public/javascripts/lib/backbone.js'}" type="text/javascript" charset="utf-8"></script>
+        #{get 'moreScripts' /}
     </body>
 </html>
