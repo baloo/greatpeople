@@ -352,6 +352,12 @@ h1, h2 {
     
 } 
 
+.warning-note {
+    color: #c00;
+    display: block;
+    padding: 10px 0 0 13px;
+}
+
 .himself {
     
 }

@@ -47,10 +47,10 @@
         </div>
         <div class="answer">
             <ul class="tabs">
-                <li><a href="#" class="active">Internal note</a></li>
-                <li><a href="#">Send an email</a></li>
+                <li><a href="#tab-internal" class="active">Internal note</a></li>
+                <li><a href="#tab-email">Send an email</a></li>
             </ul>
-            <div class="internal">
+            <div id="tab-internal">
                 #{form @JobApplications.postNote(resume.id)}
                     <label for="comment">Message</label>
                     <textarea id="comment" name="comment"></textarea>
@@ -68,9 +68,9 @@
                     </p>
                 #{/form}
             </div>
-            <div class="email">
+            <div id="tab-email">
                 #{form @JobApplications.sendMessage(resume.id)}
-                    <span style="color:#c00">Your message will be sent!</span>
+                    <span class="warning-note">Your message will be sent!</span>
                     <label for="content">Message</label>
                     <textarea id="content" name="comment"></textarea>
                     <p>
@@ -94,12 +94,15 @@
                 width: self.id == "name" ? "auto" : 100
             });
         });
-
-        $(".answer .email").hide();
+        
+        // tabs
+        $("#tab-email").hide();
         $(".tabs a").click(function(e){
             e.preventDefault();
-            $(".tabs a").toggleClass("active");
-            $(".answer > div").toggle();
+            $(".tabs a").removeClass("active");
+            $(this).addClass("active");
+            $(".answer > div").hide();
+            $(".answer > " + this.hash).show();
         })
     });
 </script>
