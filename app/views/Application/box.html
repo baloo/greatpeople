@@ -47,6 +47,12 @@ $(function(){
 #{/list}
 </div>
 
+#{if applications.size() == 0}
+<div id="noCandidate">
+    No application here...
+</div>
+#{/}
+
 #{if pageCount > 1}
 <div id="pages">
 <ul

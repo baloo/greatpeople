@@ -51,6 +51,12 @@
                         <option value="3">GOOD</option>
                         <option value="4">AWESOME</option>
                     </select>
+                    <label for="status">Status</label>
+                    <select name="status" id="status" style="width:100px;margin-left:60px;margin-top:-32px">
+                        <option value="new">New</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="archived">Archived</option>
+                    </select>
                     <p>
                         <input type="submit" value="Send" />
                     </p>
@@ -84,7 +90,15 @@
                 width: self.id == "name" ? "auto" : 100
             });
         });
-        
+
+        // Status
+#{if resume.status.toString() == "NEW" || resume.status.toString() == "INPROGRESS"}
+        $("#status").val("inprogress");
+#{/if}
+#{else}
+        $("#status").val("${resume.status.toString().toLowerCase()}");
+#{/else}
+
         // tabs
         $("#tab-email").hide();
         $(".tabs a").click(function(e){

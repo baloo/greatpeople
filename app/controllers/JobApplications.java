@@ -1,9 +1,7 @@
 package controllers;
-import play.Logger;
-import models.JobApplication;
-import models.Note;
 import models.Attachment;
-
+import models.JobApplication;
+import models.JobApplication.JobStatus;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -16,9 +14,10 @@ public class JobApplications extends Controller {
         render(resume);
     }
 
-    public static void postNote(Long resumeId, String comment, Integer rating) {
+    public static void postNote(Long resumeId, String comment, Integer rating, String status) {
         JobApplication resume = JobApplication.findById(resumeId);
-        resume.status = JobApplication.JobStatus.INPROGRESS;
+        JobStatus jobStatus = JobStatus.find(status);
+        resume.status = jobStatus != null ? jobStatus : JobStatus.INPROGRESS;
         resume.save();
         resume.addInternalNote(session.get("name"), session.get("email"), comment, rating);
         index(resumeId);
@@ -38,7 +37,7 @@ public class JobApplications extends Controller {
         response.contentType = attachment.content.type();
         renderBinary(attachment.content.getFile());
     }
-    
+
     public static void delete(Long id) {
         JobApplication resume = JobApplication.findById(id);
         resume.status = JobApplication.JobStatus.DELETED;

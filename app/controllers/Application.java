@@ -2,9 +2,12 @@ package controllers;
 
 import java.util.List;
 
+import org.apache.commons.io.filefilter.NotFileFilter;
+
 import models.JobApplication;
 import models.JobApplication.JobStatus;
 import play.Logger;
+import play.Play;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -24,23 +27,17 @@ public class Application extends Controller {
     // API
 
     public static void box(String boxid, int pageId) {
-        JobStatus status = null;
-        if ("new".equals(boxid)) {
-            status = JobStatus.NEW;
-        } else if ("inprogress".equals(boxid)) {
-            status = JobStatus.INPROGRESS;
-        } else if ("archived".equals(boxid)) {
-            status = JobStatus.ARCHIVED;
-        } else {
-            notFound();
-        }
+        JobStatus status = JobStatus.find(boxid);
+        if (status == null || status == JobStatus.DELETED) notFound();
         List<JobApplication> applications = JobApplication.find("status = ? order by submitted desc", status)
             .from(JobApplication.PER_PAGE * pageId).fetch(JobApplication.PER_PAGE);
         int pageCount = JobApplication.pageCount(status);
+        if (pageId >= pageCount) notFound();
         render(boxid, pageId, applications, pageCount);
     }
 
     public static void candidate() {
+        if (Play.mode.isProd()) notFound();
         render();
     }
 
