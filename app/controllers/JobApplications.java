@@ -6,7 +6,7 @@ import play.mvc.Controller;
 import play.mvc.With;
 
 @With(Auth.class)
-public class JobApplications extends Controller {
+public class JobApplications extends Application {
 
     public static void index(Long id){
         JobApplication resume = JobApplication.findById(id);
