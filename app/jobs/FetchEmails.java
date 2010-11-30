@@ -45,11 +45,11 @@ public class FetchEmails extends Job {
         // Search unstarred messages
         SearchTerm unstarred = new FlagTerm(new Flags(Flags.Flag.FLAGGED), false);
         Message[] messages = folder.search(unstarred);
-
+        
         // Loop over messages
         for (Message message : messages) {
             try {
-            
+                
                 String contentString = "(no content found)";
                 List<Attachment> attachments = new ArrayList<Attachment>();
             
@@ -66,9 +66,16 @@ public class FetchEmails extends Job {
                                         .equalsIgnoreCase(Part.INLINE)))) {
                             // Check if plain
                             MimeBodyPart mbp = (MimeBodyPart) part;
-                            System.out.println(mbp.getContentType());
                             if (mbp.isMimeType("text/plain")) {
                                 contentString += (String) mbp.getContent();
+                            } else if(mbp.isMimeType("multipart/ALTERNATIVE")) {
+                                MimeMultipart mmp = (MimeMultipart)mbp.getContent();
+                                for(int k=0; k<mmp.getCount(); k++) {
+                                    Part p = mmp.getBodyPart(k);
+                                    if(((MimeBodyPart)p).isMimeType("text/plain")) {
+                                        contentString = (String)p.getContent();
+                                    }
+                                }
                             } else {
                                 attachments.add(saveAttachment(part));
                             }
@@ -79,6 +86,11 @@ public class FetchEmails extends Job {
                 String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
                 String email = ((InternetAddress) message.getFrom()[0]).getAddress();
                 String to = ((InternetAddress) message.getAllRecipients()[0]).getAddress();
+                for(InternetAddress ia : (InternetAddress[])message.getAllRecipients()) {
+                    if(ia.getAddress().contains("jobs")) {
+                        to = ia.getAddress();
+                    }
+                }
             
                 if("jobs@zenexity.com".equals(to)) {
                 
