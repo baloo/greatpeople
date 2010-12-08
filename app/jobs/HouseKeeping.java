@@ -1,11 +1,13 @@
 package jobs;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.List;
 
-import play.jobs.*;
-
-import models.*;
-import controllers.*;
+import models.JobApplication;
+import models.JobApplication.JobStatus;
+import play.jobs.Every;
+import play.jobs.Job;
+import controllers.Mails;
 
 @Every("24h")
 public class HouseKeeping extends Job {
@@ -13,11 +15,11 @@ public class HouseKeeping extends Job {
     public void doJob() {
         Calendar now = Calendar.getInstance();
         now.add(Calendar.DATE, -7);
-        List old = JobApplication.find("submitted < ?", now.getTime()).fetch();
+        List old = JobApplication.find("submitted < ? and status = ?", now.getTime(), JobStatus.NEW).fetch();
         if(!old.isEmpty()) {
             Mails.alert(old);
         }
     }
-    
+
 }
 

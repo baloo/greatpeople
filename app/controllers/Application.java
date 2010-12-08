@@ -14,7 +14,7 @@ import play.mvc.Before;
 
 @With(Auth.class) 
 public class Application extends Controller {
-    
+
     @Before
     static void data() {
         renderArgs.put("newCount", JobApplication.count("status = ?", JobApplication.JobStatus.NEW));
@@ -22,26 +22,27 @@ public class Application extends Controller {
         renderArgs.put("archivedCount", JobApplication.count("status = ?", JobApplication.JobStatus.ARCHIVED));
     }
 
-    public static void index() {
-        new jobs.HouseKeeping().now();
-        box("new", 0);
-    }
-
     public static void check() throws Exception {
         new jobs.FetchEmails().now().get();
-        box("new", 0);
+        index();
     }
 
     // API
 
-    public static void box(String boxid, int pageId) {
+    public static void applications(String boxid, int pageId) {
         JobStatus status = JobStatus.find(boxid);
         if (status == null || status == JobStatus.DELETED) notFound();
         List<JobApplication> applications = JobApplication.find("status = ? order by submitted desc", status)
             .from(JobApplication.PER_PAGE * pageId).fetch(JobApplication.PER_PAGE);
         int pageCount = JobApplication.pageCount(status);
         if (pageId >= pageCount) notFound();
-        render(boxid, pageId, applications, pageCount);
+        renderJSON(applications);
+    }
+
+    // Pages
+
+    public static void index() {
+        render();
     }
 
     public static void candidate() {

@@ -45,13 +45,13 @@ public class JobApplication extends Model {
     }
 
     public void addMessage(String from, String email, String content) {
-        new Note(this, from, email, content, false).create();
+        new Note(this, from, email, content, false).save();
     }
 
     public void addInternalNote(String from, String email, String content, Integer rating) {
         Note note = new Note(this, from, email, content, true);
         note.rating = rating;
-        note.create();
+        note.save();
     }
 
     public List<Note> getNotes() {

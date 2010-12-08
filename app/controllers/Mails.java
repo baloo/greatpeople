@@ -15,20 +15,20 @@ public class Mails extends Mailer {
         setSubject("Thank you for being interested by zenexity!");
         send(jobApplication);
     }
-    
+
     public static void sendMessage(JobApplication jobApplication, String message) {
         setFrom("jobs+" + jobApplication.uniqueID + "-" + jobApplication.id + "@zenexity.com");
         addRecipient(jobApplication.email);
         setSubject("Your job application @ zenexity");
         send(jobApplication, message);
     }
-    
+
     public static void alert(List oldApplications) {
         setFrom("jobs@zenexity.com");
-        addRecipient("z@zenexity.com");
+        addRecipient("jobs@zenexity.com");
         setSubject("There are some job applications to process");
         send(oldApplications);
     }
-    
+
 }
 

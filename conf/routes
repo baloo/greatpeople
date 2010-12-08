@@ -10,6 +10,7 @@ GET     /check                                  Application.check
 
 GET     /login                                  Auth.authenticate
 GET     /logout                                 Auth.logout
+GET     /auth/error                             Auth.error
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public

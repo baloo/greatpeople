@@ -96,10 +96,10 @@ public class FetchEmails extends Job {
                 
                     // Create Application
                     JobApplication application = new JobApplication(name, email, contentString, attachments);
-                    application.create();
+                    application.save();
                     for(Attachment attachment : attachments) {
                         attachment.jobApplication = application;
-                        attachment.create();
+                        attachment.save();
                     }
                     Mails.applied(application);
                 
