@@ -21,9 +21,9 @@
             <nav>
                 <input type="search" results="10" placeholder="Search" id="search" />
                 <ul>
-                    <li class="new"><a href="@{Application.index()}#new">Submitted #{if newCount}(${newCount})#{/if}</a></li>
-                    <li class="inprogress"><a href="@{Application.index()}#inprogress">In process  #{if inprogressCount}(${inprogressCount})#{/if}</a></li>
-                    <li class="archived"><a href="@{Application.index()}#archived">Archived #{if archivedCount}(${archivedCount})#{/if}</a></li>
+                    <li class="new"><a href="@{Application.box('new', 0)}">Submitted #{if newCount}(${newCount})#{/if}</a></li>
+                    <li class="inprogress"><a href="@{Application.box('inprogress', 0)}">In process  #{if inprogressCount}(${inprogressCount})#{/if}</a></li>
+                    <li class="archived"><a href="@{Application.box('archived', 0)}">Archived #{if archivedCount}(${archivedCount})#{/if}</a></li>
                 </ul>
             </nav>
         </header>
@@ -36,7 +36,6 @@
         <script src="@{'/public/javascripts/lib/jquery-1.4.4.min.js'}" type="text/javascript" charset="utf-8"></script>
         <script src="@{'/public/javascripts/lib/underscore-min.js'}" type="text/javascript" charset="utf-8"></script>
         <script src="@{'/public/javascripts/lib/backbone.js'}" type="text/javascript" charset="utf-8"></script>
-        <script src="@{'/public/javascripts/lib/jquery.history.js'}" type="text/javascript" charset="utf-8"></script>
         #{get 'moreScripts' /}
     </body>
 </html>
