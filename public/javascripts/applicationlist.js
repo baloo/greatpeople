@@ -3,6 +3,7 @@
 var Workspace = Backbone.Controller.extend({
 
     routes: {
+        "": "index",
         "new": "newapp",    // #new
         "inprogress": "inprogress",    // #inprogress
         "archived": "archived",
@@ -15,6 +16,10 @@ var Workspace = Backbone.Controller.extend({
         this.view = new AppView({
             collection: this.apps
         });
+    },
+
+    index: function() {
+        window.location.hash = "#new";
     },
 
     newapp: function() {
