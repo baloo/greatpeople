@@ -3,11 +3,13 @@ package controllers;
 import java.util.List;
 
 import org.apache.commons.io.filefilter.NotFileFilter;
+import org.yaml.snakeyaml.Yaml;
 
 import models.JobApplication;
 import models.JobApplication.JobStatus;
 import play.Logger;
 import play.Play;
+import play.libs.IO;
 import play.mvc.Controller;
 import play.mvc.With;
 import play.mvc.Before;
@@ -21,7 +23,7 @@ public class Application extends Controller {
         renderArgs.put("inprogressCount", JobApplication.count("status = ?", JobApplication.JobStatus.INPROGRESS));
         renderArgs.put("archivedCount", JobApplication.count("status = ?", JobApplication.JobStatus.ARCHIVED));
     }
-
+   
     public static void index() {
         new jobs.HouseKeeping().now();
         box("new", 0);
@@ -41,10 +43,12 @@ public class Application extends Controller {
             .from(JobApplication.PER_PAGE * pageId).fetch(JobApplication.PER_PAGE);
         int pageCount = JobApplication.pageCount(status);
         if (pageId >= pageCount) notFound();
+        
         render(boxid, pageId, applications, pageCount);
     }
 
     public static void candidate() {
+    	
         if (Play.mode.isProd()) notFound();
         render();
     }

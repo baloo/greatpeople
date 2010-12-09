@@ -62,8 +62,21 @@
                     </p>
                 #{/form}
             </div>
+            
             <div id="tab-email">
+                #{if templates}
+                    <label for="template">Template</label>
+                    <select name="template" id="template" onchange="$('#content').html(this.value)" style="width:200px;margin-left:100px;margin-top:-32px">
+                            <option value="">No template</option>
+                            #{list items:templates, as:'template'}
+                                <option value="${template.text}">${template.label}</option>
+                            #{/list}
+                    </select>
+                    
+                #{/if}
+                
                 #{form @JobApplications.sendMessage(resume.id)}
+                    
                     <span class="warning-note">Your message will be sent!</span>
                     <label for="content">Message</label>
                     <textarea id="content" name="comment"></textarea>

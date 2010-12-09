@@ -1,7 +1,13 @@
 package controllers;
+import org.yaml.snakeyaml.Yaml;
+
 import models.Attachment;
 import models.JobApplication;
 import models.JobApplication.JobStatus;
+import models.*;
+import play.Play;
+import play.cache.Cache;
+import play.libs.IO;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -11,7 +17,12 @@ public class JobApplications extends Application {
     public static void index(Long id){
         JobApplication resume = JobApplication.findById(id);
         notFoundIfNull(resume);
-        render(resume);
+        Object templates = Cache.get("answer_templates");
+        if (templates == null){
+        	templates = AnswerTemplate.all().fetch();
+        	if (Play.mode == Play.Mode.PROD) Cache.add("answer_templates", templates, "1h");
+        }
+        render(resume, templates);
     }
 
     public static void postNote(Long resumeId, String comment, Integer rating, String status) {
