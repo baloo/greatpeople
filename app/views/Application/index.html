@@ -1,0 +1,60 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+<div id="list">
+    *{ Candidates go here }*
+</div>
+
+<div id="noCandidate" style="display: none;">
+    No application here...
+</div>
+
+<div id="pages">
+<ul>
+    <li>
+        <a href="#">0</a>
+    </li>
+</ul>
+</div>
+
+<script id="applicantTmpl" type="text/template" charset="utf-8">
+    <dl class="candidate-list">
+        <dt><a class="name" href="/resume/{{= id }}">{{= name }}</a></dt>
+        <dd class="submition"><date>{{= formattedDate }}</date></dd>
+        <dd class="rate">
+            <div class="cursor" style="width: {{= stars }}%"></div>
+        </dd>
+    </dl>
+</script>
+
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/applicationlist.js'}" type="text/javascript" charset="utf-8"></script>
+<script>
+
+function filter(q) {
+    if (q.length < 3) {
+        $(".candidate-list").show();
+        return;
+    }
+    $(".candidate-list").each(function(){
+        console.log("one candidate");
+        var name = $(this).find(".name").text();
+        console.log(name.toLowerCase());
+        if (name.toLowerCase().indexOf(q) > -1) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+$(function(){
+
+    // window.App = new AppView()
+    new Workspace();
+    Backbone.history.start();
+
+});
+
+</script>
+#{/}
