@@ -45,14 +45,14 @@ public class FetchEmails extends Job {
         // Search unstarred messages
         SearchTerm unstarred = new FlagTerm(new Flags(Flags.Flag.FLAGGED), false);
         Message[] messages = folder.search(unstarred);
-        
+
         // Loop over messages
         for (Message message : messages) {
             try {
-                
+
                 String contentString = "(no content found)";
                 List<Attachment> attachments = new ArrayList<Attachment>();
-            
+
                 // Decode content
                 if (message.getContent() instanceof String) {
                     contentString = (String) message.getContent();
@@ -82,18 +82,23 @@ public class FetchEmails extends Job {
                         }
                     }
                 }
-                
+
                 String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
                 String email = ((InternetAddress) message.getFrom()[0]).getAddress();
                 String to = ((InternetAddress) message.getAllRecipients()[0]).getAddress();
-                for(InternetAddress ia : (InternetAddress[])message.getAllRecipients()) {
-                    if(ia.getAddress().contains("jobs")) {
-                        to = ia.getAddress();
+                for (Address a : (Address[])message.getAllRecipients()) {
+                    if ("rfc822".equals(a.getType())) {
+                        InternetAddress ia = (InternetAddress)a;
+                        if (ia.getAddress().contains("jobs")) {
+                            to = ia.getAddress();
+                        }
+                    } else {
+                        Logger.warn("Could not convert address " + a + " to an InternetAddress, type is invalid " + a.getType());
                     }
                 }
-            
+
                 if("jobs@zenexity.com".equals(to)) {
-                
+
                     // Create Application
                     JobApplication application = new JobApplication(name, email, contentString, attachments);
                     application.save();
@@ -102,7 +107,7 @@ public class FetchEmails extends Job {
                         attachment.save();
                     }
                     Mails.applied(application);
-                
+
                 } else {
                     Pattern regexp = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
                     Matcher matcher = regexp.matcher(to);
@@ -119,11 +124,11 @@ public class FetchEmails extends Job {
                         Logger.warn("Unknow address --> %s", to);
                     }
                 }
-            
+
                 if (Play.mode == Play.Mode.PROD) {
                     message.setFlag(Flag.FLAGGED, true);
                 }
-            
+
             } catch(Exception e) {
                 Logger.error(e, "Cannot read this message");
             }
@@ -133,14 +138,14 @@ public class FetchEmails extends Job {
         folder.close(false);
         store.close();
     }
-    
+
     private Attachment saveAttachment(Part part) throws Exception, MessagingException, IOException {
         Attachment attachment = new Attachment();
         attachment.name = decodeName(part.getFileName());
         attachment.content.set(part.getInputStream(), part.getContentType());
         return attachment;
     }
-    
+
     protected String decodeName(String name) throws Exception {
         if (name == null || name.length() == 0) {
             return "unknown";
