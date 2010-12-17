@@ -55,6 +55,7 @@ var AppView = Backbone.View.extend({
     loadBox: function(box) {
         this.collection.url = '/api/applicants/' + box;
         var view = this;
+        this.spinner();
         this.collection.fetch({
             success: function() {
                 view.render();
@@ -67,7 +68,12 @@ var AppView = Backbone.View.extend({
         });
     },
 
+    spinner: function() {
+        $("#spinner").show();
+    },
+
     render: function() {
+        $("#spinner").hide();
         var view = this;
         $(this.el).html('');
         this.collection.forEach(function(applicant){

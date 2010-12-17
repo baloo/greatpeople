@@ -9,6 +9,10 @@
     No application here...
 </div>
 
+<div id="spinner" style="display: none">
+    <img src="@{'/public/images/throbber.gif'}" />
+</div>
+
 <div id="pages">
 <ul>
     <li>
@@ -49,11 +53,8 @@ function filter(q) {
 }
 
 $(function(){
-
-    // window.App = new AppView()
     new Workspace();
     Backbone.history.start();
-
 });
 
 </script>

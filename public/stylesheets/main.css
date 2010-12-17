@@ -159,7 +159,10 @@ nav li a.active {
     -moz-border-radius: 0 0 5px 5px;
     border-radius: 0 0 5px 5px;
 }
-
+#spinner {
+    text-align: center;
+    padding-top: 80px;
+}
 #list {
     padding: 10px;
 }
