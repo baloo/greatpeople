@@ -58,6 +58,11 @@ var AppView = Backbone.View.extend({
         this.collection.fetch({
             success: function() {
                 view.render();
+            },
+            error: function(model, response) {
+                if (response.status == 403) {
+                    view.login();
+                }
             }
         });
     },
@@ -73,6 +78,10 @@ var AppView = Backbone.View.extend({
                 })
             ));
         });
+    },
+
+    login: function() {
+        window.location = "/login?callback=" + encodeURIComponent(window.location);
     }
 
 });

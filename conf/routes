@@ -13,8 +13,8 @@ GET     /logout                                 Auth.logout
 GET     /auth/error                             Auth.error
 
 # API
-GET     /api/applicants/{boxid}                            Application.applications(pageId:'0')
-GET     /api/applicants/{boxid}/{pageId}                   Application.applications
+GET     /api/applicants/{boxid}                            API.applications(pageId:'0')
+GET     /api/applicants/{boxid}/{pageId}                   API.applications
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public

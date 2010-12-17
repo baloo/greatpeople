@@ -25,18 +25,6 @@ public class Application extends Controller {
         index();
     }
 
-    // API
-
-    public static void applications(String boxid, int pageId) {
-        JobStatus status = JobStatus.find(boxid);
-        if (status == null || status == JobStatus.DELETED) notFound();
-        List<JobApplication> applications = JobApplication.find("status = ? order by submitted desc", status)
-            .from(JobApplication.PER_PAGE * pageId).fetch(JobApplication.PER_PAGE);
-        int pageCount = JobApplication.pageCount(status);
-        if (pageId >= pageCount) notFound();
-        renderJSON(applications, new JobApplicationSerializer());
-    }
-
     // Pages
 
     public static void index() {
