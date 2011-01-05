@@ -97,8 +97,11 @@ public class FetchEmails extends Job {
                     }
                 }
 
-                if("jobs@zenexity.com".equals(to)) {
-
+                if ("jobs@zenexity.com".equals(email)) {
+                    // Ignore emails sent from jobs (= sent from Great People)
+                    continue;
+                }
+                if ("jobs@zenexity.com".equals(to)) {
                     // Create Application
                     JobApplication application = new JobApplication(name, email, contentString, attachments);
                     application.save();

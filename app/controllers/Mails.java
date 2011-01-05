@@ -19,6 +19,7 @@ public class Mails extends Mailer {
     public static void sendMessage(JobApplication jobApplication, String message) {
         setFrom("jobs+" + jobApplication.uniqueID + "-" + jobApplication.id + "@zenexity.com");
         addRecipient(jobApplication.email);
+        addBcc("jobs@zenexity.com");
         setSubject("Your job application @ zenexity");
         send(jobApplication, message);
     }
