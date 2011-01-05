@@ -13,14 +13,6 @@
     <img src="@{'/public/images/throbber.gif'}" />
 </div>
 
-<div id="pages">
-<ul>
-    <li>
-        <a href="#">0</a>
-    </li>
-</ul>
-</div>
-
 <script id="applicantTmpl" type="text/template" charset="utf-8">
     <dl class="candidate-list">
         <dt><a class="name" href="/resume/{{= id }}">{{= name }}</a></dt>
@@ -30,32 +22,38 @@
         </dd>
     </dl>
 </script>
+<script id="noApplicantTmpl" type="text/template" charset="utf-8">
+    <dl class="candidate-list noApplicant">
+        <dt>No current applications {{= status}}</dt>
+        <dd></dd>
+    </dl>
+</script>
 
 #{set 'moreScripts'}
 <script src="@{'/public/javascripts/applicationlist.js'}" type="text/javascript" charset="utf-8"></script>
-<script>
+<script type="text/javascript" charset="utf-8">
 
-function filter(q) {
-    if (q.length < 3) {
-        $(".candidate-list").show();
-        return;
-    }
-    $(".candidate-list").each(function(){
-        console.log("one candidate");
-        var name = $(this).find(".name").text();
-        console.log(name.toLowerCase());
-        if (name.toLowerCase().indexOf(q) > -1) {
-            $(this).show();
-        } else {
-            $(this).hide();
+    function filter(q) {
+        if (q.length < 3) {
+            $(".candidate-list").show();
+            return;
         }
-    });
-}
+        $(".candidate-list").each(function(){
+            console.log("one candidate");
+            var name = $(this).find(".name").text();
+            console.log(name.toLowerCase());
+            if (name.toLowerCase().indexOf(q) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
 
-$(function(){
-    new Workspace();
-    Backbone.history.start();
-});
+    $(function(){
+        new Workspace();
+        Backbone.history.start();
+    });
 
 </script>
 #{/}

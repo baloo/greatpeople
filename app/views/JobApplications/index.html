@@ -58,7 +58,7 @@
                         <option value="archived">Archived</option>
                     </select>
                     <p>
-                        <input type="submit" value="Send" />
+                        <input type="submit" value="Add note" />
                     </p>
                 #{/form}
             </div>
@@ -92,35 +92,47 @@
 #{set 'moreScripts'}
 <script src="@{'/public/javascripts/lib/jquery.jeditable.mini.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
-    $(function(){
-        $(".inplace").each(function() {
-            var self = this;
-            $(this).editable("@{change()}", {
-                tooltip: 'Click to edit',
-                attribute: this.id,
-                style: 'display: inline',
-                submitdata : {resumeId: "${resume.id}"},
-                width: self.id == "name" ? "auto" : 100
-            });
-        });
 
-        // Status
-#{if resume.status.toString() == "NEW" || resume.status.toString() == "INPROGRESS"}
-        $("#status").val("inprogress");
-#{/if}
-#{else}
-        $("#status").val("${resume.status.toString().toLowerCase()}");
-#{/else}
-
-        // tabs
-        $("#tab-email").hide();
-        $(".tabs a").click(function(e){
-            e.preventDefault();
-            $(".tabs a").removeClass("active");
-            $(this).addClass("active");
-            $(".answer > div").hide();
-            $(".answer > " + this.hash).show();
-        })
+    $(document).ready(function() {
+        GP.UI.initInplaceEdit();
+        GP.UI.initTabBar();
+        GP.UI.setStatusBox();
     });
+
+    var GP = GP || {};
+    GP.UI = {
+        initInplaceEdit: function(){
+            $(".inplace").each(function() {
+                var self = this;
+                $(this).editable("@{change()}", {
+                    tooltip: 'Click to edit',
+                    attribute: this.id,
+                    style: 'display: inline',
+                    submitdata : {resumeId: "${resume.id}"},
+                    width: self.id == "name" ? "auto" : 100
+                });
+            });
+        },
+
+        initTabBar: function(){
+            // tabs
+            $(".tabs a").click(function(e){
+                e.preventDefault();
+                $(".tabs a").removeClass("active");
+                $(this).addClass("active");
+                $(".answer > div").hide();
+                $(".answer > " + this.hash).fadeIn("fast");
+            })
+        },
+        
+        setStatusBox: function(){
+            #{if resume.status.toString() == "NEW" || resume.status.toString() == "INPROGRESS"}
+                $("#status").val("inprogress");
+            #{/if}
+            #{else}
+                $("#status").val("${resume.status.toString().toLowerCase()}");
+            #{/else}
+        }
+    }
 </script>
 #{/set}

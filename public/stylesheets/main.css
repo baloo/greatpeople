@@ -190,7 +190,7 @@ nav li a.active {
 .candidate-list:last-child {
     border-bottom: none;
 }
-.candidate-list .submition {
+.candidate-list .submition, .noApplicant {
     color: #999;
 }
 .candidate-list .rate {
@@ -428,6 +428,11 @@ h1, h2 {
     -webkit-border-radius: 5px 5px 0 0;
     -moz-border-radius: 5px 5px 0 0;
     border-radius: 5px 5px 0 0;
+}
+
+.answer #tab-email { 
+    /* hide tab body by default */
+    display: none;
 }
 .answer label {
     width: 500px;

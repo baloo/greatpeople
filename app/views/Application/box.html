@@ -2,35 +2,32 @@
 #{set title:'Home' /}
 
 #{set 'moreScripts'}
-<script>
-
-function filter(q) {
-    if (q.length < 3) {
-        $(".candidate-list").show();
-        return;
-    }
-    $(".candidate-list").each(function(){
-        console.log("one candidate");
-        var name = $(this).find(".name").text();
-        console.log(name.toLowerCase());
-        if (name.toLowerCase().indexOf(q) > -1) {
-            $(this).show();
-        } else {
-            $(this).hide();
+<script type="text/javascript" charset="utf-8">
+    function filter(q) {
+        if (q.length < 3) {
+            $(".candidate-list").show();
+            return;
         }
+        $(".candidate-list").each(function(){
+            console.log("one candidate");
+            var name = $(this).find(".name").text();
+            console.log(name.toLowerCase());
+            if (name.toLowerCase().indexOf(q) > -1) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+    $(function(){
+        $(".${boxid} a").addClass("active");
+
+        $("#search").keyup(function(){
+            var q = $(this).val();
+            filter(q.toLowerCase());
+        });
     });
-}
-
-$(function(){
-    $(".${boxid} a").addClass("active");
-
-    $("#search").keyup(function(){
-        var q = $(this).val();
-        filter(q.toLowerCase());
-    });
-
-});
-
 </script>
 #{/}
 
@@ -55,18 +52,18 @@ $(function(){
 
 #{if pageCount > 1}
 <div id="pages">
-<ul
-#{list Math.max(0, pageId-4)..Math.min(pageCount-1, pageId+4)}
-    <li>
-        #{if (pageId == _)}
-        ${_}
-        #{/if}
-        #{else}
-        <a href="@{box(boxid, _)}">${_}</a>
-        #{/else}
-    </li>
-#{/}
-</ul>
+    <ul
+    #{list Math.max(0, pageId-4)..Math.min(pageCount-1, pageId+4)}
+        <li>
+            #{if (pageId == _)}
+            ${_}
+            #{/if}
+            #{else}
+            <a href="@{box(boxid, _)}">${_}</a>
+            #{/else}
+        </li>
+    #{/}
+    </ul>
 </div>
 #{/if}
 

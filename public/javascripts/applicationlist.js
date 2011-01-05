@@ -74,11 +74,17 @@ var AppView = Backbone.View.extend({
 
     render: function() {
         $("#spinner").hide();
-        var view = this;
-        $(this.el).html('');
-        this.collection.forEach(function(applicant){
+        var $view = $(this.el).html('');
+
+        if(this.collection.length === 0) {
+            // Render the "no applications" message
+            $view.append( $("#noApplicantTmpl").tmpl() );
+            return;
+        }
+
+        this.collection.forEach(function(applicant) {
             var attr = applicant.toJSON();
-            $(view.el).append($("#applicantTmpl").tmpl(
+            $view.append($("#applicantTmpl").tmpl(
                 _(attr).extend({
                     stars: attr.rating * 100 / 4
                 })
