@@ -26,7 +26,7 @@
                 <dt>${_.name}</dt>
                 <dd class="date"><date>${_.date.format('dd MMMM yyyy')}</date></dd>
                 #{if _.rating}
-                    <dd class="rate"><div class="cursor" style="width:${_.rating / 4 * 100}%">${_.rating}</div></dd>                    
+                    <dd class="rate"><div class="cursor" style="width:${_.rating / 4 * 100}%">${_.rating}</div></dd>
                 #{/if}
                 <dd class="message">
                     <p>${_.comment.nl2br()}</p>
@@ -62,7 +62,7 @@
                     </p>
                 #{/form}
             </div>
-            
+
             <div id="tab-email">
                 #{if templates}
                     <label for="template">Template</label>
@@ -72,11 +72,9 @@
                                 <option value="${template.text}">${template.label}</option>
                             #{/list}
                     </select>
-                    
                 #{/if}
-                
+
                 #{form @JobApplications.sendMessage(resume.id)}
-                    
                     <span class="warning-note">Your message will be sent!</span>
                     <label for="content">Message</label>
                     <textarea id="content" name="comment"></textarea>
@@ -124,7 +122,7 @@
                 $(".answer > " + this.hash).fadeIn("fast");
             })
         },
-        
+
         setStatusBox: function(){
             #{if resume.status.toString() == "NEW" || resume.status.toString() == "INPROGRESS"}
                 $("#status").val("inprogress");

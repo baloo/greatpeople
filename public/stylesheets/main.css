@@ -430,7 +430,7 @@ h1, h2 {
     border-radius: 5px 5px 0 0;
 }
 
-.answer #tab-email { 
+.answer #tab-email {
     /* hide tab body by default */
     display: none;
 }
