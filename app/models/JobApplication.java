@@ -38,7 +38,7 @@ public class JobApplication extends Model {
     public String uniqueID;
 
     public JobApplication(String name, String email, String message, List<Attachment> attachments) {
-        this.name = name;
+        this.name = (name != null && name.length() > 0) ? name : "NoName";
         this.email = email;
         this.message = message;
         this.uniqueID = Codec.UUID().substring(0,5);
@@ -73,6 +73,14 @@ public class JobApplication extends Model {
 
     public List<Attachment> getAttachments() {
         return Attachment.find("byJobApplication", this).fetch();
+    }
+
+    public static JPAQuery search(JobStatus status, String query) {
+        if (query == null || query.length() == 0) {
+            return find("status = ? order by submitted desc", status);
+        } else {
+            return find("status = ? and name like ? order by submitted desc", status, "%" + query + "%");
+        }
     }
 
     public static int pageCount(JobStatus status) {

@@ -17,17 +17,17 @@ public class Note extends Model {
     @Lob public String comment;
     public String name;
     public String email;
-    public Integer rating;    
+    public Integer rating;
     public boolean internal;
-    
+
     public Note(JobApplication jobApplication, String name, String email, String comment, boolean internal) {
         this.jobApplication = jobApplication;
-        this.name = name;
+        this.name = (name != null && name.length() > 0) ? name : "NoName";
         this.email = email;
         this.comment = comment;
         this.internal = internal;
     }
-    
+
     @Override
     public String toString() {
         return comment + " (" + name + ")";

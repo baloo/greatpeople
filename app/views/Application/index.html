@@ -33,25 +33,19 @@
 <script src="@{'/public/javascripts/applicationlist.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 
-    function filter(q) {
+    var w;
+
+    $("#search").keyup(function(){
+        var q = $(this).val();
         if (q.length < 3) {
-            $(".candidate-list").show();
+            window.location.hash = "#" + w.box;
             return;
         }
-        $(".candidate-list").each(function(){
-            console.log("one candidate");
-            var name = $(this).find(".name").text();
-            console.log(name.toLowerCase());
-            if (name.toLowerCase().indexOf(q) > -1) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
-    }
+        window.location.hash = "#" + w.box + "/" + q;
+    });
 
     $(function(){
-        new Workspace();
+        w = new Workspace();
         Backbone.history.start();
     });
 

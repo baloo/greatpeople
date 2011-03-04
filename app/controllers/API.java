@@ -10,10 +10,10 @@ import play.mvc.Controller;
 
 public class API extends Controller {
 
-    public static void applications(String boxid, int pageId) {
+    public static void applications(String boxid, int pageId, String q) {
         JobStatus status = JobStatus.find(boxid);
         if (status == null || status == JobStatus.DELETED) notFound();
-        List<JobApplication> applications = JobApplication.find("status = ? order by submitted desc", status)
+        List<JobApplication> applications = JobApplication.search(status, q)
             .from(JobApplication.PER_PAGE * pageId).fetch(JobApplication.PER_PAGE);
         int pageCount = JobApplication.pageCount(status);
         if (pageId >= pageCount) notFound();

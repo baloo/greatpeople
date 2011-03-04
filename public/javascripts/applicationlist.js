@@ -1,13 +1,19 @@
 // Controller
 
+/*global Backbone */
+
+(function($){
+
 var Workspace = Backbone.Controller.extend({
 
     routes: {
         "": "index",
         "new": "newapp",    // #new
-        "inprogress": "inprogress",    // #inprogress
+        "new/:query": "newapp",  // #new/kiwis
+        "inprogress": "inprogress",
+        "inprogress/:query": "inprogress",
         "archived": "archived",
-        "search/:query": "search",  // #search/kiwis
+        "archived/:query": "archived",
         "search/:query/p:page": "search"   // #search/kiwis/p7
     },
 
@@ -22,24 +28,25 @@ var Workspace = Backbone.Controller.extend({
         window.location.hash = "#new";
     },
 
-    newapp: function() {
-        this._showBox("new");
+    newapp: function(query) {
+        this._showBox("new", query);
     },
 
-    inprogress: function() {
-        this._showBox("inprogress");
+    inprogress: function(query) {
+        this._showBox("inprogress", query);
     },
 
-    archived: function() {
-        this._showBox("archived");
+    archived: function(query) {
+        this._showBox("archived", query);
     },
 
     search: function(query, page) {
         // todo
     },
 
-    _showBox: function(active) {
-        this.view.loadBox(active);
+    _showBox: function(active, query) {
+        this.box = active;
+        this.view.loadBox(active, query);
         $(".navlink a").removeClass("active");
         $("." + active + " a").addClass("active");
     }
@@ -52,8 +59,11 @@ var AppView = Backbone.View.extend({
 
     el: $("#list"),
 
-    loadBox: function(box) {
+    loadBox: function(box, query) {
         this.collection.url = '/api/applicants/' + box;
+        if (query) {
+            this.collection.url += ('?q=' + encodeURIComponent(query));
+        }
         var view = this;
         this.spinner();
         this.collection.fetch({
@@ -108,3 +118,6 @@ var Applicants = Backbone.Collection.extend({
     url: '/api/applicants'
 });
 
+window.Workspace = Workspace;
+
+})(jQuery);
