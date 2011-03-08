@@ -30,6 +30,14 @@ public class Note extends Model {
 
     @Override
     public String toString() {
-        return comment + " (" + name + ")";
+        String summary;
+        if (comment == null || comment.length() == 0) {
+            summary = "empty";
+        } else if (comment.length() <= 50) {
+           summary = comment;
+        } else {
+            summary = comment.substring(0, 50) + " [...]";
+        }
+        return name + ": " + summary;
     }
 }

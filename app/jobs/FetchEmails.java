@@ -83,7 +83,7 @@ public class FetchEmails extends Job {
                         MimeMultipart mmp = (MimeMultipart)mbp.getContent();
                         for(int k=0; k<mmp.getCount(); k++) {
                             Part p = mmp.getBodyPart(k);
-                            if(((MimeBodyPart)p).isMimeType("text/plain")) {
+                            if (((MimeBodyPart)p).isMimeType("text/plain")) {
                                 contentString = (String)p.getContent();
                             }
                         }
@@ -139,7 +139,10 @@ public class FetchEmails extends Job {
     private static Attachment saveAttachment(Part part) throws Exception {
         Attachment attachment = new Attachment();
         attachment.name = decodeName(part.getFileName());
+        Logger.debug("Found attachment name: " + attachment.name);
         attachment.content.set(part.getInputStream(), part.getContentType());
+        Logger.debug("   => content-type: " + part.getContentType());
+        attachment.save();
         return attachment;
     }
 
