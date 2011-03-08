@@ -25,8 +25,8 @@ public class JobApplicationSerializer implements JsonSerializer<JobApplication> 
         if (jobApplication.email != null) {
             result.add("email", new JsonPrimitive(jobApplication.email));
         }
-        result.add("submitted", new JsonPrimitive(jobApplication.submitted.getTime()));
         if (jobApplication.submitted != null) {
+            result.add("submitted", new JsonPrimitive(jobApplication.submitted.getTime()));
             String formattedDate = JavaExtensions.format(jobApplication.submitted, "dd MMMM yyyy hh:mm:ss");
             result.add("formattedDate", new JsonPrimitive(formattedDate));
         }

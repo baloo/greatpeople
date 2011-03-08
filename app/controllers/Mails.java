@@ -9,6 +9,10 @@ import models.*;
 
 public class Mails extends Mailer {
 
+    /**
+     * Send a confirmation email to the candidate
+     * @param jobApplication
+     */
     public static void applied(JobApplication jobApplication) {
         setFrom("jobs+" + jobApplication.uniqueID + "-" + jobApplication.id + "@zenexity.com");
         addRecipient(jobApplication.email);

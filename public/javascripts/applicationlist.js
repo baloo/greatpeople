@@ -13,8 +13,7 @@ var Workspace = Backbone.Controller.extend({
         "inprogress": "inprogress",
         "inprogress/:query": "inprogress",
         "archived": "archived",
-        "archived/:query": "archived",
-        "search/:query/p:page": "search"   // #search/kiwis/p7
+        "archived/:query": "archived"
     },
 
     initialize: function() {
@@ -40,13 +39,9 @@ var Workspace = Backbone.Controller.extend({
         this._showBox("archived", query);
     },
 
-    search: function(query, page) {
-        // todo
-    },
-
-    _showBox: function(active, query) {
+    _showBox: function(active, query, page) {
         this.box = active;
-        this.view.loadBox(active, query);
+        this.view.loadBox(active, query, page);
         $(".navlink a").removeClass("active");
         $("." + active + " a").addClass("active");
     }
@@ -60,9 +55,22 @@ var AppView = Backbone.View.extend({
     el: $("#list"),
 
     loadBox: function(box, query) {
+        this.collection.box = box;
         this.collection.url = '/api/applicants/' + box;
         if (query) {
-            this.collection.url += ('?q=' + encodeURIComponent(query));
+            this.collection.query = query;
+            this.collection.page = 1;
+            if (query.indexOf(",") > -1) {
+                this.collection.query = query.split(",")[0];
+                this.collection.page = query.split(",")[1];
+            }
+            this.collection.url += (
+                '?q=' + encodeURIComponent(this.collection.query) +
+                '&p=' + this.collection.page
+            );
+        } else {
+            this.collection.query = "";
+            this.collection.page = 1;
         }
         var view = this;
         this.spinner();
@@ -85,8 +93,8 @@ var AppView = Backbone.View.extend({
     render: function() {
         $("#spinner").hide();
         var $view = $(this.el).html('');
-
-        if(this.collection.length === 0) {
+        console.log(this.collection);
+        if (this.collection.length === 0) {
             // Render the "no applications" message
             $view.append( $("#noApplicantTmpl").tmpl() );
             return;
@@ -100,6 +108,31 @@ var AppView = Backbone.View.extend({
                 })
             ));
         });
+
+        // Internal page number starts at 0, but we want to start at 1
+        var pagination = $("#pagination");
+        pagination.html("");
+        if (this.collection.pageCount > 1) {
+            for (var i = 0; i < this.collection.pageCount; i++) {
+                if (this.collection.page == i) {
+                    // Current page: just the page number
+                    pagination.append(i + 1);
+                } else {
+                    // Other: include a link
+                    pagination.append(
+                        $("<a></a>")
+                            .text(i + 1)
+                            .attr("href", "#" +
+                                  this.collection.box +
+                                  "/" +
+                                  (this.collection.query ? this.collection.query : "") +
+                                  "," + (i + 1))
+                    );
+                }
+                pagination.append("&nbsp;");
+            }
+        }
+        $("#pagination").toggle(this.collection.pageCount > 1);
     },
 
     login: function() {
@@ -115,7 +148,16 @@ var ApplicantModel = Backbone.Model.extend({
 
 var Applicants = Backbone.Collection.extend({
     model: ApplicantModel,
-    url: '/api/applicants'
+    box: 'new',
+    url: '/api/applicants',
+    query: null,
+    page: 0,
+    pageCount: 1,
+    parse: function(response) {
+        this.page = response.pageNumber;
+        this.pageCount = response.pageCount;
+        return response.applications;
+    }
 });
 
 window.Workspace = Workspace;

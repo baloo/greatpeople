@@ -1,11 +1,8 @@
 package controllers;
 
-import java.util.List;
-
 import models.JobApplication;
-import models.JobApplication.JobStatus;
-import models.json.JobApplicationSerializer;
 import play.Play;
+import play.cache.CacheFor;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -30,12 +27,5 @@ public class Application extends Controller {
     public static void index() {
         render();
     }
-
-    public static void candidate() {
-    	
-        if (Play.mode.isProd()) notFound();
-        render();
-    }
-
 
 }

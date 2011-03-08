@@ -16,7 +16,7 @@ import play.libs.Codec;
 @Entity
 public class JobApplication extends Model {
 
-    public final static int PER_PAGE = 15;
+    public final static int PER_PAGE = 10;
 
     public static enum JobStatus {
         NEW, INPROGRESS, ARCHIVED, DELETED;
@@ -37,15 +37,26 @@ public class JobApplication extends Model {
     @Enumerated(EnumType.STRING) public JobStatus status = JobStatus.NEW;
     public String uniqueID;
 
-    public JobApplication(String name, String email, String message, List<Attachment> attachments) {
+    public JobApplication(String name, String email, String message) {
         this.name = (name != null && name.length() > 0) ? name : "NoName";
         this.email = email;
         this.message = message;
         this.uniqueID = Codec.UUID().substring(0,5);
     }
 
+    public static JobApplication createApplication(String name, String email, String message, List<Attachment> attachments) {
+        JobApplication application = new JobApplication(name, email, message);
+        application.save();
+        for(Attachment attachment : attachments) {
+            attachment.jobApplication = application;
+            attachment.save();
+        }
+        return application;
+    }
+
     public void addMessage(String from, String email, String content) {
         new Note(this, from, email, content, false).save();
+        this.save();
     }
 
     public void addInternalNote(String from, String email, String content, Integer rating) {
@@ -83,8 +94,13 @@ public class JobApplication extends Model {
         }
     }
 
-    public static int pageCount(JobStatus status) {
-        int count = find("status", status).fetch().size();
+    public static int pageCount(JobStatus status, String query) {
+        int count;
+        if (query == null || query.length() == 0) {
+            count = find("status", status).fetch().size();
+        } else {
+            count = find("status = ? and name like ?", status, "%" + query + "%").fetch().size();
+        }
         int result = (int) Math.floor(count / PER_PAGE);
         return result + 1;
     }

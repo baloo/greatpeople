@@ -13,6 +13,9 @@
     <img src="@{'/public/images/throbber.gif'}" />
 </div>
 
+<div id="pagination">
+</div>
+
 <script id="applicantTmpl" type="text/template" charset="utf-8">
     <dl class="candidate-list">
         <dt><a class="name" href="/resume/{{= id }}">{{= name }}</a></dt>
@@ -28,7 +31,6 @@
         <dd></dd>
     </dl>
 </script>
-
 #{set 'moreScripts'}
 <script src="@{'/public/javascripts/applicationlist.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">

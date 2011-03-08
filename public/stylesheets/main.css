@@ -143,8 +143,13 @@ nav li a.active {
 }
 
 #search {
-    width: 200px;
+    width: 180px;
     margin: 7px;
+}
+
+#pagination {
+    text-align: center;
+    position: relative;
 }
 
 #wrapper {

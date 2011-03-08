@@ -49,89 +49,7 @@ public class FetchEmails extends Job {
         // Loop over messages
         for (Message message : messages) {
             try {
-
-                String contentString = "(no content found)";
-                List<Attachment> attachments = new ArrayList<Attachment>();
-
-                // Decode content
-                if (message.getContent() instanceof String) {
-                    contentString = (String) message.getContent();
-                } else if (message.getContent() instanceof Multipart) {
-                    Multipart mp = (Multipart) message.getContent();
-                    for (int j = 0; j < mp.getCount(); j++) {
-                        Part part = mp.getBodyPart(j);
-                        String disposition = part.getDisposition();
-                        if (disposition == null
-                                || ((disposition != null) && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition
-                                        .equalsIgnoreCase(Part.INLINE)))) {
-                            // Check if plain
-                            MimeBodyPart mbp = (MimeBodyPart) part;
-                            if (mbp.isMimeType("text/plain")) {
-                                contentString += (String) mbp.getContent();
-                            } else if(mbp.isMimeType("multipart/ALTERNATIVE")) {
-                                MimeMultipart mmp = (MimeMultipart)mbp.getContent();
-                                for(int k=0; k<mmp.getCount(); k++) {
-                                    Part p = mmp.getBodyPart(k);
-                                    if(((MimeBodyPart)p).isMimeType("text/plain")) {
-                                        contentString = (String)p.getContent();
-                                    }
-                                }
-                            } else {
-                                attachments.add(saveAttachment(part));
-                            }
-                        }
-                    }
-                }
-
-                String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
-                String email = ((InternetAddress) message.getFrom()[0]).getAddress();
-                String to = ((InternetAddress) message.getAllRecipients()[0]).getAddress();
-                for (Address a : (Address[])message.getAllRecipients()) {
-                    if ("rfc822".equals(a.getType())) {
-                        InternetAddress ia = (InternetAddress)a;
-                        if (ia.getAddress().contains("jobs")) {
-                            to = ia.getAddress();
-                        }
-                    } else {
-                        Logger.warn("Could not convert address " + a + " to an InternetAddress, type is invalid " + a.getType());
-                    }
-                }
-
-                if ("jobs@zenexity.com".equals(email)) {
-                    // Ignore emails sent from jobs (= sent from Great People)
-                    continue;
-                }
-                if ("jobs@zenexity.com".equals(to)) {
-                    // Create Application
-                    JobApplication application = new JobApplication(name, email, contentString, attachments);
-                    application.save();
-                    for(Attachment attachment : attachments) {
-                        attachment.jobApplication = application;
-                        attachment.save();
-                    }
-                    Mails.applied(application);
-
-                } else {
-                    Pattern regexp = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
-                    Matcher matcher = regexp.matcher(to);
-                    if(matcher.matches()) {
-                        Long id = Long.parseLong(matcher.group(1));
-                        JobApplication application = JobApplication.findById(id);
-                        if(application == null) {
-                            Logger.warn("Job application not found %s, for %s", id, to);
-                        } else {
-                            application.addMessage(name, email, contentString);
-                            application.save();
-                        }
-                    } else {
-                        Logger.warn("Unknow address --> %s", to);
-                    }
-                }
-
-                if (Play.mode == Play.Mode.PROD) {
-                    message.setFlag(Flag.FLAGGED, true);
-                }
-
+                handleMessage(message);
             } catch(Exception e) {
                 Logger.error(e, "Cannot read this message");
             }
@@ -142,14 +60,90 @@ public class FetchEmails extends Job {
         store.close();
     }
 
-    private Attachment saveAttachment(Part part) throws Exception, MessagingException, IOException {
+    private static void handleMessage(Message message) throws Exception {
+        String contentString = "(no content found)";
+        List<Attachment> attachments = new ArrayList<Attachment>();
+
+        // Decode content
+        if (message.getContent() instanceof String) {
+            contentString = (String) message.getContent();
+        } else if (message.getContent() instanceof Multipart) {
+            Multipart mp = (Multipart) message.getContent();
+            for (int j = 0; j < mp.getCount(); j++) {
+                Part part = mp.getBodyPart(j);
+                String disposition = part.getDisposition();
+                if (disposition == null
+                        || ((disposition != null) && (disposition.equalsIgnoreCase(Part.ATTACHMENT) || disposition
+                                .equalsIgnoreCase(Part.INLINE)))) {
+                    // Check if plain
+                    MimeBodyPart mbp = (MimeBodyPart) part;
+                    if (mbp.isMimeType("text/plain")) {
+                        contentString += (String) mbp.getContent();
+                    } else if(mbp.isMimeType("multipart/ALTERNATIVE")) {
+                        MimeMultipart mmp = (MimeMultipart)mbp.getContent();
+                        for(int k=0; k<mmp.getCount(); k++) {
+                            Part p = mmp.getBodyPart(k);
+                            if(((MimeBodyPart)p).isMimeType("text/plain")) {
+                                contentString = (String)p.getContent();
+                            }
+                        }
+                    } else {
+                        attachments.add(saveAttachment(part));
+                    }
+                }
+            }
+        }
+
+        String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
+        String email = ((InternetAddress) message.getFrom()[0]).getAddress();
+        String to = ((InternetAddress) message.getAllRecipients()[0]).getAddress();
+        for (Address a : (Address[])message.getAllRecipients()) {
+            if ("rfc822".equals(a.getType())) {
+                InternetAddress ia = (InternetAddress)a;
+                if (ia.getAddress().contains("jobs")) {
+                    to = ia.getAddress();
+                }
+            } else {
+                Logger.warn("Could not convert address " + a + " to an InternetAddress, type is invalid " + a.getType());
+            }
+        }
+
+        if (email.startsWith("jobs") && email.endsWith("@zenexity.com")) {
+            // Ignore emails sent from jobs (= sent from Great People)
+            return;
+        }
+        if ("jobs@zenexity.com".equals(to)) {
+            JobApplication application = JobApplication.createApplication(name, email, contentString, attachments);
+            Mails.applied(application);
+        } else {
+            Pattern regexp = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
+            Matcher matcher = regexp.matcher(to);
+            if(matcher.matches()) {
+                Long id = Long.parseLong(matcher.group(1));
+                JobApplication application = JobApplication.findById(id);
+                if(application == null) {
+                    Logger.warn("Job application not found %s, for %s", id, to);
+                } else {
+                    application.addMessage(name, email, contentString);
+                }
+            } else {
+                Logger.warn("Unknow address --> %s", to);
+            }
+        }
+
+        if (Play.mode == Play.Mode.PROD) {
+            message.setFlag(Flag.FLAGGED, true);
+        }
+    }
+
+    private static Attachment saveAttachment(Part part) throws Exception {
         Attachment attachment = new Attachment();
         attachment.name = decodeName(part.getFileName());
         attachment.content.set(part.getInputStream(), part.getContentType());
         return attachment;
     }
 
-    protected String decodeName(String name) throws Exception {
+    protected static String decodeName(String name) throws Exception {
         if (name == null || name.length() == 0) {
             return "unknown";
         }
