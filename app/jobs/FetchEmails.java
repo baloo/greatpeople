@@ -24,6 +24,7 @@ import play.libs.IO;
 public class FetchEmails extends Job {
 
     public void doJob() throws Exception {
+        Logger.debug("=== Fetch email...");
 
         if(Play.configuration.getProperty("mailbox.username") == null || Play.configuration.getProperty("mailbox.password") == null) {
             Logger.error("Please configure mailbox credentials in conf/credentials.conf");
@@ -97,6 +98,9 @@ public class FetchEmails extends Job {
         String name = ((InternetAddress) message.getFrom()[0]).getPersonal();
         String email = ((InternetAddress) message.getFrom()[0]).getAddress();
         String to = ((InternetAddress) message.getAllRecipients()[0]).getAddress();
+        if ((name == null || name.length() == 0) && email != null && email.contains("@")) {
+            name = email.split("@")[0];
+        }
         for (Address a : (Address[])message.getAllRecipients()) {
             if ("rfc822".equals(a.getType())) {
                 InternetAddress ia = (InternetAddress)a;
@@ -110,9 +114,13 @@ public class FetchEmails extends Job {
 
         if (email.startsWith("jobs") && email.endsWith("@zenexity.com")) {
             // Ignore emails sent from jobs (= sent from Great People)
+            if (Play.mode == Play.Mode.PROD) {
+                message.setFlag(Flag.FLAGGED, true);
+            }
             return;
         }
         if ("jobs@zenexity.com".equals(to)) {
+            Logger.debug("Found a new application: " + name);
             JobApplication application = JobApplication.createApplication(name, email, contentString, attachments);
             Mails.applied(application);
         } else {
@@ -126,6 +134,7 @@ public class FetchEmails extends Job {
                 } else {
                     application.addMessage(name, email, contentString);
                 }
+                Logger.debug("Found a follow-up from: " + name);
             } else {
                 Logger.warn("Unknow address --> %s", to);
             }
