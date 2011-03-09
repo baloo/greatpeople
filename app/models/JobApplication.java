@@ -1,7 +1,7 @@
 package models;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -10,9 +10,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 
-import org.apache.lucene.index.TermEnum;
-
-import play.Logger;
 import play.data.validation.Email;
 import play.db.jpa.Model;
 import play.libs.Codec;
@@ -79,6 +76,10 @@ public class JobApplication extends Model {
 
     public List<Note> getNotes() {
         return Note.find("jobApplication = ? order by date asc", this).fetch();
+    }
+
+    public List<String> tagList() {
+        return Arrays.asList(tags.split("\\s+"));
     }
 
     public Float getRating() {

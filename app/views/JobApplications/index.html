@@ -1,4 +1,16 @@
 #{extends 'main.html' /}
+#{set 'moreStyles'}
+<link rel="stylesheet" media="screen" href="@{'/public/tagit/css/jquery-ui/jquery.ui.autocomplete.custom.css'}">
+<style>
+.tagit {
+    background-color: white;
+    margin-left: 0;
+}
+.tagit-input:focus {
+    outline: 0;
+}
+</style>
+#{/set}
 #{set title:'Resume' /}
 
 <div id="candidate">
@@ -11,12 +23,18 @@
 
     <div class="original-message">
         <p>${resume.message.nl2br()}</p>
+        #{if resume.attachments && resume.attachments.length() > 0}
         <h2>Attachements</h2>
         <ul class="attachements">
             #{list resume.attachments}
                 <li><a href="@{download(_.id, _.name)}">${_.name}</a></li>
             #{/list}
         </ul>
+        #{/if}
+    </div>
+
+    <div class="tagsu">
+        <ul id="mytags"></ul>
     </div>
 
     <div class="discussion">
@@ -88,14 +106,27 @@
 </div>
 
 #{set 'moreScripts'}
-<script src="@{'/public/javascripts/lib/jquery.jeditable.mini.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/tagit/js/jquery-ui/jquery-ui-1.8.core-and-interactions.min.js'}" charset="utf-8"></script>
+<script src="@{'/public/tagit/js/jquery-ui/jquery-ui-1.8.autocomplete.min.js'}" charset="utf-8"></script>
+<script src="@{'/public/tagit/js/tag-it.js'}" charset="utf-8"></script>
+<script src="@{'/public/javascripts/lib/jquery.jeditable.mini.js'}" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
+
+    var userTags = "${resume.tags}";
 
     $(document).ready(function() {
         GP.UI.initInplaceEdit();
         GP.UI.initTabBar();
         GP.UI.setStatusBox();
         $("#search").attr("disabled", "disabled");
+        $("#mytags").tagit({
+            availableTags: ["${models.Tags.allTags().join('","').raw()}"],
+            values: userTags.split(" ")
+        });
+        $("#mytags .tagit-input").bind("keydown keypress", function() {
+            GP.UI.saveTags();
+        });
+
     });
 
     var GP = GP || {};
@@ -124,6 +155,24 @@
             })
         },
 
+        saveTags: function(){
+            // We use a timer to avoid pounding the server
+            if (this.tagsTimer) {
+                window.clearTimeout(this.tagsTimer);
+            }
+            this.tagsTimer = window.setTimeout(function(){
+                var tags = [];
+                $(".tagit-choice", "#mytags").each(function(){
+                    tags.push($("input", this).attr("value"));
+                });
+                $.post("@{change()}", {
+                    'resumeId': "${resume.id}",
+                    'id': 'tags',
+                    'value': tags.join(" ")
+                });
+            }, 1000);
+        },
+
         setStatusBox: function(){
             #{if resume.status.toString() == "NEW" || resume.status.toString() == "INPROGRESS"}
                 $("#status").val("inprogress");
@@ -133,5 +182,6 @@
             #{/else}
         }
     }
+
 </script>
 #{/set}

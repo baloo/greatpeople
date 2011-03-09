@@ -70,6 +70,8 @@ public class JobApplications extends Application {
             resume.email = value;
         } else if ("phone".equals(id)) {
             resume.phone = value;
+        } else if ("tags".equals(id)) {
+            resume.tags = value;
         } else {
             badRequest();
         }
