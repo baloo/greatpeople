@@ -9,7 +9,7 @@ import play.jobs.Every;
 import play.jobs.Job;
 import controllers.Mails;
 
-@Every("24h")
+@Every("1h")
 public class HouseKeeping extends Job {
 
     public void doJob() {

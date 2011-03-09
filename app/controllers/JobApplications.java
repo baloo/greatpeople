@@ -53,7 +53,7 @@ public class JobApplications extends Application {
         renderBinary(attachment.content.getFile());
     }
 
-    public static void delete(Long id) {
+    public static void delete(Long id) throws Exception {
         JobApplication resume = JobApplication.findById(id);
         if (resume == null) badRequest();
         resume.status = JobApplication.JobStatus.DELETED;

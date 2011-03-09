@@ -16,7 +16,7 @@ public class Auth extends Controller {
     static String ZENEXITY_LOGOUT = "http://google.com/a/zenexity.com/Logout";
 
     @Before(unless={"authenticate","logout","error"})
-    static void checkUser() {
+    static void checkUser() throws Exception {
         // Protect
         if (!session.contains("email")) {
             authenticate(request.url);
@@ -32,7 +32,7 @@ public class Auth extends Controller {
         renderText("Error logging in");
     }
 
-    public static void authenticate(String callback) {
+    public static void authenticate(String callback) throws Exception {
         if (OpenID.isAuthenticationResponse()) {
             OpenID.UserInfo verifiedUser = OpenID.getVerifiedID();
             if (verifiedUser == null || !verifiedUser.extensions.containsKey("email") || verifiedUser.extensions.get("email").trim().equals("")) {

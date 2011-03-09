@@ -5,6 +5,7 @@ JobApplication(michel):
     status: NEW
     email: michel.chel@hotmail.com
     message: JEE Architect Spring Pattern
+    tags: dev enterprise
 
 JobApplication(monique):
     name: Monique Laplace
@@ -13,3 +14,4 @@ JobApplication(monique):
     status: NEW
     email: monique.laplace@gmail.com
     message: Ruby HTML5 Javascript
+    tags: dev rockstar ninja

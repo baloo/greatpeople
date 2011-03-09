@@ -1,11 +1,12 @@
 package controllers;
 
 import models.JobApplication;
-import play.Play;
-import play.cache.CacheFor;
+import models.Tags;
+import play.Logger;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
+import play.utils.Utils;
 
 @With(Auth.class) 
 public class Application extends Controller {
@@ -24,7 +25,8 @@ public class Application extends Controller {
 
     // Pages
 
-    public static void index() {
+    public static void index() throws Exception {
+        Logger.info("All tags: " + Utils.join(Tags.allTags(), ", "));
         render();
     }
 

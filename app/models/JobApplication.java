@@ -1,5 +1,6 @@
 package models;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +10,9 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 
+import org.apache.lucene.index.TermEnum;
+
+import play.Logger;
 import play.data.validation.Email;
 import play.db.jpa.Model;
 import play.libs.Codec;
@@ -42,6 +46,8 @@ public class JobApplication extends Model {
     @Lob @Field public String message;
     @Enumerated(EnumType.STRING) public JobStatus status = JobStatus.NEW;
     public String uniqueID;
+    /* Separated by spaces */
+    @Field public String tags;
 
     public JobApplication(String name, String email, String message) {
         this.name = (name != null && name.length() > 0) ? name : "NoName";
@@ -96,7 +102,6 @@ public class JobApplication extends Model {
         if (query == null || query.length() == 0) {
             return find("status = ? order by submitted desc", status);
         }
-        // TODO: Normalize query
         List<Long> ids = Search.search(normalizeQuery(query), JobApplication.class).fetchIds();
         if (ids.size() == 0) {
             return find("id = ? and id = ?", 0L, 1L); // Hack to get a query with an empty result
@@ -120,7 +125,7 @@ public class JobApplication extends Model {
     public static String normalizeQuery(String input) {
         List<String> predicates = new ArrayList<String>();
         for (String term: input.split("\\s+")) {
-            predicates.add("(name:" + term + " OR message:" + term + ")");
+            predicates.add("(name:" + term + " OR message:" + term + " OR tags:" + term + ")");
         }
         return Utils.join(predicates, " AND ");
     }
