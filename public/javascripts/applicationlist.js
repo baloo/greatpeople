@@ -1,51 +1,26 @@
 // Controller
 
-/*global Backbone */
+/*global Backbone, Underscore */
 
-(function($){
+(function($) {
 
-var Workspace = Backbone.Controller.extend({
+// Model
 
-    routes: {
-        "": "index",
-        "new": "newapp",    // #new
-        "new/:query": "newapp",  // #new/kiwis
-        "inprogress": "inprogress",
-        "inprogress/:query": "inprogress",
-        "archived": "archived",
-        "archived/:query": "archived"
-    },
+var ApplicantModel = Backbone.Model.extend({
+});
 
-    initialize: function() {
-        this.apps = new Applicants;
-        this.view = new AppView({
-            collection: this.apps
-        });
-    },
-
-    index: function() {
-        window.location.hash = "#new";
-    },
-
-    newapp: function(query) {
-        this._showBox("new", query);
-    },
-
-    inprogress: function(query) {
-        this._showBox("inprogress", query);
-    },
-
-    archived: function(query) {
-        this._showBox("archived", query);
-    },
-
-    _showBox: function(active, query, page) {
-        this.box = active;
-        this.view.loadBox(active, query, page);
-        $(".navlink a").removeClass("active");
-        $("." + active + " a").addClass("active");
+var Applicants = Backbone.Collection.extend({
+    model: ApplicantModel,
+    box: 'new',
+    url: '/api/applicants',
+    query: null,
+    page: 0,
+    pageCount: 1,
+    parse: function(response) {
+        this.page = response.pageNumber;
+        this.pageCount = response.pageCount;
+        return response.applications;
     }
-
 });
 
 // Views
@@ -141,23 +116,48 @@ var AppView = Backbone.View.extend({
 
 });
 
-// Model
+var Workspace = Backbone.Controller.extend({
 
-var ApplicantModel = Backbone.Model.extend({
-});
+    routes: {
+        "": "index",
+        "new": "newapp",    // #new
+        "new/:query": "newapp",  // #new/kiwis
+        "inprogress": "inprogress",
+        "inprogress/:query": "inprogress",
+        "archived": "archived",
+        "archived/:query": "archived"
+    },
 
-var Applicants = Backbone.Collection.extend({
-    model: ApplicantModel,
-    box: 'new',
-    url: '/api/applicants',
-    query: null,
-    page: 0,
-    pageCount: 1,
-    parse: function(response) {
-        this.page = response.pageNumber;
-        this.pageCount = response.pageCount;
-        return response.applications;
+    initialize: function() {
+        this.apps = new Applicants();
+        this.view = new AppView({
+            collection: this.apps
+        });
+    },
+
+    index: function() {
+        window.location.hash = "#new";
+    },
+
+    newapp: function(query) {
+        this._showBox("new", query);
+    },
+
+    inprogress: function(query) {
+        this._showBox("inprogress", query);
+    },
+
+    archived: function(query) {
+        this._showBox("archived", query);
+    },
+
+    _showBox: function(active, query, page) {
+        this.box = active;
+        this.view.loadBox(active, query, page);
+        $(".navlink a").removeClass("active");
+        $("." + active + " a").addClass("active");
     }
+
 });
 
 window.Workspace = Workspace;

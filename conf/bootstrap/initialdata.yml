@@ -2,12 +2,12 @@ JobApplication(michel):
     name: Michel Chel
     submitted: 2010-11-15
     phone: 0607080910
-    status: new
+    status: NEW
     email: michel.chel@hotmail.com
 
 JobApplication(monique):
     name: Monique Laplace
     submitted: 2010-11-25
     phone: 0107080910
-    status: new
+    status: NEW
     email: monique.laplace@gmail.com
