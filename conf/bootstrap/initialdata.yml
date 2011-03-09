@@ -4,6 +4,7 @@ JobApplication(michel):
     phone: 0607080910
     status: NEW
     email: michel.chel@hotmail.com
+    message: JEE Architect Spring Pattern
 
 JobApplication(monique):
     name: Monique Laplace
@@ -11,3 +12,4 @@ JobApplication(monique):
     phone: 0107080910
     status: NEW
     email: monique.laplace@gmail.com
+    message: Ruby HTML5 Javascript

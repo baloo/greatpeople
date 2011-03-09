@@ -1,5 +1,6 @@
 package models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,9 +12,14 @@ import javax.persistence.Lob;
 import play.data.validation.Email;
 import play.db.jpa.Model;
 import play.libs.Codec;
+import play.modules.search.Field;
+import play.modules.search.Indexed;
+import play.modules.search.Search;
+import play.utils.Utils;
 
 
 @Entity
+@Indexed
 public class JobApplication extends Model {
 
     public final static int PER_PAGE = 10;
@@ -29,11 +35,11 @@ public class JobApplication extends Model {
         }
     }
 
-    public String name;
-    @Email public String email;
+    @Field public String name;
+    @Email @Field public String email;
     public Date submitted = new Date();
     public String phone;
-    @Lob public String message;
+    @Lob @Field public String message;
     @Enumerated(EnumType.STRING) public JobStatus status = JobStatus.NEW;
     public String uniqueID;
 
@@ -89,9 +95,15 @@ public class JobApplication extends Model {
     public static JPAQuery search(JobStatus status, String query) {
         if (query == null || query.length() == 0) {
             return find("status = ? order by submitted desc", status);
-        } else {
-            return find("status = ? and name like ? order by submitted desc", status, "%" + query + "%");
         }
+        // TODO: Normalize query
+        List<Long> ids = Search.search(normalizeQuery(query), JobApplication.class).fetchIds();
+        if (ids.size() == 0) {
+            return find("id = ? and id = ?", 0L, 1L); // Hack to get a query with an empty result
+        }
+        JPAQuery q = find("status = ? and id in (:ids) order by submitted desc", status);
+        q.bind("ids", ids);
+        return q;
     }
 
     public static int pageCount(JobStatus status, String query) {
@@ -103,6 +115,14 @@ public class JobApplication extends Model {
         }
         int result = (int) Math.floor(count / PER_PAGE);
         return result + 1;
+    }
+
+    public static String normalizeQuery(String input) {
+        List<String> predicates = new ArrayList<String>();
+        for (String term: input.split("\\s+")) {
+            predicates.add("(name:" + term + " OR message:" + term + ")");
+        }
+        return Utils.join(predicates, " AND ");
     }
 
     @Override
