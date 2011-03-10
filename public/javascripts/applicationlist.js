@@ -30,7 +30,7 @@ var AppView = Backbone.View.extend({
     el: $("#list"),
 
     loadBox: function(box, query) {
-        // $("#search").val(query,split(",")[0]);
+        $("#search").val(query ? query.split(",")[0] : "");
         this.refreshLinks(query);
         this.collection.box = box;
         this.collection.url = '/api/applicants/' + box;
@@ -83,10 +83,12 @@ var AppView = Backbone.View.extend({
             return;
         }
 
+        var box = this.collection.box;
         this.collection.forEach(function(applicant) {
             var attr = applicant.toJSON();
             $view.append($("#applicantTmpl").tmpl(
                 _(attr).extend({
+                    box: "#" + box,
                     stars: attr.rating * 100 / 4
                 })
             ));
