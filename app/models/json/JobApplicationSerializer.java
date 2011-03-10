@@ -7,6 +7,7 @@ import models.JobApplication;
 import play.libs.I18N;
 import play.templates.JavaExtensions;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -18,22 +19,23 @@ public class JobApplicationSerializer implements JsonSerializer<JobApplication> 
     @Override
     public JsonElement serialize(JobApplication jobApplication, Type type, JsonSerializationContext context) {
         JsonObject result = new JsonObject();
-        result.add("id", new JsonPrimitive(jobApplication.id));
+        result.add("id", context.serialize(jobApplication.id));
         if (jobApplication.name != null) {
-            result.add("name", new JsonPrimitive(jobApplication.name));
+            result.add("name", context.serialize(jobApplication.name));
         }
         if (jobApplication.email != null) {
-            result.add("email", new JsonPrimitive(jobApplication.email));
+            result.add("email", context.serialize(jobApplication.email));
         }
         if (jobApplication.submitted != null) {
-            result.add("submitted", new JsonPrimitive(jobApplication.submitted.getTime()));
+            result.add("submitted", context.serialize(jobApplication.submitted.getTime()));
             String formattedDate = JavaExtensions.format(jobApplication.submitted, "dd MMMM yyyy hh:mm:ss");
-            result.add("formattedDate", new JsonPrimitive(formattedDate));
+            result.add("formattedDate", context.serialize(formattedDate));
         }
         if (jobApplication.phone != null) {
-            result.add("phone", new JsonPrimitive(jobApplication.phone));
+            result.add("phone", context.serialize(jobApplication.phone));
         }
-        result.add("rating", new JsonPrimitive(jobApplication.getRating()));
+        result.add("tags", context.serialize((jobApplication.tagList())));
+        result.add("rating", context.serialize(jobApplication.getRating()));
         return result;
     }
 

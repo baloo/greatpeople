@@ -118,15 +118,8 @@
         GP.UI.initInplaceEdit();
         GP.UI.initTabBar();
         GP.UI.setStatusBox();
+        GP.UI.setTagBox();
         $("#search").attr("disabled", "disabled");
-        $("#mytags").tagit({
-            availableTags: ["${models.Tags.allTags().join('","').raw()}"],
-            values: userTags.split(" ")
-        });
-        $("#mytags .tagit-input").bind("keydown keypress", function() {
-            GP.UI.saveTags();
-        });
-
     });
 
     var GP = GP || {};
@@ -155,8 +148,17 @@
             })
         },
 
+        setTagBox: function() {
+            $("#mytags").tagit({
+                availableTags: ["${models.Tags.allTags().join('","').raw()}"],
+                values: userTags.split(" ")
+            });
+            $("#mytags .tagit-input").bind("keydown keypress", function() {
+                GP.UI.saveTags();
+            });
+        },
+
         saveTags: function(){
-            // We use a timer to avoid pounding the server
             if (this.tagsTimer) {
                 window.clearTimeout(this.tagsTimer);
             }

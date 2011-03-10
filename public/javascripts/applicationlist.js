@@ -30,6 +30,8 @@ var AppView = Backbone.View.extend({
     el: $("#list"),
 
     loadBox: function(box, query) {
+        // $("#search").val(query,split(",")[0]);
+        this.refreshLinks(query);
         this.collection.box = box;
         this.collection.url = '/api/applicants/' + box;
         if (query) {
@@ -61,6 +63,13 @@ var AppView = Backbone.View.extend({
         });
     },
 
+    refreshLinks: function(query) {
+        var q = query ? "/" + query.split(",")[0] : "";
+        $(["new", "inprogress", "archived"]).each(function(){
+            $(".navlink." + this + " a").attr("href", "#" + this + q);
+        });
+    },
+
     spinner: function() {
         $("#spinner").show();
     },
@@ -68,10 +77,9 @@ var AppView = Backbone.View.extend({
     render: function() {
         $("#spinner").hide();
         var $view = $(this.el).html('');
-        console.log(this.collection);
         if (this.collection.length === 0) {
             // Render the "no applications" message
-            $view.append( $("#noApplicantTmpl").tmpl() );
+            $view.append($("#noApplicantTmpl").tmpl());
             return;
         }
 

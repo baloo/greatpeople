@@ -5,6 +5,7 @@ import java.util.List;
 
 import models.JobApplication;
 import models.JobApplication.JobStatus;
+import play.Play;
 import play.jobs.Every;
 import play.jobs.Job;
 import controllers.Mails;
@@ -13,10 +14,11 @@ import controllers.Mails;
 public class HouseKeeping extends Job {
 
     public void doJob() {
+        if (!Play.mode.isProd()) return;
         Calendar now = Calendar.getInstance();
         now.add(Calendar.DATE, -7);
         List old = JobApplication.find("submitted < ? and status = ?", now.getTime(), JobStatus.NEW).fetch();
-        if(!old.isEmpty()) {
+        if (!old.isEmpty()) {
             Mails.alert(old);
         }
     }

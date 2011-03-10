@@ -19,7 +19,12 @@
 <script id="applicantTmpl" type="text/template" charset="utf-8">
     <dl class="candidate-list">
         <dt><a class="name" href="/resume/{{= id }}">{{= name }}</a></dt>
-        <dd class="submition"><date>{{= formattedDate }}</date></dd>
+        <dd class="tags">
+            <ul>{{each tags}}
+                <li>{{= $value}}</li>
+            {{/each}}</ul>
+        </dd>
+        <dd class="submition"><time>{{= formattedDate }}</time></dd>
         <dd class="rate">
             <div class="cursor" style="width: {{= stars }}%"></div>
         </dd>

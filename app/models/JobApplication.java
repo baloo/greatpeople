@@ -10,6 +10,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 
+import play.Logger;
 import play.data.validation.Email;
 import play.db.jpa.Model;
 import play.libs.Codec;
@@ -79,6 +80,7 @@ public class JobApplication extends Model {
     }
 
     public List<String> tagList() {
+        if (tags == null) return new ArrayList<String>();
         return Arrays.asList(tags.split("\\s+"));
     }
 
@@ -103,9 +105,19 @@ public class JobApplication extends Model {
         if (query == null || query.length() == 0) {
             return find("status = ? order by submitted desc", status);
         }
-        List<Long> ids = Search.search(normalizeQuery(query), JobApplication.class).fetchIds();
+        String normalized = normalizeQuery(query);
+        if (normalized.length() == 0) {
+            return emptyQuery();
+        }
+        List<Long> ids = null;
+        try {
+            ids = Search.search(normalized, JobApplication.class).fetchIds();
+        } catch (Exception e) {
+            Logger.warn(e, "Error parsing query");
+            return emptyQuery();
+        }
         if (ids.size() == 0) {
-            return find("id = ? and id = ?", 0L, 1L); // Hack to get a query with an empty result
+            return emptyQuery();
         }
         JPAQuery q = find("status = ? and id in (:ids) order by submitted desc", status);
         q.bind("ids", ids);
@@ -126,9 +138,17 @@ public class JobApplication extends Model {
     public static String normalizeQuery(String input) {
         List<String> predicates = new ArrayList<String>();
         for (String term: input.split("\\s+")) {
-            predicates.add("(name:" + term + " OR message:" + term + " OR tags:" + term + ")");
+            if (term.startsWith("tag:") && term.length() > 6) {
+                predicates.add("(tags:" + term.substring("tag:".length()) + ")");
+            } else {
+                predicates.add("(name:" + term + " OR message:" + term + " OR tags:" + term + ")");
+            }
         }
         return Utils.join(predicates, " AND ");
+    }
+
+    public static JPAQuery emptyQuery() {
+        return find("id = ? and id = ?", 0L, 1L); // Hack to get a query with an empty result
     }
 
     @Override

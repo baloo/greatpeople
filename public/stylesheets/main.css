@@ -208,7 +208,7 @@ nav li a.active {
 }
 .candidate-list .tags {
     position: absolute;
-    right: 0;
+    right: 70px;
     top: 5px;
 }
 .tags li {
