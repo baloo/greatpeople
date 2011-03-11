@@ -122,7 +122,7 @@ public class FetchEmails extends Job {
             }
         }
 
-        if (email.startsWith("jobs") && email.contains("@zenexity.com")) {
+        if ("no-reply@zenexity.com".equals(email)) {
             // Ignore emails sent from jobs (= sent from Great People)
             if (Play.mode == Play.Mode.PROD) {
                 message.setFlag(Flag.FLAGGED, true);
