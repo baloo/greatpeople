@@ -134,21 +134,9 @@ public class FetchEmails extends Job {
             JobApplication application = JobApplication.createApplication(name, email, contentString, attachments);
             Mails.applied(application);
         } else {
-            // Look for an application to a tagged email, e.g. jobs+t:design@zenexity.com
-            Pattern tagRe = Pattern.compile("^jobs[+]t\\-(\\w+)@.*$");
-            Matcher matcher = tagRe.matcher(to);
-            if(matcher.matches()) {
-                String tag = matcher.group(1);
-                JobApplication application = JobApplication.createApplication(name, email, contentString, attachments);
-                application.tags = tag;
-                application.save();
-                Mails.applied(application);
-                return;
-            }
-
             // Look for a reply to an existing thread
             Pattern replyRe = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
-            matcher = replyRe.matcher(to);
+            Matcher matcher = replyRe.matcher(to);
             if(matcher.matches()) {
                 Long id = Long.parseLong(matcher.group(1));
                 JobApplication application = JobApplication.findById(id);
@@ -158,9 +146,22 @@ public class FetchEmails extends Job {
                     application.addMessage(name, email, contentString);
                 }
                 Logger.debug("Found a follow-up from: " + name);
+                return;
+            }
+
+            // Look for an application to a tagged email, e.g. jobs+t:design@zenexity.com
+            Pattern tagRe = Pattern.compile("^jobs[+](\\w+)@.*$");
+            matcher = tagRe.matcher(to);
+            if (matcher.matches()) {
+                String tag = matcher.group(1);
+                JobApplication application = JobApplication.createApplication(name, email, contentString, attachments);
+                application.tags = tag;
+                application.save();
+                Mails.applied(application);
             } else {
                 Logger.warn("Unknow address --> %s", to);
             }
+
         }
 
         if (Play.mode == Play.Mode.PROD) {
