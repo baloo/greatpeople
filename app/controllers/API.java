@@ -16,10 +16,9 @@ public class API extends Controller {
         JobStatus status = JobStatus.find(boxid);
         int pageId = p < 1 ? 0 : p - 1; // The API starts at 1 but internally we start at 0
         if (status == null || status == JobStatus.DELETED) notFound();
-        List<JobApplication> applications = JobApplication.search(status, q)
-            .from(JobApplication.PER_PAGE * pageId).fetch(JobApplication.PER_PAGE);
-        int pageCount = JobApplication.pageCount(status, q);
-        if (pageId >= pageCount) notFound();
+        List<JobApplication> applications = JobApplication.search(status, q, pageId);
+        int pageCount = JobApplication.pageCount(status, q); // TODO: This is wrong
+        if (pageId > pageCount) notFound();
 
         renderJSON(new ApplicationResult(applications, pageId, pageCount), new JobApplicationSerializer());
     }

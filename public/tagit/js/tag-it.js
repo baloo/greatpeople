@@ -26,7 +26,9 @@
 
 		// read initial values
 		for (var i = 0; i < options.values.length; i++) {
-			create_choice(jQuery.trim(options.values[i]));
+			var term = jQuery.trim(options.values[i]);
+			if (term.length > 0)
+				create_choice(term);
 		}
 
 		$(this).click(function(e){

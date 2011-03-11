@@ -26,7 +26,6 @@ public class Application extends Controller {
     // Pages
 
     public static void index() throws Exception {
-        Logger.info("All tags: " + Utils.join(Tags.allTags(), ", "));
         render();
     }
 

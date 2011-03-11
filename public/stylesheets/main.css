@@ -1,9 +1,9 @@
 @import "reset.css";
 @font-face {
-    font-family: 'Neuton';
+    font-family: "Neuton";
     font-style: normal;
     font-weight: normal;
-    src: local('Neuton Regular'), local('Neuton'), url('/public/fonts/Neuton.ttf') format('truetype');
+    src: local("Neuton Regular"), local("Neuton"), url("/public/fonts/Neuton.ttf") format("truetype");
 }
 
 body {
@@ -19,6 +19,7 @@ a:hover {
 }
 
 #logo {
+    padding-top: 0;
     margin-left: -270px;
     position: absolute;
     left: 50%;

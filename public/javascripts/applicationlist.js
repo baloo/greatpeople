@@ -86,12 +86,16 @@ var AppView = Backbone.View.extend({
         var box = this.collection.box;
         this.collection.forEach(function(applicant) {
             var attr = applicant.toJSON();
-            $view.append($("#applicantTmpl").tmpl(
+            var entry = $("#applicantTmpl").tmpl(
                 _(attr).extend({
                     box: "#" + box,
                     stars: attr.rating * 100 / 4
                 })
-            ));
+            );
+/*            $(".tags li", entry).css("background", "hsla(350, 60%, 90%, 1)")
+                .css("border-color", "hsla(350, 60%, 70%)")
+                .css("color", "hsla(350, 60%, 70%)");*/
+            $view.append(entry);
         });
 
         // Internal page number starts at 0, but we want to start at 1

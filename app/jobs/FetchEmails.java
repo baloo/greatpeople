@@ -1,24 +1,34 @@
 package jobs;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.mail.*;
+import javax.mail.Address;
+import javax.mail.Flags;
 import javax.mail.Flags.Flag;
-import javax.mail.internet.*;
-import javax.mail.search.*;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.Part;
+import javax.mail.Session;
+import javax.mail.Store;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.search.FlagTerm;
+import javax.mail.search.SearchTerm;
 
 import models.Attachment;
 import models.JobApplication;
-
+import play.Logger;
+import play.Play;
+import play.jobs.Every;
+import play.jobs.Job;
+import play.libs.MimeTypes;
 import controllers.Mails;
-
-import play.*;
-import play.db.jpa.Blob;
-import play.jobs.*;
-import play.libs.IO;
 
 @Every("10min")
 public class FetchEmails extends Job {
@@ -112,7 +122,7 @@ public class FetchEmails extends Job {
             }
         }
 
-        if (email.startsWith("jobs") && email.endsWith("@zenexity.com")) {
+        if (email.startsWith("jobs") && email.contains("@zenexity.com")) {
             // Ignore emails sent from jobs (= sent from Great People)
             if (Play.mode == Play.Mode.PROD) {
                 message.setFlag(Flag.FLAGGED, true);
@@ -124,8 +134,21 @@ public class FetchEmails extends Job {
             JobApplication application = JobApplication.createApplication(name, email, contentString, attachments);
             Mails.applied(application);
         } else {
-            Pattern regexp = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
-            Matcher matcher = regexp.matcher(to);
+            // Look for an application to a tagged email, e.g. jobs+t:design@zenexity.com
+            Pattern tagRe = Pattern.compile("^jobs[+]t\\-(\\w+)@.*$");
+            Matcher matcher = tagRe.matcher(to);
+            if(matcher.matches()) {
+                String tag = matcher.group(1);
+                JobApplication application = JobApplication.createApplication(name, email, contentString, attachments);
+                application.tags = tag;
+                application.save();
+                Mails.applied(application);
+                return;
+            }
+
+            // Look for a reply to an existing thread
+            Pattern replyRe = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
+            matcher = replyRe.matcher(to);
             if(matcher.matches()) {
                 Long id = Long.parseLong(matcher.group(1));
                 JobApplication application = JobApplication.findById(id);
@@ -149,8 +172,9 @@ public class FetchEmails extends Job {
         Attachment attachment = new Attachment();
         attachment.name = decodeName(part.getFileName());
         Logger.debug("Found attachment name: " + attachment.name);
-        attachment.content.set(part.getInputStream(), part.getContentType());
-        Logger.debug("   => content-type: " + part.getContentType());
+        String type = MimeTypes.getContentType(attachment.name, "application/binary");
+        attachment.content.set(part.getInputStream(), type);
+        Logger.debug("   => content-type: " + type);
         attachment.save();
         return attachment;
     }

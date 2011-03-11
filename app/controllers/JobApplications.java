@@ -1,14 +1,11 @@
 package controllers;
-import org.yaml.snakeyaml.Yaml;
-
+import models.AnswerTemplate;
 import models.Attachment;
 import models.JobApplication;
 import models.JobApplication.JobStatus;
-import models.*;
 import play.Play;
 import play.cache.Cache;
-import play.libs.IO;
-import play.mvc.Controller;
+import play.libs.MimeTypes;
 import play.mvc.With;
 
 @With(Auth.class)
@@ -49,7 +46,7 @@ public class JobApplications extends Application {
     public static void download(Long id, String filename) {
         Attachment attachment = Attachment.findById(id);
         notFoundIfNull(attachment);
-        response.contentType = attachment.content.type();
+        response.contentType = MimeTypes.getContentType(filename, "application/binary");
         renderBinary(attachment.content.getFile());
     }
 

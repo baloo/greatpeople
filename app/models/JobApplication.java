@@ -16,6 +16,7 @@ import play.db.jpa.Model;
 import play.libs.Codec;
 import play.modules.search.Field;
 import play.modules.search.Indexed;
+import play.modules.search.Query;
 import play.modules.search.Search;
 import play.utils.Utils;
 
@@ -24,10 +25,10 @@ import play.utils.Utils;
 @Indexed
 public class JobApplication extends Model {
 
-    public final static int PER_PAGE = 10;
+    public final static int PAGE_SIZE = 10;
 
     public static enum JobStatus {
-        NEW, INPROGRESS, ARCHIVED, DELETED;
+        NEW, INPROGRESS, ARCHIVED, HIRED, DELETED;
         public static JobStatus find(String label) {
             String upper = label.toUpperCase();
             for (JobStatus status: values()) {
@@ -39,10 +40,10 @@ public class JobApplication extends Model {
 
     @Field public String name;
     @Email @Field public String email;
-    public Date submitted = new Date();
+    @Field public Date submitted = new Date();
     public String phone;
     @Lob @Field public String message;
-    @Enumerated(EnumType.STRING) public JobStatus status = JobStatus.NEW;
+    @Field @Enumerated(EnumType.STRING) public JobStatus status = JobStatus.NEW;
     public String uniqueID;
     /* Separated by spaces */
     @Field public String tags;
@@ -56,11 +57,11 @@ public class JobApplication extends Model {
 
     public static JobApplication createApplication(String name, String email, String message, List<Attachment> attachments) {
         JobApplication application = new JobApplication(name, email, message);
-        application.save();
         for(Attachment attachment : attachments) {
             attachment.jobApplication = application;
             attachment.save();
         }
+        application.save();
         return application;
     }
 
@@ -80,7 +81,7 @@ public class JobApplication extends Model {
     }
 
     public List<String> tagList() {
-        if (tags == null) return new ArrayList<String>();
+        if (tags == null || "".equals(tags)) return new ArrayList<String>();
         return Arrays.asList(tags.split("\\s+"));
     }
 
@@ -101,42 +102,42 @@ public class JobApplication extends Model {
         return Attachment.find("byJobApplication", this).fetch();
     }
 
-    public static JPAQuery search(JobStatus status, String query) {
+    ////////////////////////////////////////////////////////////
+    // Search
+
+    private static Query query(JobStatus status, String query) {
         if (query == null || query.length() == 0) {
-            return find("status = ? order by submitted desc", status);
+            return Search.search("status:" + status, JobApplication.class)
+                .orderBy("submitted");
         }
-        String normalized = normalizeQuery(query);
+        String normalized = normalizeQuery(query, status);
         if (normalized.length() == 0) {
-            return emptyQuery();
+            return null;
         }
-        List<Long> ids = null;
         try {
-            ids = Search.search(normalized, JobApplication.class).fetchIds();
+            return Search.search(normalized, JobApplication.class)
+                .orderBy("submitted");
         } catch (Exception e) {
             Logger.warn(e, "Error parsing query");
-            return emptyQuery();
+            return null;
         }
-        if (ids.size() == 0) {
-            return emptyQuery();
-        }
-        JPAQuery q = find("status = ? and id in (:ids) order by submitted desc", status);
-        q.bind("ids", ids);
-        return q;
+    }
+
+    public static List<JobApplication> search(JobStatus status, String query, int page) {
+        Query luceneQ = query(status, query);
+        if (luceneQ == null) return new ArrayList<JobApplication>();
+        return luceneQ.page(page * PAGE_SIZE, PAGE_SIZE).fetch();
     }
 
     public static int pageCount(JobStatus status, String query) {
-        int count;
-        if (query == null || query.length() == 0) {
-            count = find("status", status).fetch().size();
-        } else {
-            count = find("status = ? and name like ?", status, "%" + query + "%").fetch().size();
-        }
-        int result = (int) Math.floor(count / PER_PAGE);
-        return result + 1;
+        Query luceneQ = query(status, query);
+        if (luceneQ == null) return 1;
+        return (int)Math.ceil(luceneQ.count() / PAGE_SIZE);
     }
 
-    public static String normalizeQuery(String input) {
+    public static String normalizeQuery(String input, JobStatus status) {
         List<String> predicates = new ArrayList<String>();
+        predicates.add("(status:" + status + ")");
         for (String term: input.split("\\s+")) {
             if (term.startsWith("tag:") && term.length() > 6) {
                 predicates.add("(tags:" + term.substring("tag:".length()) + ")");

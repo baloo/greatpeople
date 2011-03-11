@@ -23,7 +23,7 @@
 
     <div class="original-message">
         <p>${resume.message.nl2br()}</p>
-        #{if resume.attachments && resume.attachments.length() > 0}
+        #{if resume.attachments && resume.attachments.size() > 0}
         <h2>Attachements</h2>
         <ul class="attachements">
             #{list resume.attachments}
@@ -150,7 +150,7 @@
 
         setTagBox: function() {
             $("#mytags").tagit({
-                availableTags: ["${models.Tags.allTags().join('","').raw()}"],
+                availableTags: "${models.Tags.spaceSeparated()}".split(" "),
                 values: userTags.split(" ")
             });
             $("#mytags .tagit-input").bind("keydown keypress", function() {

@@ -9,6 +9,7 @@ import org.apache.lucene.index.TermEnum;
 import play.Logger;
 import play.cache.Cache;
 import play.modules.search.Search;
+import play.utils.Utils;
 
 public class Tags {
 
@@ -19,12 +20,14 @@ public class Tags {
         if (result == null) {
             result = new HashSet<String>();
             TermEnum terms = Search.getCurrentStore().getIndexSearcher("models.JobApplication").getIndexReader().terms();
-            if (terms.term() != null) {
+            if (terms.term() != null) { 
+                Logger.info(terms.term().field() + " - " + terms.term().text());
                 if ("tags".equals(terms.term().field())) {
                     result.add(terms.term().text());
                 }
             }
             while (terms.next()) {
+                Logger.info(terms.term().field() + " - " + terms.term().text());
                 if ("tags".equals(terms.term().field())) {
                     result.add(terms.term().text());
                 }
@@ -32,6 +35,10 @@ public class Tags {
             Cache.set(CACHE_KEY, result, "30min");
         }
         return result;
+    }
+
+    public static String spaceSeparated() throws IOException {
+        return Utils.join(allTags(), " ");
     }
 
 }
