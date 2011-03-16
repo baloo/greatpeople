@@ -38,37 +38,12 @@
 </script>
 #{set 'moreScripts'}
 <script src="@{'/public/javascripts/applicationlist.js'}" type="text/javascript" charset="utf-8"></script>
+<script src="@{'/public/javascripts/searchbox.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 
-    var w;
-    var searchTimeout = null
-
-    // TODO: Move the searchbar related functionality to a different JS file
-    function applySearch(delay) {
-        if (searchTimeout) {
-            window.clearTimeout(searchTimeout);
-        }
-        searchTimeout = window.setTimeout(function(){
-            var q = $("#search").val()
-            if (q.length < 3) {
-                window.location.hash = "#" + w.box;
-                return;
-            }
-            window.location.hash = "#" + w.box + "/" + q;
-        }, delay ? 300 : 0);
-    }
-
-    $("#search").keyup(function(){
-        applySearch(true);
-    });
-
-    $("#search").click(function(){
-        if ($(this).val() == "")
-            applySearch();
-    });
-
     $(function(){
-        w = new Workspace();
+        var w = new Workspace();
+        $("#search").searchbox(w);
         Backbone.history.start();
     });
 
