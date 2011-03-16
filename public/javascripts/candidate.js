@@ -26,7 +26,22 @@ Candidate.prototype = {
                 attribute: this.id,
                 style: 'display: inline',
                 submitdata : {resumeId: candidate.resumeId},
-                width: self.id == "name" ? "auto" : 100
+                width: self.id == "name" ? "auto" : 100,
+                onsubmit: function() {
+                    if (candidate.options.notification) {
+                        candidate.options.notification.display("Saving...");
+                    }
+                },
+                callback: function () {
+                    if (candidate.options.notification) {
+                        candidate.options.notification.display("Successfully saved", 2000);
+                    }
+                },
+                onerror: function () {
+                    if (candidate.options.notification) {
+                        candidate.options.notification.display("Error, change NOT saved", 2000);
+                    }
+                }
             });
         });
     },
@@ -59,14 +74,33 @@ Candidate.prototype = {
             window.clearTimeout(this.tagsTimer);
         }
         this.tagsTimer = window.setTimeout(function(){
+            // TODO: Check that the tags didn't change before pushing
+            // Do the same notif for jeditable
             var tags = [];
             $(".tagit-choice", "#mytags").each(function(){
                 tags.push($("input", this).attr("value"));
             });
-            $.post(candidate.options.post, {
-                'resumeId': candidate.resumeId,
-                'id': 'tags',
-                'value': tags.join(" ")
+            if (candidate.options.notification) {
+                candidate.options.notification.display("Saving...");
+            }
+            $.ajax({
+                type: 'POST',
+                url: candidate.options.post,
+                data: {
+                    'resumeId': candidate.resumeId,
+                    'id': 'tags',
+                    'value': tags.join(" ")
+                },
+                success: function() {
+                    if (candidate.options.notification) {
+                        candidate.options.notification.display("Successfully saved", 2000);
+                    }
+                },
+                error: function() {
+                    if (candidate.options.notification) {
+                        candidate.options.notification.display("Error, change NOT saved", 2000);
+                    }
+                }
             });
         }, 1000);
     }

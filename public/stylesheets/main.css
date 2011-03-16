@@ -249,7 +249,7 @@ h1, h2 {
 }
 
 .contact dt {
-    position:absolute !important;    
+    position:absolute !important;
     clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
     clip: rect(1px, 1px, 1px, 1px);
 }
@@ -354,6 +354,17 @@ h1, h2 {
     color: #9b0000;
 }
 
+#messagezone {
+    height: 7px;
+    text-align: center;
+}
+
+.notification {
+    background-color: #f3f3f3;
+    padding: 3px 10px 3px 10px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+}
 
 .rate {
     background: url(/public/images/clear-star.png) left center repeat-x;
@@ -367,22 +378,10 @@ h1, h2 {
     height: 12px;
 }
 
-.email-message {
-    
-} 
-
-.internal-message {
-    
-} 
-
 .warning-note {
     color: #c00;
     display: block;
     padding: 10px 0 0 13px;
-}
-
-.himself {
-    
 }
 
 #addTag {

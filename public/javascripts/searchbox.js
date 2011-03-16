@@ -11,7 +11,7 @@ $.fn.searchbox = function(w) {
             window.clearTimeout(searchTimeout);
         }
         searchTimeout = window.setTimeout(function(){
-            var q = $(box).val()
+            var q = $(box).val();
             if (q.length < 3) {
                 window.location.hash = "#" + w.box;
                 return;
@@ -25,10 +25,10 @@ $.fn.searchbox = function(w) {
     });
 
     $(this).click(function(){
-        if ($(this).val() == "") {
+        if ($(this).val() === "") {
             applySearch();
         }
     });
-}
+};
 
 })(jQuery);

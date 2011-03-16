@@ -14,6 +14,11 @@
 #{set 'title'}${resume.name} - Great People#{/set}
 
 <div id="candidate">
+    <div id="messagezone">
+        <span id="notification" style="display: none;">
+            Saving...
+        </span>
+    </div>
     <h1 class="inplace" id="name">${resume.name}</h1>
     <dl class="contact">
         <dt>Contact</dt>
@@ -111,22 +116,25 @@
 <script src="@{'/public/tagit/js/tag-it.js'}" charset="utf-8"></script>
 <script src="@{'/public/javascripts/lib/jquery.jeditable.mini.js'}" charset="utf-8"></script>
 <script src="@{'/public/javascripts/candidate.js'}" charset="utf-8"></script>
+<script src="@{'/public/javascripts/notification.js'}" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 
-    $(document).ready(function() {
-        var candidate = new Candidate(${resume.id}, {
-            "allTags": "${models.Tags.spaceSeparated()}".split(" "),
-            "userTags": "${resume.tags}".split(" "),
-            "post": "@{change()}"
-        });
-        $("#search").attr("disabled", "disabled");
-        #{if resume.status.toString() == "NEW" || resume.status.toString() == "INPROGRESS"}
-            $("#status").val("inprogress");
-        #{/if}
-        #{else}
-            $("#status").val("${resume.status.toString().toLowerCase()}");
-        #{/else}
+$(document).ready(function() {
+    var notif = new Notification("#messagezone");
+    var candidate = new Candidate(${resume.id}, {
+        "allTags": "${models.Tags.spaceSeparated()}".split(" "),
+        "userTags": "${resume.tags}".split(" "),
+        "post": "@{change()}",
+        "notification": notif
     });
+    $("#search").attr("disabled", "disabled");
+    #{if resume.status.toString() == "NEW" || resume.status.toString() == "INPROGRESS"}
+        $("#status").val("inprogress");
+    #{/if}
+    #{else}
+        $("#status").val("${resume.status.toString().toLowerCase()}");
+    #{/else}
+});
 
 </script>
 #{/set}
