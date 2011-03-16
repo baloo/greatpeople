@@ -57,16 +57,26 @@ public class JobApplication extends Model {
 
     public static JobApplication createApplication(String name, String email, String message, List<Attachment> attachments) {
         JobApplication application = new JobApplication(name, email, message);
+        application.save();
         for(Attachment attachment : attachments) {
             attachment.jobApplication = application;
             attachment.save();
         }
-        application.save();
         return application;
     }
 
     public void addMessage(String from, String email, String content) {
+        addMessage(from, email, content);
+    }
+
+    public void addMessage(String from, String email, String content, List<Attachment> attachments) {
         new Note(this, from, email, content, false).save();
+        if (attachments != null) {
+            for(Attachment attachment : attachments) {
+                attachment.jobApplication = this;
+                attachment.save();
+            }
+        }
         this.save();
     }
 

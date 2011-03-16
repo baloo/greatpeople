@@ -3,6 +3,7 @@ import models.AnswerTemplate;
 import models.Attachment;
 import models.JobApplication;
 import models.JobApplication.JobStatus;
+import play.Logger;
 import play.Play;
 import play.cache.Cache;
 import play.libs.MimeTypes;
@@ -46,8 +47,10 @@ public class JobApplications extends Application {
     public static void download(Long id, String filename) {
         Attachment attachment = Attachment.findById(id);
         notFoundIfNull(attachment);
-        response.contentType = MimeTypes.getContentType(filename, "application/binary");
-        renderBinary(attachment.content.getFile());
+        Logger.debug("Search a content-type for " + filename);
+        response.contentType = MimeTypes.getContentType(filename);
+        Logger.debug("  ==> " + response.contentType);
+        renderBinary(attachment.content.getFile(), filename);
     }
 
     public static void delete(Long id) throws Exception {

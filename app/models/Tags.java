@@ -21,13 +21,11 @@ public class Tags {
             result = new HashSet<String>();
             TermEnum terms = Search.getCurrentStore().getIndexSearcher("models.JobApplication").getIndexReader().terms();
             if (terms.term() != null) { 
-                Logger.info(terms.term().field() + " - " + terms.term().text());
                 if ("tags".equals(terms.term().field())) {
                     result.add(terms.term().text());
                 }
             }
             while (terms.next()) {
-                Logger.info(terms.term().field() + " - " + terms.term().text());
                 if ("tags".equals(terms.term().field())) {
                     result.add(terms.term().text());
                 }

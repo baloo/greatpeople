@@ -4,6 +4,8 @@
 
 (function($) {
 
+"use strict";
+
 // Model
 
 var ApplicantModel = Backbone.Model.extend({

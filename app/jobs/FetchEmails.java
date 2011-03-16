@@ -143,7 +143,7 @@ public class FetchEmails extends Job {
                 if(application == null) {
                     Logger.warn("Job application not found %s, for %s", id, to);
                 } else {
-                    application.addMessage(name, email, contentString);
+                    application.addMessage(name, email, contentString, attachments);
                 }
                 Logger.debug("Found a follow-up from: " + name);
                 return;
@@ -173,7 +173,7 @@ public class FetchEmails extends Job {
         Attachment attachment = new Attachment();
         attachment.name = decodeName(part.getFileName());
         Logger.debug("Found attachment name: " + attachment.name);
-        String type = MimeTypes.getContentType(attachment.name, "application/binary");
+        String type = MimeTypes.getContentType(attachment.name);
         attachment.content.set(part.getInputStream(), type);
         Logger.debug("   => content-type: " + type);
         attachment.save();
