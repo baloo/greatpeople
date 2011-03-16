@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Great People :: #{get 'title' /}</title>
-        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
-        <meta charset="utf-8">
-        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
-        <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
-        <link href='http://fonts.googleapis.com/css?family=Neuton&subset=latin' rel='stylesheet' type='text/css'>
-        #{get 'moreStyles' /}
-    </head>
-    <body>
-        <menu>
+<head>
+    <title>#{get 'title' /}</title>
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+    <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
+    <link href='http://fonts.googleapis.com/css?family=Neuton&subset=latin' rel='stylesheet' type='text/css'>
+    #{get 'moreStyles' /}
+</head>
+<body>
+    <menu>
+        <ul>
+            <li class="user-name">${session.name} <span class="user-mail">(${session.email})</span></li> |
+            <li><a href="@{Auth.logout()}">logout</a></li>
+        </ul>
+    </menu>
+    <header>
+        <a href="/" id="logo">Great People</a>
+        <nav>
+            <input type="search" results="10" placeholder="Search" id="search" />
             <ul>
-                <li class="user-name">${session.name} <span class="user-mail">(${session.email})</span></li> |
-                <li><a href="@{Auth.logout()}">logout</a></li>
+                <li class="navlink new"><a href="@{Application.index()}#new">Submitted #{if newCount}(${newCount})#{/if}</a></li>
+                <li class="navlink inprogress"><a href="@{Application.index()}#inprogress">In process  #{if inprogressCount}(${inprogressCount})#{/if}</a></li>
+                <li class="navlink archived"><a href="@{Application.index()}#archived">Archived #{if archivedCount}(${archivedCount})#{/if}</a></li>
             </ul>
-        </menu>
-        <header>
-            <a href="/" id="logo">Great People</a>
-            <nav>
-                <input type="search" results="10" placeholder="Search" id="search" />
-                <ul>
-                    <li class="navlink new"><a href="@{Application.index()}#new">Submitted #{if newCount}(${newCount})#{/if}</a></li>
-                    <li class="navlink inprogress"><a href="@{Application.index()}#inprogress">In process  #{if inprogressCount}(${inprogressCount})#{/if}</a></li>
-                    <li class="navlink archived"><a href="@{Application.index()}#archived">Archived #{if archivedCount}(${archivedCount})#{/if}</a></li>
-                </ul>
-            </nav>
-        </header>
-        <div id="wrapper">
-            #{doLayout /}
-        </div>
-        <footer>
-            ©zenexity.com
-        </footer>
-        <script src="@{'/public/javascripts/lib/jquery-1.5.1.min.js'}" type="text/javascript" charset="utf-8"></script>
-        <script src="@{'/public/javascripts/lib/jquery.tmpl.min.js'}" type="text/javascript" charset="utf-8"></script>
-        <script src="@{'/public/javascripts/lib/underscore-min.js'}" type="text/javascript" charset="utf-8"></script>
-        <script src="@{'/public/javascripts/lib/backbone.js'}" type="text/javascript" charset="utf-8"></script>
-        <script src="@{'/public/javascripts/lib/jquery.history.js'}" type="text/javascript" charset="utf-8"></script>
-        #{get 'moreScripts' /}
-    </body>
+        </nav>
+    </header>
+    <div id="wrapper">
+        #{doLayout /}
+    </div>
+    <footer>
+        ©zenexity.com
+    </footer>
+    <script src="@{'/public/javascripts/lib/jquery-1.5.1.min.js'}" charset="utf-8"></script>
+    <script src="@{'/public/javascripts/lib/jquery.tmpl.min.js'}" charset="utf-8"></script>
+    <script src="@{'/public/javascripts/lib/underscore-min.js'}" charset="utf-8"></script>
+    <script src="@{'/public/javascripts/lib/backbone.js'}" charset="utf-8"></script>
+    <script src="@{'/public/javascripts/lib/jquery.history.js'}" charset="utf-8"></script>
+    #{get 'moreScripts' /}
+</body>
 </html>
