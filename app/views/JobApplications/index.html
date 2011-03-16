@@ -110,80 +110,23 @@
 <script src="@{'/public/tagit/js/jquery-ui/jquery-ui-1.8.autocomplete.min.js'}" charset="utf-8"></script>
 <script src="@{'/public/tagit/js/tag-it.js'}" charset="utf-8"></script>
 <script src="@{'/public/javascripts/lib/jquery.jeditable.mini.js'}" charset="utf-8"></script>
+<script src="@{'/public/javascripts/candidate.js'}" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 
-    var userTags = "${resume.tags}";
-
     $(document).ready(function() {
-        GP.UI.initInplaceEdit();
-        GP.UI.initTabBar();
-        GP.UI.setStatusBox();
-        GP.UI.setTagBox();
+        var candidate = new Candidate(${resume.id}, {
+            "allTags": "${models.Tags.spaceSeparated()}".split(" "),
+            "userTags": "${resume.tags}".split(" "),
+            "post": "@{change()}"
+        });
         $("#search").attr("disabled", "disabled");
+        #{if resume.status.toString() == "NEW" || resume.status.toString() == "INPROGRESS"}
+            $("#status").val("inprogress");
+        #{/if}
+        #{else}
+            $("#status").val("${resume.status.toString().toLowerCase()}");
+        #{/else}
     });
-
-    var GP = GP || {};
-    GP.UI = {
-        initInplaceEdit: function(){
-            $(".inplace").each(function() {
-                var self = this;
-                $(this).editable("@{change()}", {
-                    tooltip: 'Click to edit',
-                    attribute: this.id,
-                    style: 'display: inline',
-                    submitdata : {resumeId: "${resume.id}"},
-                    width: self.id == "name" ? "auto" : 100
-                });
-            });
-        },
-
-        initTabBar: function(){
-            // tabs
-            $(".tabs a").click(function(e){
-                e.preventDefault();
-                $(".tabs a").removeClass("active");
-                $(this).addClass("active");
-                $(".answer > div").hide();
-                $(".answer > " + this.hash).fadeIn("fast");
-            })
-        },
-
-        setTagBox: function() {
-            $("#mytags").tagit({
-                availableTags: "${models.Tags.spaceSeparated()}".split(" "),
-                values: userTags.split(" ")
-            });
-            $("#mytags .tagit-input").bind("keydown keypress", function() {
-                GP.UI.saveTags();
-            });
-        },
-
-        saveTags: function(){
-            if (this.tagsTimer) {
-                window.clearTimeout(this.tagsTimer);
-            }
-            this.tagsTimer = window.setTimeout(function(){
-                var tags = [];
-                $(".tagit-choice", "#mytags").each(function(){
-                    tags.push($("input", this).attr("value"));
-                });
-                $.post("@{change()}", {
-                    'resumeId': "${resume.id}",
-                    'id': 'tags',
-                    'value': tags.join(" ")
-                });
-            }, 1000);
-        },
-
-        setStatusBox: function(){
-            #{if resume.status.toString() == "NEW" || resume.status.toString() == "INPROGRESS"}
-                $("#status").val("inprogress");
-            #{/if}
-            #{else}
-                $("#status").val("${resume.status.toString().toLowerCase()}");
-            #{/else}
-        }
-    }
 
 </script>
 #{/set}
