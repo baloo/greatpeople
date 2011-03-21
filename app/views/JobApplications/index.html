@@ -27,7 +27,7 @@
     </dl>
 
     <div class="original-message">
-        <p>${resume.message.nl2br()}</p>
+        <p>${resume.htmlMessage().nl2br()}</p>
         #{if resume.attachments && resume.attachments.size() > 0}
         <h2>Attachements</h2>
         <ul class="attachements">

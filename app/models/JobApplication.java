@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,6 +20,7 @@ import play.modules.search.Field;
 import play.modules.search.Indexed;
 import play.modules.search.Query;
 import play.modules.search.Search;
+import play.utils.HTML;
 import play.utils.Utils;
 
 
@@ -66,7 +69,7 @@ public class JobApplication extends Model {
     }
 
     public void addMessage(String from, String email, String content) {
-        addMessage(from, email, content);
+        addMessage(from, email, content, null);
     }
 
     public void addMessage(String from, String email, String content, List<Attachment> attachments) {
@@ -84,6 +87,14 @@ public class JobApplication extends Model {
         Note note = new Note(this, from, email, content, true);
         note.rating = rating;
         note.save();
+    }
+
+    /**
+     * Strip tags from the message *then* htmlify some text (to protect from XSS)
+     * @return an HTML string
+     */
+    public String htmlMessage() {
+        return HTML.htmlEscape(message).replaceAll("(https?://[^\\s]+)", "<a href='$1'>$1</a>");
     }
 
     public List<Note> getNotes() {

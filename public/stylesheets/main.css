@@ -277,6 +277,10 @@ h1, h2 {
     margin: 10px 0 0;
 }
 
+.original-message a {
+    text-decoration: underline;
+}
+
 #candidate .tags {
     padding: 5px;
     margin: 15px 0;
