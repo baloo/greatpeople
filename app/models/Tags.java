@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.apache.lucene.index.TermEnum;
 
-import play.Logger;
 import play.cache.Cache;
 import play.modules.search.Search;
 import play.utils.Utils;

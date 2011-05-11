@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 
 import models.JobApplication;
 import models.JobApplication.JobStatus;
-import models.json.JobApplicationSerializer;
+import models.json.JobApplicationSerializerLite;
 import play.mvc.Before;
 import play.mvc.Controller;
 
@@ -20,7 +20,7 @@ public class API extends Controller {
         int pageCount = JobApplication.pageCount(status, q);
         if (pageId > pageCount) notFound();
 
-        renderJSON(new ApplicationResult(applications, pageId, pageCount), new JobApplicationSerializer());
+        renderJSON(new ApplicationResult(applications, pageId, pageCount), new JobApplicationSerializerLite());
     }
 
     // We don't want to redirect to the login page, so we don't use @With(Auth.class)

@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -22,7 +20,7 @@ import play.modules.search.Query;
 import play.modules.search.Search;
 import play.utils.HTML;
 import play.utils.Utils;
-
+import play.db.jpa.JPA;
 
 @Entity
 @Indexed
@@ -107,6 +105,15 @@ public class JobApplication extends Model {
     }
 
     public Float getRating() {
+/*        String query = "select avg(rating) "
+                     + "from Note where rating > 0 and jobApplication = :appid "
+                     + "group by jobApplication";
+        javax.persistence.Query indexQuery = JPA.em().createNativeQuery(query);
+        indexQuery.setParameter("appid", this);
+        List<Object[]> rows = indexQuery.getResultList();
+        Logger.info("Rows: " + rows);
+        Logger.info("Row: " + rows.get(0));
+        return (Float)rows.get(0)[0];*/
         List<Note> notes = getNotes();
         int votes = 0;
         int total = 0;

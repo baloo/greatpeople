@@ -17,8 +17,8 @@ public class JobApplications extends Application {
         notFoundIfNull(resume);
         Object templates = Cache.get("answer_templates");
         if (templates == null){
-        	templates = AnswerTemplate.all().fetch();
-        	if (Play.mode == Play.Mode.PROD) Cache.add("answer_templates", templates, "1h");
+            templates = AnswerTemplate.all().fetch();
+            if (Play.mode == Play.Mode.PROD) Cache.add("answer_templates", templates, "1h");
         }
         render(resume, templates);
     }

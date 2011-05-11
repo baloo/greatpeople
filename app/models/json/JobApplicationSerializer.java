@@ -16,7 +16,6 @@ import com.google.gson.JsonSerializer;
 
 public class JobApplicationSerializer implements JsonSerializer<JobApplication> {
 
-    @Override
     public JsonElement serialize(JobApplication jobApplication, Type type, JsonSerializationContext context) {
         JsonObject result = new JsonObject();
         result.add("id", context.serialize(jobApplication.id));
