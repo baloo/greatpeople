@@ -1,17 +1,8 @@
 package models;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Lob;
-
 import play.Logger;
 import play.data.validation.Email;
+import play.db.jpa.JPA;
 import play.db.jpa.Model;
 import play.libs.Codec;
 import play.modules.search.Field;
@@ -20,7 +11,23 @@ import play.modules.search.Query;
 import play.modules.search.Search;
 import play.utils.HTML;
 import play.utils.Utils;
-import play.db.jpa.JPA;
+
+import java.lang.reflect.Type;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import play.templates.JavaExtensions;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializer;
+import com.google.gson.JsonSerializationContext;
+
 
 @Entity
 @Indexed
@@ -104,27 +111,16 @@ public class JobApplication extends Model {
         return Arrays.asList(tags.split("\\s+"));
     }
 
-    public Float getRating() {
-/*        String query = "select avg(rating) "
+    public Double getRating() {
+        String query = "select avg(rating) "
                      + "from Note where rating > 0 and jobApplication = :appid "
                      + "group by jobApplication";
-        javax.persistence.Query indexQuery = JPA.em().createNativeQuery(query);
+        javax.persistence.Query indexQuery = JPA.em().createQuery(query);
         indexQuery.setParameter("appid", this);
-        List<Object[]> rows = indexQuery.getResultList();
-        Logger.info("Rows: " + rows);
-        Logger.info("Row: " + rows.get(0));
-        return (Float)rows.get(0)[0];*/
-        List<Note> notes = getNotes();
-        int votes = 0;
-        int total = 0;
-        for (Note note: notes) {
-            if (note.rating != null && note.rating > 0) {
-                votes++;
-                total += note.rating;
-            }
-        }
-        return votes == 0 ? 0 : (float)total / (float)votes;
-    }
+        @SuppressWarnings("unchecked")
+        List<Double> rows = indexQuery.getResultList();
+        return rows.size() > 0 ? rows.get(0) : 0;
+   }
 
     public List<Attachment> getAttachments() {
         return Attachment.find("byJobApplication", this).fetch();
@@ -176,13 +172,33 @@ public class JobApplication extends Model {
         return Utils.join(predicates, " AND ");
     }
 
-    public static JPAQuery emptyQuery() {
-        return find("id = ? and id = ?", 0L, 1L); // Hack to get a query with an empty result
-    }
-
     @Override
     public String toString() {
         return name + " <" + email + ">";
+    }
+
+    public static class Serializer implements JsonSerializer<JobApplication> {
+        public JsonElement serialize(JobApplication jobApplication, Type type, JsonSerializationContext context) {
+            JsonObject result = new JsonObject();
+            result.add("id", context.serialize(jobApplication.id));
+            if (jobApplication.name != null) {
+                result.add("name", context.serialize(jobApplication.name));
+            }
+            if (jobApplication.email != null) {
+                result.add("email", context.serialize(jobApplication.email));
+            }
+            if (jobApplication.submitted != null) {
+                result.add("submitted", context.serialize(jobApplication.submitted.getTime()));
+                String formattedDate = JavaExtensions.format(jobApplication.submitted, "dd MMMM yyyy hh:mm:ss");
+                result.add("formattedDate", context.serialize(formattedDate));
+            }
+            if (jobApplication.phone != null) {
+                result.add("phone", context.serialize(jobApplication.phone));
+            }
+            result.add("tags", context.serialize((jobApplication.tagList())));
+            result.add("rating", context.serialize(jobApplication.getRating()));
+            return result;
+        }
     }
 
 }

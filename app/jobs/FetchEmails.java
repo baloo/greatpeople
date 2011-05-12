@@ -137,7 +137,7 @@ public class FetchEmails extends Job {
             // Look for a reply to an existing thread
             Pattern replyRe = Pattern.compile("^jobs[+][^@]{5}-([0-9]+)@.*$");
             Matcher matcher = replyRe.matcher(to);
-            if(matcher.matches()) {
+            if (matcher.matches()) {
                 Long id = Long.parseLong(matcher.group(1));
                 JobApplication application = JobApplication.findById(id);
                 if(application == null) {
@@ -146,6 +146,9 @@ public class FetchEmails extends Job {
                     application.addMessage(name, email, contentString, attachments);
                 }
                 Logger.debug("Found a follow-up from: " + name);
+                if (Play.mode == Play.Mode.PROD) {
+                    message.setFlag(Flag.FLAGGED, true);
+                }
                 return;
             }
 
@@ -159,7 +162,7 @@ public class FetchEmails extends Job {
                 application.save();
                 Mails.applied(application);
             } else {
-                Logger.warn("Unknow address --> %s", to);
+                Logger.warn("Unknown address --> %s", to);
             }
 
         }
