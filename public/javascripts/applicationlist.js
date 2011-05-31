@@ -9,6 +9,13 @@
 // Model
 
 var ApplicantModel = Backbone.Model.extend({
+
+    initialize: function() {
+        this.set({
+            "stars": this.get("rating") ? this.get("rating") * 100 / 4 : 0
+        });
+    }
+
 });
 
 var Applicants = Backbone.Collection.extend({
@@ -26,6 +33,13 @@ var Applicants = Backbone.Collection.extend({
 });
 
 // Views
+
+var ApplicantView = Backbone.View.extend({
+    render: function() {
+        $("#applicantTmpl").tmpl(this.model.toJSON()).appendTo(this.el);
+        return this;
+    }
+});
 
 var AppView = Backbone.View.extend({
 
@@ -87,17 +101,11 @@ var AppView = Backbone.View.extend({
 
         var box = this.collection.box;
         this.collection.forEach(function(applicant) {
-            var attr = applicant.toJSON();
-            var entry = $("#applicantTmpl").tmpl(
-                _(attr).extend({
-                    box: "#" + box,
-                    stars: attr.rating * 100 / 4
-                })
-            );
-/*            $(".tags li", entry).css("background", "hsla(350, 60%, 90%, 1)")
-                .css("border-color", "hsla(350, 60%, 70%)")
-                .css("color", "hsla(350, 60%, 70%)");*/
-            $view.append(entry);
+            var entry = new ApplicantView({model: applicant});
+            $view.append(entry.render().el);
+        });
+        $(".tags > ul > li > a").each(function(){
+            $(this).attr("href", "#" + box + "/tag:" + $(this).attr("data"));
         });
 
         // Internal page number starts at 0, but we want to start at 1

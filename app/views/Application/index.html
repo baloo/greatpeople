@@ -21,7 +21,7 @@
         <dt><a class="name" href="/resume/{{= id }}">{{= name }}</a></dt>
         <dd class="tags">
             <ul>{{each tags}}
-                <li><a href="{{= box}}/tag:{{= $value}}">{{= $value}}</a></li>
+                <li><a href="#" data="{{= $value}}">{{= $value}}</a></li>
             {{/each}}</ul>
         </dd>
         <dd class="submition"><time>{{= formattedDate }}</time></dd>
