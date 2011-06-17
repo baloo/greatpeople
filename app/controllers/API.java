@@ -29,7 +29,7 @@ public class API extends Controller {
         }
     }
 
-    // Useful for json serialization
+    // Useful for JSON serialization
     public static class ApplicationResult {
         public List<JobApplication> applications;
         public int pageNumber;

@@ -1,7 +1,0 @@
-09:16:51,272 INFO  ~ Starting P:\greenscript\java\play\samples-and-tests\demo
-09:16:51,279 INFO  ~ Module CRUD is available (J:\play\modules\crud)
-09:16:51,280 INFO  ~ Module greenscript is available (P:\greenscript\java\play\samples-and-tests\demo\..\..)
-09:16:52,601 WARN  ~ You're running Play! in DEV mode
-09:16:52,902 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
-09:17:00,677 INFO  ~ GreenScript module initialized
-09:17:02,640 INFO  ~ Application 'Play GreenScript Demo' is now started !

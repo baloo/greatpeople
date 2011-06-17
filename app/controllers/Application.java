@@ -1,15 +1,11 @@
 package controllers;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import models.JobApplication;
-import play.Logger;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
 
-@With(Auth.class) 
+@With(Auth.class)
 public class Application extends Controller {
 
     @Before

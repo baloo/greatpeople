@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'Great People' /}
 
-<div id="list">
+<div id="applist">
     *{ Candidates go here }*
 </div>
 
@@ -17,7 +17,6 @@
 </div>
 
 <script id="applicantTmpl" type="text/template" charset="utf-8">
-    <dl class="candidate-list">
         <dt><a class="name" href="/resume/{{= id }}">{{= name }}</a></dt>
         <dd class="tags">
             <ul>{{each tags}}
@@ -28,7 +27,6 @@
         <dd class="rate">
             <div class="cursor" style="width: {{= stars }}%"></div>
         </dd>
-    </dl>
 </script>
 <script id="noApplicantTmpl" type="text/template" charset="utf-8">
     <dl class="candidate-list noApplicant">
@@ -36,9 +34,16 @@
         <dd></dd>
     </dl>
 </script>
+<script id="pageLink" type="text/template" charset="utf-8">
+<a href="{{= link }}">{{= page }}</a>
+        .text(i + 1)
+        .attr("href", "#" +
+              this.collection.box +
+              "/" +
+              (this.collection.query ? this.collection.query : "") +
+              "," + (i + 1))
+</script>
 #{set 'moreScripts'}
-<script src="@{'/public/javascripts/applicationlist.js'}" type="text/javascript" charset="utf-8"></script>
-<script src="@{'/public/javascripts/searchbox.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
 
     $(function(){

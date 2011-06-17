@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir=".">
+
+    <!-- Minify Javascript with Closure Compiler -->
+    <property name="dir.js" value="public/javascripts" />
+    <property name="dir.build.tools" value="vendor/" />
+    <property name="tool.rhino" value="rhino.jar" />
+    <property name="tool.jshint" value="fulljshint.js" />
+
+    <!-- JSHint target, run separately -->
+    <target name="jshint">
+        <apply dir="public/javascripts" executable="java" parallel="false" failonerror="true">
+            <fileset dir="${dir.js}/src">
+                <include name="**/*.js"/>
+                <exclude name="**/*.min.js"/>
+            </fileset>
+            <arg value="-jar" />
+            <arg path="./${dir.build.tools}/${tool.rhino}" />
+            <arg path="./${dir.build.tools}/${tool.jshint}" />
+            <srcfile/>
+            <arg value="${tool.jshint.opts}" />
+        </apply>
+        <echo>JSHint Successful</echo>
+    </target>
+
+    <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+             classpath="${dir.build.tools}/compiler.jar"/>
+
+    <target name="compilealljs">
+        <jscomp compilationLevel="simple" debug="false" output="${dir.js}/greatpeople.min.js">
+        <externs dir="${dir.js}/lib/externs">
+            <file name="jquery-1.6.js"/>
+        </externs>
+        <sources dir="${dir.js}/lib">
+            <file name="underscore-min.js"/>
+            <file name="backbone.js"/>
+            <file name="jquery.history.js"/>
+            <file name="jquery.jeditable.js"/>
+        </sources>
+        <sources dir="${dir.js}/src">
+            <file name="applicationlist.js"/>
+            <file name="candidate.js"/>
+            <file name="notification.js"/>
+            <file name="searchbox.js"/>
+        </sources>
+      </jscomp>
+    </target>
+
+</project>
+
