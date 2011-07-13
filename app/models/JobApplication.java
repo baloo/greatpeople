@@ -182,10 +182,10 @@ public class JobApplication extends Model {
             JsonObject result = new JsonObject();
             result.add("id", context.serialize(jobApplication.id));
             if (jobApplication.name != null) {
-                result.add("name", context.serialize(jobApplication.name));
+                result.add("name", context.serialize(HTML.htmlEscape(jobApplication.name)));
             }
             if (jobApplication.email != null) {
-                result.add("email", context.serialize(jobApplication.email));
+                result.add("email", context.serialize(HTML.htmlEscape(jobApplication.email)));
             }
             if (jobApplication.submitted != null) {
                 result.add("submitted", context.serialize(jobApplication.submitted.getTime()));
@@ -193,7 +193,7 @@ public class JobApplication extends Model {
                 result.add("formattedDate", context.serialize(formattedDate));
             }
             if (jobApplication.phone != null) {
-                result.add("phone", context.serialize(jobApplication.phone));
+                result.add("phone", context.serialize(HTML.htmlEscape(jobApplication.phone)));
             }
             result.add("tags", context.serialize((jobApplication.tagList())));
             result.add("rating", context.serialize(jobApplication.getRating()));

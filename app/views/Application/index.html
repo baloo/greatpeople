@@ -16,27 +16,26 @@
 <div id="pagination">
 </div>
 
-<script id="applicantTmpl" type="text/template" charset="utf-8">
-        <dt><a class="name" href="/resume/{{= id }}">{{= name }}</a></dt>
-        <dd class="tags">
-            <ul>{{each tags}}
-                <li><a href="#" data="{{= $value}}">{{= $value}}</a></li>
-            {{/each}}</ul>
-        </dd>
-        <dd class="submition"><time>{{= formattedDate }}</time></dd>
-        <dd class="rate">
-            <div class="cursor" style="width: {{= stars }}%"></div>
-        </dd>
+<script id="applicantTmpl" type="text/template">
+    <dt><a class="name" href="/resume/<%= id %>"><%= name %></a></dt>
+    <dd class="tags">
+        <ul>
+            <% for (i in tags) { %> <li><a href="#" data="<%= tags[i] %>"><%= tags[i] %></a></li> <% } %>
+        </ul>
+    </dd>
+    <dd class="submition"><time><%= formattedDate %></time></dd>
+    <dd class="rate">
+        <div class="cursor" style="width: <%= stars %>%"></div>
+    </dd>
 </script>
-<script id="noApplicantTmpl" type="text/template" charset="utf-8">
+<script id="noApplicantTmpl" type="text/template">
     <dl class="candidate-list noApplicant">
-        <dt>No current applications {{= status}}</dt>
+        <dt>No current applications <%= status%></dt>
         <dd></dd>
     </dl>
 </script>
-<script id="pageLink" type="text/template" charset="utf-8">
-<a href="{{= link }}">{{= page }}</a>
-
+<script id="pageLink" type="text/template">
+<a href="<%= link %>"><%= page %></a>
 </script>
 #{set 'moreScripts'}
 <script type="text/javascript" charset="utf-8">

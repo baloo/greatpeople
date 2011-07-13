@@ -42,8 +42,9 @@ var Applicants = new ApplicantList();
 var ApplicantView = Backbone.View.extend({
     tagName: 'dl',
     className: 'candidate-list',
+    template: _.template($("#applicantTmpl").html()),
     render: function() {
-        $("#applicantTmpl").tmpl(this.model.toJSON()).appendTo(this.el);
+        $(this.el).html(this.template(this.model.toJSON()))
         return this;
     }
 });
@@ -73,7 +74,7 @@ var AppView = Backbone.View.extend({
         var $view = $(this.el).html('');
             if (Applicants.length === 0) {
             // Render the "no applications" message
-            $view.append($("#noApplicantTmpl").tmpl());
+            $view.append(_.template($("#noApplicantTmpl").html()));
             return;
         }
 
@@ -94,13 +95,12 @@ var AppView = Backbone.View.extend({
             _(Applicants.pageCount).times(function (i) {
                 pagination.append(
                     Applicants.page == i ? i + 1         // Current page: just the page number
-                        : ($("#pageLink").tmpl({
+                        : _template($("#pageLink").html(), {
                             page: i + 1,
                             link: "#" + Applicants.box +
                                   "/" + (Applicants.query ? Applicants.query : "") +
                                   "," + (i + 1)
                        })
-                    )
                 );
                 pagination.append("&nbsp;");
             });

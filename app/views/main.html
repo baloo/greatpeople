@@ -36,9 +36,7 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/public/javascripts/lib/jquery-1.6.1.min.js">\x3C/script>')</script>
-    <script src="//ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
-    <script>window.jQuery.tmpl || document.write('<script src="/public/javascripts/lib/jquery.tmpl.min.js">\x3C/script>')</script>
-    #{if play.Play.mode.isDev() }
+    #{if play.Play.mode.isProd() }
     <script src="@{'/public/javascripts/greatpeople.min.js'}"></script>
     #{/if}
     #{else}
