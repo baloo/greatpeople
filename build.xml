@@ -33,7 +33,7 @@
         </externs>
         <sources dir="${dir.js}/lib">
             <file name="underscore-min.js"/>
-            <file name="backbone.js"/>
+            <file name="backbone-min.js"/>
             <file name="jquery.history.js"/>
             <file name="jquery.jeditable.js"/>
         </sources>

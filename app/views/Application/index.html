@@ -36,12 +36,7 @@
 </script>
 <script id="pageLink" type="text/template" charset="utf-8">
 <a href="{{= link }}">{{= page }}</a>
-        .text(i + 1)
-        .attr("href", "#" +
-              this.collection.box +
-              "/" +
-              (this.collection.query ? this.collection.query : "") +
-              "," + (i + 1))
+
 </script>
 #{set 'moreScripts'}
 <script type="text/javascript" charset="utf-8">

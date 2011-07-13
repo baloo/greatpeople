@@ -156,7 +156,7 @@ public class JobApplication extends Model {
     public static int pageCount(JobStatus status, String query) {
         Query luceneQ = query(status, query);
         if (luceneQ == null) return 1;
-        return (int)Math.ceil(luceneQ.count() / PAGE_SIZE);
+        return (int)Math.ceil(new Double(luceneQ.count()) / new Double(PAGE_SIZE));
     }
 
     public static String normalizeQuery(String input, JobStatus status) {

@@ -7,7 +7,7 @@
 
 var searchTimeout = null;
 
-$.fn.searchbox = function(w) {
+$.fn["searchbox"] = function(w) {
 
     var box = this;
 

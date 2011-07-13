@@ -19,19 +19,23 @@ var ApplicantModel = Backbone.Model.extend({
 
 });
 
-var Applicants = Backbone.Collection.extend({
+var ApplicantList = Backbone.Collection.extend({
     model: ApplicantModel,
     box: 'new',
     url: '/api/applicants',
     query: null,
     page: 0,
     pageCount: 1,
+
     parse: function(response) {
         this.page = response.pageNumber;
         this.pageCount = response.pageCount;
         return response.applications;
     }
+
 });
+
+var Applicants = new ApplicantList();
 
 // Views
 
@@ -46,40 +50,11 @@ var ApplicantView = Backbone.View.extend({
 
 var AppView = Backbone.View.extend({
 
-    el: document.getElementById("applist"),
+    el: $("#applist")[0],
 
-    loadBox: function(box, query) {
-        $("#search").val(query ? query.split(",")[0] : "");
-        this.refreshLinks(query);
-        this.collection.box = box;
-        this.collection.url = '/api/applicants/' + box;
-        if (query) {
-            this.collection.query = query;
-            this.collection.page = 1;
-            if (query.indexOf(",") > -1) {
-                this.collection.query = query.split(",")[0];
-                this.collection.page = query.split(",")[1];
-            }
-            this.collection.url += (
-                '?q=' + encodeURIComponent(this.collection.query) +
-                '&p=' + this.collection.page
-            );
-        } else {
-            this.collection.query = "";
-            this.collection.page = 1;
-        }
-        var view = this;
-        this.spinner();
-        this.collection.fetch({
-            success: function() {
-                view.render();
-            },
-            error: function(model, response) {
-                if (response.status == 403) {
-                    view.login();
-                }
-            }
-        });
+    initialize: function() {
+        _.bindAll(this, "render");
+        Applicants.bind("reset", this.render);
     },
 
     refreshLinks: function(query) {
@@ -96,14 +71,14 @@ var AppView = Backbone.View.extend({
     render: function() {
         $("#spinner").hide();
         var $view = $(this.el).html('');
-        if (this.collection.length === 0) {
+            if (Applicants.length === 0) {
             // Render the "no applications" message
             $view.append($("#noApplicantTmpl").tmpl());
             return;
         }
 
-        var box = this.collection.box;
-        this.collection
+        var box = Applicants.box;
+        Applicants
             .map(function(applicant) { return new ApplicantView({model: applicant}); })
             .forEach(function(entry) {
                 $view.append(entry.render().el);
@@ -115,14 +90,14 @@ var AppView = Backbone.View.extend({
         // Internal page number starts at 0, but we want to start at 1
         var pagination = $("#pagination");
         pagination.html("");
-        if (this.collection.pageCount > 1) {
-            _(this.collection.pageCount).times(function (i) {
+        if (Applicants.pageCount > 1) {
+            _(Applicants.pageCount).times(function (i) {
                 pagination.append(
-                    this.collection.page == i ? i + 1         // Current page: just the page number
+                    Applicants.page == i ? i + 1         // Current page: just the page number
                         : ($("#pageLink").tmpl({
                             page: i + 1,
-                            link: "#" + this.collection.box +
-                                  "/" + (this.collection.query ? this.collection.query : "") +
+                            link: "#" + Applicants.box +
+                                  "/" + (Applicants.query ? Applicants.query : "") +
                                   "," + (i + 1)
                        })
                     )
@@ -130,7 +105,7 @@ var AppView = Backbone.View.extend({
                 pagination.append("&nbsp;");
             });
         }
-        $("#pagination").toggle(this.collection.pageCount > 1);
+        $("#pagination").toggle(Applicants.pageCount > 1);
     },
 
     login: function() {
@@ -139,7 +114,35 @@ var AppView = Backbone.View.extend({
 
 });
 
-var Workspace = Backbone.Controller.extend({
+/*
+var PaginationView = Backbone.View.extend({
+
+    el: $("#pagination")[0],
+
+    render: function() {
+        // Internal page number starts at 0, but we want to start at 1
+        var pagination = $(this.el).html("");
+        if (this.model.pageCount > 1) {
+            _(this.model.pageCount).times(function (i) {
+                pagination.append(
+                    this.model.page == i ? i + 1         // Current page: just the page number
+                        : ($("#pageLink").tmpl({
+                            page: i + 1,
+                            link: "#" + this.model.box +
+                                  "/" + (this.model.query ? this.model.query : "") +
+                                  "," + (i + 1)
+                       })
+                    )
+                );
+                pagination.append("&nbsp;");
+            });
+        }
+        return this;
+    }
+
+});
+*/
+var Workspace = Backbone.Router.extend({
 
     routes: {
         "": "index",
@@ -152,10 +155,7 @@ var Workspace = Backbone.Controller.extend({
     },
 
     initialize: function() {
-        this.apps = new Applicants();
-        this.view = new AppView({
-            collection: this.apps
-        });
+        this.view = new AppView({});
     },
 
     index: function() {
@@ -176,11 +176,30 @@ var Workspace = Backbone.Controller.extend({
 
     _showBox: function(active, query, page) {
         this.box = active;
-        this.view.loadBox(active, query, page);
+        // this.view.loadBox(active, query, page);
+        $("#search").val(query ? query.split(",")[0] : "");
+        // this.refreshLinks(query);
+        Applicants.box = this.box;
+        Applicants.url = '/api/applicants/' + this.box;
+        if (query) {
+            Applicants.query = query;
+            Applicants.page = 1;
+            if (query.indexOf(",") > -1) {
+                Applicants.query = query.split(",")[0];
+                Applicants.page = query.split(",")[1];
+            }
+            Applicants.url += (
+                '?q=' + encodeURIComponent(Applicants.query) +
+                '&p=' + Applicants.page
+            );
+        } else {
+            Applicants.query = "";
+            Applicants.page = 1;
+        }
+        Applicants.fetch();
         $(".navlink a").removeClass("active");
         $("." + active + " a").addClass("active");
     }
-
 });
 
 window["Workspace"] = Workspace;
