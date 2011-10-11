@@ -26,6 +26,7 @@ import play.mvc.Router;
 import play.templates.JavaExtensions;
 import play.utils.HTML;
 import play.utils.Utils;
+import utils.StringUtils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -177,7 +178,7 @@ public class JobApplication extends Model {
     }
 
     public String stub() {
-        return name.replaceAll("\\s+", "-").replaceAll("[^a-zA-Z0-9-]", "");
+        return StringUtils.noAccent(name).replaceAll("\\s+", "-").replaceAll("[^a-zA-Z0-9-]", "");
     }
 
     public String url() {
