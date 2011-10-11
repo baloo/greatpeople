@@ -12,7 +12,7 @@ import play.mvc.With;
 @With(Auth.class)
 public class JobApplications extends Application {
 
-    public static void index(Long id){
+    public static void index(Long id, String stub) {
         JobApplication resume = JobApplication.findById(id);
         notFoundIfNull(resume);
         Object templates = Cache.get("answer_templates");
@@ -30,7 +30,7 @@ public class JobApplications extends Application {
         resume.status = jobStatus != null ? jobStatus : JobStatus.INPROGRESS;
         resume.save();
         resume.addInternalNote(session.get("name"), session.get("email"), comment, rating);
-        index(resumeId);
+        index(resumeId, resume.stub());
     }
 
     public static void sendMessage(Long resumeId, String comment) {
@@ -40,7 +40,7 @@ public class JobApplications extends Application {
         resume.save();
         resume.addMessage(session.get("name"), session.get("email"), comment);
         Mails.sendMessage(resume, comment);
-        index(resumeId);
+        index(resumeId, resume.stub());
     }
 
     // Filename is not used, it's just to get the correct filename at download time

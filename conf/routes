@@ -23,7 +23,8 @@ GET     /public/                                staticDir:public
 *       /admin/secure                           module:secure
 
 # Resume
-GET     /resume/{id}                            JobApplications.index
+GET     /resume/{<[0-9]+>id}-{stub}             JobApplications.index
+GET     /resume/{<[0-9]+>id}                    JobApplications.index
 POST    /resume/note                            JobApplications.postNote
 POST    /resume/message                         JobApplications.sendMessage
 POST    /resume/change                          JobApplications.change

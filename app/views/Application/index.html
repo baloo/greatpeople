@@ -17,7 +17,7 @@
 </div>
 
 <script id="applicantTmpl" type="text/template">
-    <dt><a class="name" href="/resume/<%= id %>"><%= name %></a></dt>
+    <dt><a class="name" href="<%= url %>"><%= name %></a></dt>
     <dd class="tags">
         <ul>
             <% for (i in tags) { %> <li><a href="#" data="<%= tags[i] %>"><%= tags[i] %></a></li> <% } %>

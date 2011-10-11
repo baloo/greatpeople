@@ -1,5 +1,18 @@
 package models;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+
 import play.Logger;
 import play.data.validation.Email;
 import play.db.jpa.JPA;
@@ -9,24 +22,15 @@ import play.modules.search.Field;
 import play.modules.search.Indexed;
 import play.modules.search.Query;
 import play.modules.search.Search;
+import play.mvc.Router;
+import play.templates.JavaExtensions;
 import play.utils.HTML;
 import play.utils.Utils;
 
-import java.lang.reflect.Type;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Lob;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import play.templates.JavaExtensions;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializer;
 import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
 
 @Entity
@@ -172,6 +176,17 @@ public class JobApplication extends Model {
         return Utils.join(predicates, " AND ");
     }
 
+    public String stub() {
+        return name.replaceAll("\\s+", "-").replaceAll("[^a-zA-Z0-9-]", "");
+    }
+
+    public String url() {
+        Map<String, Object> args = new HashMap<String, Object>();
+        args.put("id", this.id);
+        args.put("stub", this.stub());
+        return Router.getFullUrl("JobApplications.index", args);
+    }
+
     @Override
     public String toString() {
         return name + " <" + email + ">";
@@ -181,6 +196,7 @@ public class JobApplication extends Model {
         public JsonElement serialize(JobApplication jobApplication, Type type, JsonSerializationContext context) {
             JsonObject result = new JsonObject();
             result.add("id", context.serialize(jobApplication.id));
+            result.add("url", context.serialize(jobApplication.url()));
             if (jobApplication.name != null) {
                 result.add("name", context.serialize(HTML.htmlEscape(jobApplication.name)));
             }
