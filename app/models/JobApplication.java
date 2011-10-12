@@ -26,7 +26,6 @@ import play.mvc.Router;
 import play.templates.JavaExtensions;
 import play.utils.HTML;
 import play.utils.Utils;
-import utils.StringUtils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
