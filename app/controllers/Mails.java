@@ -28,6 +28,13 @@ public class Mails extends Mailer {
         send(jobApplication, message);
     }
 
+    public static void internalNoteNotification(JobApplication jobApplication, String message, String author) {
+        setFrom("jobs@zenexity.com");
+        addRecipient("jobs@zenexity.com");
+        setSubject("Internal message about: " + jobApplication.name);
+        send(jobApplication, message, author);
+    }
+
     public static void alert(List oldApplications) {
         setFrom("jobs@zenexity.com");
         addRecipient("jobs@zenexity.com");

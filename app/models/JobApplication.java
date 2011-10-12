@@ -178,7 +178,7 @@ public class JobApplication extends Model {
     }
 
     public String stub() {
-        return StringUtils.noAccent(name).replaceAll("\\s+", "-").replaceAll("[^a-zA-Z0-9-]", "");
+        return JavaExtensions.slugify(this.name);
     }
 
     public String url() {

@@ -1,0 +1,5 @@
+An internal note has been added to ${jobApplication.name} by ${author}:
+
+${message}
+
+${jobApplication.url()}

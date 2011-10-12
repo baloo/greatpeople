@@ -30,6 +30,7 @@ public class JobApplications extends Application {
         resume.status = jobStatus != null ? jobStatus : JobStatus.INPROGRESS;
         resume.save();
         resume.addInternalNote(session.get("name"), session.get("email"), comment, rating);
+        Mails.internalNoteNotification(resume, comment, session.get("name") + " " + session.get("email"));
         index(resumeId, resume.stub());
     }
 

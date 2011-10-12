@@ -36,7 +36,8 @@ public class FetchEmails extends Job {
     public void doJob() throws Exception {
         Logger.debug("=== Fetch email...");
 
-        if(Play.configuration.getProperty("mailbox.username") == null || Play.configuration.getProperty("mailbox.password") == null) {
+        if (Play.configuration.getProperty("mailbox.username") == null ||
+            Play.configuration.getProperty("mailbox.password") == null) {
             Logger.error("Please configure mailbox credentials in conf/credentials.conf");
             return;
         }
