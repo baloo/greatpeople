@@ -95,7 +95,7 @@ var AppView = Backbone.View.extend({
             _(Applicants.pageCount).times(function (i) {
                 pagination.append(
                     Applicants.page == i ? i + 1         // Current page: just the page number
-                        : _template($("#pageLink").html(), {
+                        : _.template($("#pageLink").html(), {
                             page: i + 1,
                             link: "#" + Applicants.box +
                                   "/" + (Applicants.query ? Applicants.query : "") +
